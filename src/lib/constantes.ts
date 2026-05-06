@@ -62,7 +62,7 @@ export const COLORES_TEMA: {
 
 export const PLANTILLAS: { valor: PlantillaId; etiqueta: string; descripcion: string; ats: boolean }[] = [
   { valor: "clasico", etiqueta: "Clasico", descripcion: "Estilo Harvard — legible por sistemas ATS", ats: true },
-  { valor: "minimalista", etiqueta: "Minimalista)", descripcion: "Plano y elegante — legible por sistemas ATS", ats: true },
+  { valor: "minimalista", etiqueta: "Minimalista", descripcion: "Plano y elegante — legible por sistemas ATS", ats: true },
   { valor: "moderno", etiqueta: "Moderno", descripcion: "Sidebar con iconos y color", ats: false },
   { valor: "colorido", etiqueta: "Colorido", descripcion: "Header grande con formas decorativas", ats: false },
 ]
