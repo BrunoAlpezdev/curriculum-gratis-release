@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Design system: papel cálido, tinta suave y acento institucional no-IA. */
+  --ds-paper: #f3eddf;
+  --ds-surface: #fbf7ec;
+  --ds-surface-muted: #ebe1cf;
+  --ds-ink: #24211c;
+  --ds-ink-muted: #635a4a;
+  --ds-line: #b9ad98;
+  --ds-line-strong: #5b5142;
+  --ds-accent: #8a4b2a;
+  --ds-accent-strong: #65351f;
+  --ds-accent-soft: #ead5c5;
+  --background: var(--ds-paper);
+  --foreground: var(--ds-ink);
+}
+
+.dark {
+  --ds-paper: #201d19;
+  --ds-surface: #2a261f;
+  --ds-surface-muted: #342f26;
+  --ds-ink: #efe6d3;
+  --ds-ink-muted: #c6bba7;
+  --ds-line: #6f6250;
+  --ds-line-strong: #b8a98f;
+  --ds-accent: #d28a56;
+  --ds-accent-strong: #efb178;
+  --ds-accent-soft: #4b3528;
+  --background: var(--ds-paper);
+  --foreground: var(--ds-ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-ds-paper: var(--ds-paper);
+  --color-ds-surface: var(--ds-surface);
+  --color-ds-surface-muted: var(--ds-surface-muted);
+  --color-ds-ink: var(--ds-ink);
+  --color-ds-ink-muted: var(--ds-ink-muted);
+  --color-ds-line: var(--ds-line);
+  --color-ds-line-strong: var(--ds-line-strong);
+  --color-ds-accent: var(--ds-accent);
+  --color-ds-accent-strong: var(--ds-accent-strong);
+  --color-ds-accent-soft: var(--ds-accent-soft);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+@keyframes tip-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20%       { transform: rotate(-20deg); }
+  40%       { transform: rotate(20deg); }
+  60%       { transform: rotate(-15deg); }
+  80%       { transform: rotate(10deg); }
+}
+
+.tip-wiggle {
+  animation: tip-wiggle 0.5s ease-in-out 3;
+  transform-origin: bottom center;
+}
+
+/* Print styles — solo muestra el CV */
+@media print {
+  body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  [data-no-print] {
+    display: none !important;
+  }
+}
