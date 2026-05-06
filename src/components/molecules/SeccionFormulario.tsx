@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { CaretDownIcon, CaretUpIcon, LightbulbIcon } from "@phosphor-icons/react"
+import { Button } from "@/components/atoms/Button"
 import { cn } from "@/components/ui/cn"
 
 const PEEK_KEY = "curriculum-gratis:tip-peek"
@@ -74,22 +75,24 @@ export function SeccionFormulario({
   }
 
   return (
-    <div className="border border-ds-line bg-ds-surface">
-      <button
+    <div className="border border-border-subtle bg-panel">
+      <Button
         type="button"
         onClick={toggle}
-        className="flex w-full items-center justify-between px-4 py-4 cursor-pointer"
+        variant="plain"
+        size="none"
+        className="flex w-full items-center justify-between px-4 py-4"
       >
         <div className="flex items-center gap-2">
-          <span className="text-ds-accent-strong">{icono}</span>
-          <h3 className="text-base font-extrabold text-ds-ink">{titulo}</h3>
+          <span className="text-action-strong">{icono}</span>
+          <h3 className="text-base font-extrabold text-text-main">{titulo}</h3>
         </div>
         {abierta ? (
-          <CaretUpIcon size={16} className="text-ds-ink-muted" />
+          <CaretUpIcon size={16} className="text-text-muted" />
         ) : (
-          <CaretDownIcon size={16} className="text-ds-ink-muted" />
+          <CaretDownIcon size={16} className="text-text-muted" />
         )}
-      </button>
+      </Button>
       <div
         className={cn(
           "grid transition-[grid-template-rows,opacity] duration-300 ease-in-out",
@@ -100,13 +103,15 @@ export function SeccionFormulario({
         }}
       >
         <div className={cn("min-h-0", overflowVisible ? "overflow-visible" : "overflow-hidden")}>
-          <div className="border-t border-ds-line px-4 py-4 flex flex-col gap-4">
+          <div className="border-t border-border-subtle px-4 py-4 flex flex-col gap-4">
             {tip && (
               <div className="flex flex-col gap-0">
-                <button
+                <Button
                   type="button"
                   onClick={() => setTipAbierto((v) => !v)}
-                  className="flex items-center gap-1.5 text-ds-accent-strong w-fit cursor-pointer"
+                  variant="plain"
+                  size="none"
+                  className="flex w-fit items-center gap-1.5 text-action-strong"
                 >
                   <LightbulbIcon
                     size={14}
@@ -118,11 +123,11 @@ export function SeccionFormulario({
                   <CaretDownIcon
                     size={12}
                      className={cn(
-                       "transition-transform duration-200 text-ds-accent",
+                       "transition-transform duration-200 text-action-primary",
                       tipAbierto && "rotate-180",
                     )}
                   />
-                </button>
+                </Button>
                 <div
                   className={cn(
                     "grid transition-[grid-template-rows,opacity] duration-200 ease-in-out",
@@ -130,10 +135,10 @@ export function SeccionFormulario({
                   )}
                 >
                   <div className="overflow-hidden">
-                    <ul className="mt-2 border border-ds-line bg-ds-accent-soft px-3 py-2.5 flex flex-col gap-1.5">
+                    <ul className="mt-2 border border-border-subtle bg-action-soft px-3 py-2.5 flex flex-col gap-1.5">
                       {tip.map((t, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs text-ds-ink leading-relaxed">
-                          <span className="mt-0.5 shrink-0 text-ds-accent">•</span>
+                        <li key={i} className="flex items-start gap-2 text-xs text-text-main leading-relaxed">
+                          <span className="mt-0.5 shrink-0 text-action-primary">•</span>
                           {t}
                         </li>
                       ))}

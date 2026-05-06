@@ -1,6 +1,7 @@
 "use client"
 
 import { EnvelopeIcon } from "@phosphor-icons/react"
+import { Button } from "@/components/atoms/Button"
 import { Input } from "@/components/atoms/Input"
 import { Textarea } from "@/components/atoms/Textarea"
 import { SeccionFormulario } from "@/components/molecules/SeccionFormulario"
@@ -82,19 +83,20 @@ export function FormCarta() {
       />
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-semibold text-ds-ink-muted">
+        <label className="text-sm font-semibold text-text-muted">
           Plantillas de cuerpo
         </label>
         <div className="flex flex-wrap gap-2">
           {PLANTILLAS_CUERPO.map((p) => (
-            <button
+            <Button
               key={p.nombre}
               type="button"
               onClick={() => set({ cuerpo: p.texto })}
-              className="border border-ds-line bg-ds-surface px-3 py-1 text-xs text-ds-ink-muted hover:bg-ds-surface-muted hover:text-ds-ink cursor-pointer"
+              variant="secondary"
+              size="xs"
             >
               {p.nombre}
-            </button>
+            </Button>
           ))}
         </div>
       </div>

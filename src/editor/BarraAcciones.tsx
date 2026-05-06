@@ -168,17 +168,17 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   }
 
   return (
-    <div data-no-print className="flex items-center justify-between border-b border-ds-line bg-ds-surface px-3 py-2.5 md:px-4">
+    <div data-no-print className="flex items-center justify-between border-b border-border-subtle bg-panel px-3 py-2.5 md:px-4">
       <div className="flex items-center gap-1.5 min-w-0">
         <h1
-          className="text-base font-extrabold text-ds-ink truncate cursor-default select-none"
+          className="text-base font-extrabold text-text-main truncate cursor-default select-none"
           onClick={handleTapTitulo}
         >
           <span className="md:hidden">CV Gratis</span>
           <span className="hidden md:inline">Generador de Curriculum</span>
         </h1>
-        <span className="hidden md:inline text-xs text-ds-ink-muted">·</span>
-        <span className="hidden md:inline text-xs text-ds-ink-muted shrink-0">100% gratuito</span>
+        <span className="hidden md:inline text-xs text-text-muted">·</span>
+        <span className="hidden md:inline text-xs text-text-muted shrink-0">100% gratuito</span>
       </div>
       <div className="flex items-center gap-1 md:gap-2 shrink-0">
         <Button variant="ghost" size="sm" className="hidden md:inline-flex" onClick={() => setEjemploAbierto(true)}>
@@ -223,32 +223,36 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
               id={menuId}
               role="menu"
               onKeyDown={handleTeclaMenu}
-              className="absolute right-0 top-full mt-1 z-50 min-w-[180px] border border-ds-line bg-ds-surface py-1 shadow-lg"
+              className="absolute right-0 top-full mt-1 z-50 min-w-[180px] border border-border-subtle bg-panel py-1 shadow-lg"
             >
-              <button
+              <Button
                 ref={(el) => {
                   opcionesMenuRef.current[0] = el
                 }}
                 type="button"
                 role="menuitem"
                 onClick={exportar}
-                className="flex items-center gap-2 w-full px-3 py-2 text-sm text-ds-ink-muted hover:bg-ds-surface-muted hover:text-ds-ink cursor-pointer"
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
               >
                 <FileArrowDownIcon size={16} />
                 Exportar JSON
-              </button>
-              <button
+              </Button>
+              <Button
                 ref={(el) => {
                   opcionesMenuRef.current[1] = el
                 }}
                 type="button"
                 role="menuitem"
                 onClick={pedirImportar}
-                className="flex items-center gap-2 w-full px-3 py-2 text-sm text-ds-ink-muted hover:bg-ds-surface-muted hover:text-ds-ink cursor-pointer"
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
               >
                 <FileArrowUpIcon size={16} />
                 Importar JSON
-              </button>
+              </Button>
             </div>
           )}
           <input

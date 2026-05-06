@@ -1,4 +1,6 @@
 import Link from "next/link"
+import { buttonVariants } from "@/components/atoms/Button"
+import { cn } from "@/components/ui/cn"
 import { Editor } from "@/editor/Editor"
 
 const JSON_LD = {
@@ -178,95 +180,95 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(HOW_TO_JSON_LD) }}
       />
 
-      <main className="bg-ds-paper text-ds-ink">
-        <section className="border-b-4 border-ds-accent bg-ds-paper px-4 py-8 md:px-6 md:py-12">
+      <main className="bg-app-bg text-text-main">
+        <section className="border-b-4 border-action-primary bg-app-bg px-4 py-8 md:px-6 md:py-12">
           <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-[1fr_360px] md:items-start">
             <div className="max-w-3xl">
-              <p className="mb-4 inline-flex border border-ds-accent bg-ds-surface px-3 py-1 text-sm font-bold text-ds-accent-strong">
+              <p className="mb-4 inline-flex border border-action-primary bg-panel px-3 py-1 text-sm font-bold text-action-strong">
                 Curriculum gratis para Chile
               </p>
-              <h1 className="text-4xl font-extrabold leading-[1.04] tracking-tight text-ds-ink md:text-6xl">
+              <h1 className="text-4xl font-extrabold leading-[1.04] tracking-tight text-text-main md:text-6xl">
                 Cree su curriculum gratis y descárguelo en PDF
               </h1>
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-ds-ink-muted">
+              <p className="mt-5 max-w-2xl text-lg leading-8 text-text-muted">
                 Complete sus datos paso a paso, revise cómo queda y descargue un curriculum listo para enviar. No necesita registrarse ni saber usar programas complicados.
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <a
                   href="#editor"
-                  className="inline-flex min-h-14 items-center justify-center bg-ds-accent px-6 text-base font-bold text-ds-surface transition hover:bg-ds-accent-strong focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ds-accent"
+                  className={cn(buttonVariants({ variant: "primary", size: "lg" }), "min-h-14 text-base")}
                 >
                   Empezar ahora
                 </a>
                 <a
                   href="#como-funciona"
-                  className="inline-flex min-h-14 items-center justify-center border-2 border-ds-line-strong bg-ds-surface px-6 text-base font-bold text-ds-ink transition hover:bg-ds-surface-muted focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ds-line-strong"
+                  className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "min-h-14 border-2 text-base")}
                 >
                   Ver cómo funciona
                 </a>
               </div>
-              <ul className="mt-6 grid gap-2 text-base font-medium text-ds-ink-muted sm:grid-cols-2">
+              <ul className="mt-6 grid gap-2 text-base font-medium text-text-muted sm:grid-cols-2">
                 {TRUST_ITEMS.map((item) => (
                   <li key={item} className="flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 bg-ds-accent" />
+                    <span className="h-2.5 w-2.5 bg-action-primary" />
                     {item}
                   </li>
                 ))}
               </ul>
             </div>
 
-            <aside className="border-2 border-ds-line-strong bg-ds-surface p-5">
-              <p className="text-sm font-bold uppercase tracking-[0.08em] text-ds-ink-muted">
+            <aside className="border-2 border-border-strong bg-panel p-5">
+              <p className="text-sm font-bold uppercase tracking-[0.08em] text-text-muted">
                 Antes de empezar
               </p>
-              <h2 className="mt-2 text-2xl font-extrabold text-ds-ink">
+              <h2 className="mt-2 text-2xl font-extrabold text-text-main">
                 Tenga a mano su información laboral
               </h2>
-              <p className="mt-3 text-base leading-7 text-ds-ink-muted">
+              <p className="mt-3 text-base leading-7 text-text-muted">
                 Puede completar solo lo que tenga. Si le falta algo, la herramienta igual funciona y puede volver después.
               </p>
-              <div className="mt-5 border-t border-ds-line pt-4 text-sm leading-6 text-ds-ink-muted">
+              <div className="mt-5 border-t border-border-subtle pt-4 text-sm leading-6 text-text-muted">
                 Sirve para crear CV gratis, curriculum vitae gratis, formato CV simple y curriculum para postular en Chile.
               </div>
             </aside>
           </div>
         </section>
 
-        <section id="como-funciona" className="border-b border-ds-line bg-ds-surface px-4 py-10 md:px-6">
+        <section id="como-funciona" className="border-b border-border-subtle bg-panel px-4 py-10 md:px-6">
           <div className="mx-auto max-w-6xl">
             <div className="max-w-2xl">
-              <p className="text-sm font-bold uppercase tracking-[0.08em] text-ds-accent-strong">
+              <p className="text-sm font-bold uppercase tracking-[0.08em] text-action-strong">
                 Cómo funciona
               </p>
-              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-ds-ink md:text-4xl">
+              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-text-main md:text-4xl">
                 Tres pasos, sin vueltas
               </h2>
             </div>
             <div className="mt-7 grid gap-4 md:grid-cols-3">
               {STEPS.map((step) => (
-                <article key={step.number} className="border-2 border-ds-line-strong bg-ds-paper p-5">
-                  <span className="inline-flex h-10 w-10 items-center justify-center bg-ds-accent text-lg font-extrabold text-ds-surface">
+                <article key={step.number} className="border-2 border-border-strong bg-app-bg p-5">
+                  <span className="inline-flex h-10 w-10 items-center justify-center bg-action-primary text-lg font-extrabold text-action-primary-fg">
                     {step.number}
                   </span>
-                  <h3 className="mt-4 text-xl font-extrabold text-ds-ink">{step.title}</h3>
-                  <p className="mt-2 text-base leading-7 text-ds-ink-muted">{step.text}</p>
+                  <h3 className="mt-4 text-xl font-extrabold text-text-main">{step.title}</h3>
+                  <p className="mt-2 text-base leading-7 text-text-muted">{step.text}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="border-b border-ds-line bg-ds-paper px-4 py-10 md:px-6">
+        <section className="border-b border-border-subtle bg-app-bg px-4 py-10 md:px-6">
           <div className="mx-auto max-w-6xl">
             <div className="grid gap-6 md:grid-cols-[320px_1fr] md:items-start">
               <div>
-                <p className="text-sm font-bold uppercase tracking-[0.08em] text-ds-accent-strong">
+                <p className="text-sm font-bold uppercase tracking-[0.08em] text-action-strong">
                   Ayuda rápida
                 </p>
-                <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-ds-ink">
+                <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-text-main">
                   Elija lo que necesita
                 </h2>
-                <p className="mt-3 text-base leading-7 text-ds-ink-muted">
+                <p className="mt-3 text-base leading-7 text-text-muted">
                   Estos accesos sirven si busca un formato específico o quiere entender qué tipo de curriculum le conviene.
                 </p>
               </div>
@@ -275,10 +277,10 @@ export default function Home() {
                   <Link
                     key={group.title}
                     href={group.href}
-                    className="block border border-ds-line bg-ds-surface p-4 transition hover:border-ds-accent hover:bg-ds-accent-soft"
+                    className="block border border-border-subtle bg-panel p-4 transition hover:border-action-primary hover:bg-action-soft"
                   >
-                    <h3 className="text-lg font-extrabold text-ds-ink">{group.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-ds-ink-muted">{group.text}</p>
+                    <h3 className="text-lg font-extrabold text-text-main">{group.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-text-muted">{group.text}</p>
                   </Link>
                 ))}
               </div>

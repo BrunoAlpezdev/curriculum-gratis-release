@@ -1,4 +1,6 @@
 import Link from "next/link"
+import { buttonVariants } from "@/components/atoms/Button"
+import { cn } from "@/components/ui/cn"
 
 export interface SeoPageContent {
   eyebrow: string
@@ -35,33 +37,33 @@ export function SeoPage({ content }: SeoPageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-ds-paper text-ds-ink">
+    <main className="min-h-screen bg-app-bg text-text-main">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <section className="border-b-4 border-ds-accent bg-ds-paper px-4 py-10 md:px-6 md:py-14">
+      <section className="border-b-4 border-action-primary bg-app-bg px-4 py-10 md:px-6 md:py-14">
         <div className="mx-auto max-w-5xl">
-          <p className="mb-4 inline-flex border border-ds-accent bg-ds-surface px-3 py-1 text-sm font-bold text-ds-accent-strong">
+          <p className="mb-4 inline-flex border border-action-primary bg-panel px-3 py-1 text-sm font-bold text-action-strong">
             {content.eyebrow}
           </p>
           <h1 className="max-w-4xl text-4xl font-extrabold leading-[1.06] tracking-tight md:text-6xl">
             {content.title}
           </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-ds-ink-muted">
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-text-muted">
             {content.description}
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/#editor"
-              className="inline-flex min-h-14 items-center justify-center bg-ds-accent px-6 text-base font-bold text-ds-surface transition hover:bg-ds-accent-strong focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ds-accent"
+              className={cn(buttonVariants({ variant: "primary", size: "lg" }), "min-h-14 text-base")}
             >
               Empezar mi curriculum
             </Link>
             <Link
               href="/"
-              className="inline-flex min-h-14 items-center justify-center border-2 border-ds-line-strong bg-ds-surface px-6 text-base font-bold text-ds-ink transition hover:bg-ds-surface-muted focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ds-line-strong"
+              className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "min-h-14 border-2 text-base")}
             >
               Volver al inicio
             </Link>
@@ -73,23 +75,23 @@ export function SeoPage({ content }: SeoPageProps) {
         <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-[0.72fr_0.28fr]">
           <div className="space-y-5">
             {content.sections.map((section) => (
-              <article key={section.title} className="border-2 border-ds-line-strong bg-ds-surface p-6">
+              <article key={section.title} className="border-2 border-border-strong bg-panel p-6">
                 <h2 className="text-2xl font-extrabold">{section.title}</h2>
-                <p className="mt-3 text-base leading-8 text-ds-ink-muted">{section.body}</p>
+                <p className="mt-3 text-base leading-8 text-text-muted">{section.body}</p>
               </article>
             ))}
           </div>
 
-          <aside className="border-2 border-ds-line-strong bg-ds-surface-muted p-5 md:sticky md:top-4 md:self-start">
-            <h2 className="text-sm font-bold uppercase tracking-[0.08em] text-ds-ink-muted">
+          <aside className="border-2 border-border-strong bg-panel-muted p-5 md:sticky md:top-4 md:self-start">
+            <h2 className="text-sm font-bold uppercase tracking-[0.08em] text-text-muted">
               También puede servirle
             </h2>
-            <p className="mt-3 text-base font-extrabold text-ds-accent-strong">
+            <p className="mt-3 text-base font-extrabold text-action-strong">
               {content.primaryKeyword}
             </p>
-            <ul className="mt-4 space-y-2 text-sm leading-6 text-ds-ink-muted">
+            <ul className="mt-4 space-y-2 text-sm leading-6 text-text-muted">
               {content.relatedKeywords.map((keyword) => (
-                <li key={keyword} className="border-t border-ds-line pt-2 first:border-t-0 first:pt-0">
+                <li key={keyword} className="border-t border-border-subtle pt-2 first:border-t-0 first:pt-0">
                   {keyword}
                 </li>
               ))}
@@ -98,14 +100,14 @@ export function SeoPage({ content }: SeoPageProps) {
         </div>
       </section>
 
-      <section className="border-t border-ds-line bg-ds-surface px-4 py-10 md:px-6">
+      <section className="border-t border-border-subtle bg-panel px-4 py-10 md:px-6">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-3xl font-extrabold">Preguntas frecuentes</h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             {content.faq.map((item) => (
-              <article key={item.question} className="border border-ds-line bg-ds-paper p-5">
+              <article key={item.question} className="border border-border-subtle bg-app-bg p-5">
                 <h3 className="font-extrabold">{item.question}</h3>
-                <p className="mt-2 text-base leading-7 text-ds-ink-muted">{item.answer}</p>
+                <p className="mt-2 text-base leading-7 text-text-muted">{item.answer}</p>
               </article>
             ))}
           </div>

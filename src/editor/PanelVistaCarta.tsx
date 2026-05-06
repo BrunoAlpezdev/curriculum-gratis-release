@@ -40,7 +40,7 @@ export function PanelVistaCarta() {
   return (
     <div
       ref={contenedorRef}
-      className="h-full overflow-y-auto bg-ds-surface-muted p-3 sm:p-4"
+      className="h-full overflow-y-auto bg-panel-muted p-3 sm:p-4"
     >
       <div
         className="mx-auto"

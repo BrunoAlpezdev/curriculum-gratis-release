@@ -7,6 +7,7 @@ import { PanelFormulario } from "@/editor/PanelFormulario"
 import { PanelFormularioCarta } from "@/editor/PanelFormularioCarta"
 import { PanelVistaPrevia } from "@/editor/PanelVistaPrevia"
 import { PanelVistaCarta } from "@/editor/PanelVistaCarta"
+import { Button } from "@/components/atoms/Button"
 import { cn } from "@/components/ui/cn"
 import { useHidratado } from "@/lib/useHidratado"
 
@@ -21,49 +22,43 @@ export function Editor() {
   if (!hidratado) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <p className="text-sm text-ds-ink-muted">Cargando...</p>
+        <p className="text-sm text-text-muted">Cargando...</p>
       </div>
     )
   }
 
   return (
-    <div className="flex h-dvh flex-col bg-ds-paper text-ds-ink">
+    <div className="flex h-dvh flex-col bg-app-bg text-text-main">
       <BarraAcciones modo={modo} />
 
       {/* Toggle CV / Carta */}
       <div
         data-no-print
-        className="flex items-center justify-center gap-1 border-b border-ds-line bg-ds-surface-muted px-2 py-2"
+        className="flex items-center justify-center gap-1 border-b border-border-subtle bg-panel-muted px-2 py-2"
         aria-label="Tipo de documento"
       >
-        <button
+        <Button
           type="button"
           onClick={() => setModo("cv")}
           aria-pressed={modo === "cv"}
-          className={cn(
-            "flex min-h-10 items-center gap-1.5 px-4 text-sm font-semibold transition-colors cursor-pointer",
-            modo === "cv"
-              ? "bg-ds-accent text-ds-surface"
-              : "text-ds-ink-muted hover:bg-ds-surface hover:text-ds-ink",
-          )}
+          variant={modo === "cv" ? "segmentedActive" : "segmented"}
+          size="sm"
+          className="min-h-10"
         >
           <FileTextIcon size={14} />
           Curriculum
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={() => setModo("carta")}
           aria-pressed={modo === "carta"}
-          className={cn(
-            "flex min-h-10 items-center gap-1.5 px-4 text-sm font-semibold transition-colors cursor-pointer",
-            modo === "carta"
-              ? "bg-ds-accent text-ds-surface"
-              : "text-ds-ink-muted hover:bg-ds-surface hover:text-ds-ink",
-          )}
+          variant={modo === "carta" ? "segmentedActive" : "segmented"}
+          size="sm"
+          className="min-h-10"
         >
           <EnvelopeIcon size={14} />
           Carta de presentacion
-        </button>
+        </Button>
       </div>
 
       {/* Tabs mobile */}
@@ -71,40 +66,34 @@ export function Editor() {
         data-no-print
         role="tablist"
         aria-label="Vista del editor"
-        className="flex md:hidden border-b border-ds-line bg-ds-surface"
+        className="flex md:hidden border-b border-border-subtle bg-panel"
       >
-        <button
+        <Button
           type="button"
           role="tab"
           aria-selected={tab === "editar"}
           aria-controls="panel-editar"
           onClick={() => setTab("editar")}
-          className={cn(
-            "flex-1 flex min-h-12 items-center justify-center gap-1.5 text-sm font-semibold transition-colors cursor-pointer",
-            tab === "editar"
-              ? "text-ds-accent-strong border-b-2 border-ds-accent"
-              : "text-ds-ink-muted",
-          )}
+          variant={tab === "editar" ? "tabActive" : "tab"}
+          size="none"
+          className="flex-1 min-h-12"
         >
           <PencilSimpleIcon size={16} />
           Editar
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           role="tab"
           aria-selected={tab === "preview"}
           aria-controls="panel-preview"
           onClick={() => setTab("preview")}
-          className={cn(
-            "flex-1 flex min-h-12 items-center justify-center gap-1.5 text-sm font-semibold transition-colors cursor-pointer",
-            tab === "preview"
-              ? "text-ds-accent-strong border-b-2 border-ds-accent"
-              : "text-ds-ink-muted",
-          )}
+          variant={tab === "preview" ? "tabActive" : "tab"}
+          size="none"
+          className="flex-1 min-h-12"
         >
           <EyeIcon size={16} />
           Vista Previa
-        </button>
+        </Button>
       </div>
 
       {/* Layout principal */}
@@ -113,7 +102,7 @@ export function Editor() {
           id="panel-editar"
           role="tabpanel"
           className={cn(
-            "w-full bg-ds-paper md:w-[45%] md:block md:border-r md:border-ds-line overflow-y-auto",
+            "w-full bg-app-bg md:w-[45%] md:block md:border-r md:border-border-subtle overflow-y-auto",
             tab === "editar" ? "block" : "hidden",
           )}
         >
