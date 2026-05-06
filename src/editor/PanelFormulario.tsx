@@ -48,7 +48,7 @@ export function PanelFormulario() {
             </p>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-2">
               <a
-                href="https://github.com/BrunoAlpezdev/curriculum-gratis"
+                href="https://github.com/BrunoAlpezdev/curriculum-gratis-release"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-sm font-semibold text-ds-ink hover:text-ds-accent-strong transition-colors"
