@@ -13,6 +13,7 @@ import type {
   Carta,
 } from "@/types"
 import { DATOS_INICIALES, PERSONALIZACION_INICIAL, CARTA_INICIAL } from "@/lib/constantes"
+import { normalizarDatosCurriculum, normalizarPersonalizacion } from "@/lib/importar-exportar"
 
 interface CurriculumStore {
   datos: DatosCurriculum
@@ -350,14 +351,8 @@ export const useCurriculumStore = create<CurriculumStore>()(
         return {
           ...current,
           ...estado,
-          datos: {
-            ...DATOS_INICIALES,
-            ...(estado?.datos as object),
-          },
-          personalizacion: {
-            ...PERSONALIZACION_INICIAL,
-            ...(estado?.personalizacion as object),
-          },
+          datos: normalizarDatosCurriculum(estado?.datos),
+          personalizacion: normalizarPersonalizacion(estado?.personalizacion),
           carta: {
             ...CARTA_INICIAL,
             ...(estado?.carta as object),

@@ -31,10 +31,15 @@ export function Editor() {
       <BarraAcciones modo={modo} />
 
       {/* Toggle CV / Carta */}
-      <div data-no-print className="flex items-center justify-center gap-1 border-b border-ds-line bg-ds-surface-muted px-2 py-2">
+      <div
+        data-no-print
+        className="flex items-center justify-center gap-1 border-b border-ds-line bg-ds-surface-muted px-2 py-2"
+        aria-label="Tipo de documento"
+      >
         <button
           type="button"
           onClick={() => setModo("cv")}
+          aria-pressed={modo === "cv"}
           className={cn(
             "flex min-h-10 items-center gap-1.5 px-4 text-sm font-semibold transition-colors cursor-pointer",
             modo === "cv"
@@ -48,6 +53,7 @@ export function Editor() {
         <button
           type="button"
           onClick={() => setModo("carta")}
+          aria-pressed={modo === "carta"}
           className={cn(
             "flex min-h-10 items-center gap-1.5 px-4 text-sm font-semibold transition-colors cursor-pointer",
             modo === "carta"
@@ -61,9 +67,17 @@ export function Editor() {
       </div>
 
       {/* Tabs mobile */}
-      <div data-no-print className="flex md:hidden border-b border-ds-line bg-ds-surface">
+      <div
+        data-no-print
+        role="tablist"
+        aria-label="Vista del editor"
+        className="flex md:hidden border-b border-ds-line bg-ds-surface"
+      >
         <button
           type="button"
+          role="tab"
+          aria-selected={tab === "editar"}
+          aria-controls="panel-editar"
           onClick={() => setTab("editar")}
           className={cn(
             "flex-1 flex min-h-12 items-center justify-center gap-1.5 text-sm font-semibold transition-colors cursor-pointer",
@@ -77,6 +91,9 @@ export function Editor() {
         </button>
         <button
           type="button"
+          role="tab"
+          aria-selected={tab === "preview"}
+          aria-controls="panel-preview"
           onClick={() => setTab("preview")}
           className={cn(
             "flex-1 flex min-h-12 items-center justify-center gap-1.5 text-sm font-semibold transition-colors cursor-pointer",
@@ -93,6 +110,8 @@ export function Editor() {
       {/* Layout principal */}
       <div className="flex flex-1 overflow-hidden">
         <div
+          id="panel-editar"
+          role="tabpanel"
           className={cn(
             "w-full bg-ds-paper md:w-[45%] md:block md:border-r md:border-ds-line overflow-y-auto",
             tab === "editar" ? "block" : "hidden",
@@ -101,6 +120,8 @@ export function Editor() {
           {modo === "cv" ? <PanelFormulario /> : <PanelFormularioCarta />}
         </div>
         <div
+          id="panel-preview"
+          role="tabpanel"
           className={cn(
             "w-full md:w-[55%] md:block overflow-hidden",
             tab === "preview" ? "block" : "hidden",

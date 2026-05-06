@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next"
 
 const BASE_URL = "https://curriculum-gratis.cl"
-const LAST_MODIFIED = new Date("2026-05-06")
 
 const ROUTES: Array<{
   path: string
@@ -18,7 +17,7 @@ const ROUTES: Array<{
 export default function sitemap(): MetadataRoute.Sitemap {
   return ROUTES.map((route) => ({
     url: `${BASE_URL}${route.path}`,
-    lastModified: LAST_MODIFIED,
+    lastModified: new Date(),
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }))

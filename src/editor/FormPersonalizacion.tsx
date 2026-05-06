@@ -65,14 +65,15 @@ export function FormPersonalizacion() {
         "Idioma: cambia solo los títulos de las secciones. Tus datos los tienes que escribir tú en el idioma del país al que postulas.",
       ]}
     >
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-semibold text-ds-ink-muted">Idioma del CV</label>
+      <fieldset className="flex flex-col gap-1.5">
+        <legend className="text-sm font-semibold text-ds-ink-muted">Idioma del CV</legend>
         <div className="grid grid-cols-2 gap-2">
           {IDIOMAS_CV.map((i) => (
             <button
               key={i.valor}
               type="button"
               onClick={() => set({ idiomaCv: i.valor })}
+              aria-pressed={(personalizacion.idiomaCv ?? "es") === i.valor}
               className={cn(
                 "border p-2.5 text-left transition-all cursor-pointer",
                 (personalizacion.idiomaCv ?? "es") === i.valor
@@ -85,16 +86,17 @@ export function FormPersonalizacion() {
             </button>
           ))}
         </div>
-      </div>
+      </fieldset>
 
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-semibold text-ds-ink-muted">Plantilla</label>
+      <fieldset className="flex flex-col gap-1.5">
+        <legend className="text-sm font-semibold text-ds-ink-muted">Plantilla</legend>
         <div className="grid grid-cols-2 gap-2">
           {PLANTILLAS.map((p) => (
             <button
               key={p.valor}
               type="button"
               onClick={() => set({ plantilla: p.valor as PlantillaId })}
+              aria-pressed={personalizacion.plantilla === p.valor}
               className={cn(
                 "border p-3 text-left transition-all cursor-pointer",
                 personalizacion.plantilla === p.valor
@@ -114,17 +116,18 @@ export function FormPersonalizacion() {
             </button>
           ))}
         </div>
-      </div>
+      </fieldset>
 
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-semibold text-ds-ink-muted">Color</label>
+      <fieldset className="flex flex-col gap-1.5">
+        <legend className="text-sm font-semibold text-ds-ink-muted">Color</legend>
         <div className="flex gap-2 flex-wrap">
           {COLORES_TEMA.map((c) => (
             <button
               key={c.valor}
               type="button"
               onClick={() => set({ color: c.valor as ColorTema })}
-              title={c.etiqueta}
+              aria-label={`Color ${c.etiqueta}`}
+              aria-pressed={personalizacion.color === c.valor}
               className={cn(
                 "h-8 w-8 rounded-full transition-all cursor-pointer",
                 c.clase,
@@ -135,16 +138,17 @@ export function FormPersonalizacion() {
             />
           ))}
         </div>
-      </div>
+      </fieldset>
 
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-semibold text-ds-ink-muted">Fuente</label>
+      <fieldset className="flex flex-col gap-1.5">
+        <legend className="text-sm font-semibold text-ds-ink-muted">Fuente</legend>
         <div className="grid grid-cols-1 gap-2">
           {FUENTES.map((f) => (
             <button
               key={f.valor}
               type="button"
               onClick={() => set({ fuente: f.valor as FuenteId })}
+              aria-pressed={(personalizacion.fuente ?? "inter") === f.valor}
               className={cn(
                 "border px-3 py-2 text-left transition-all cursor-pointer flex items-baseline gap-2",
                 (personalizacion.fuente ?? "inter") === f.valor
@@ -162,19 +166,20 @@ export function FormPersonalizacion() {
             </button>
           ))}
         </div>
-      </div>
+      </fieldset>
 
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-semibold text-ds-ink-muted">
+      <fieldset className="flex flex-col gap-1.5">
+        <legend className="text-sm font-semibold text-ds-ink-muted">
           Orden de secciones
-        </label>
+        </legend>
         <p className="text-xs text-ds-ink-muted -mt-1">
           Arrastra o usa las flechas. En Moderno, competencias e idiomas se muestran en el sidebar.
         </p>
-        <div className="flex flex-col gap-1.5 mt-1">
+        <div className="flex flex-col gap-1.5 mt-1" role="list">
           {ordenSecciones.map((id, i) => (
             <div
               key={id}
+              role="listitem"
               draggable
               onDragStart={() => setArrastrando(i)}
               onDragEnter={() => setSobreIndex(i)}
@@ -228,7 +233,7 @@ export function FormPersonalizacion() {
             </div>
           ))}
         </div>
-      </div>
+      </fieldset>
     </SeccionFormulario>
   )
 }

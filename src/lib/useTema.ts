@@ -18,11 +18,7 @@ function aplicarClaseDark(oscuro: boolean) {
 }
 
 export function useTema() {
-  const [tema, setTemaState] = useState<Tema>("sistema")
-
-  useEffect(() => {
-    setTemaState(obtenerTemaGuardado())
-  }, [])
+  const [tema, setTemaState] = useState<Tema>(() => obtenerTemaGuardado())
 
   useEffect(() => {
     function actualizar() {
