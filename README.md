@@ -136,6 +136,14 @@ El sitio usa:
 
 Los cambios se trabajan primero en `dev` para revisar preview antes de llevarlos a `main`.
 
+## Licencia
+
+Este proyecto es source-available bajo la PolyForm Noncommercial License 1.0.0.
+
+Puedes usar, estudiar, modificar y compartir el codigo para fines no comerciales. No puedes usarlo comercialmente, venderlo, integrarlo en un producto comercial ni explotarlo con fines de lucro sin autorizacion previa del titular del proyecto.
+
+Ver `LICENSE`, `NOTICE` y `CONTRIBUTING.md`.
+
 ## Notas para contribuir
 
 - Mantener nombres de variables, funciones, tipos y archivos en espanol cuando sea codigo propio del dominio.
