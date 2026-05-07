@@ -2,6 +2,9 @@
 
 import { useState, useMemo } from "react"
 import { TargetIcon, CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react"
+import { Badge } from "@/components/atoms/Badge"
+import { Surface } from "@/components/atoms/Surface"
+import { Text } from "@/components/atoms/Text"
 import { Textarea } from "@/components/atoms/Textarea"
 import { SeccionFormulario } from "@/components/molecules/SeccionFormulario"
 import { useCurriculumStore } from "@/lib/store"
@@ -44,11 +47,11 @@ export function FormAnalisisAts() {
       />
 
       {jd.trim().length > 0 && resultado.totalClaves > 0 && (
-        <div className="flex flex-col gap-3 border border-border-subtle p-3 bg-panel-muted">
+        <Surface variant="panelMuted" className="flex flex-col gap-3 p-3">
           <div className="flex items-baseline justify-between">
-            <span className="text-sm font-semibold text-text-muted">
+            <Text as="span" variant="label">
               Coincidencia con el puesto
-            </span>
+            </Text>
             <span className={`text-2xl font-bold ${colorPorcentaje}`}>
               {porcentaje}%
             </span>
@@ -65,40 +68,40 @@ export function FormAnalisisAts() {
               style={{ width: `${porcentaje}%` }}
             />
           </div>
-          <p className="text-xs text-text-muted">
+          <Text variant="caption">
             {resultado.encontradas} de {resultado.totalClaves} palabras clave presentes en tu CV
-          </p>
+          </Text>
 
           <div className="flex flex-col gap-2">
             <div className="flex flex-wrap gap-1.5">
               {resultado.palabras
                 .filter((p) => !p.enCv)
                 .map((p) => (
-                  <span
+                  <Badge
                     key={p.palabra}
-                    className="inline-flex items-center gap-1 border border-danger-line bg-danger-soft px-2 py-0.5 text-[11px] text-danger-text"
+                    variant="danger"
                     title={`Aparece ${p.frecuencia}× en la oferta`}
                   >
                     <XCircleIcon size={12} weight="fill" />
                     {p.palabra}
-                  </span>
+                  </Badge>
                 ))}
             </div>
             <div className="flex flex-wrap gap-1.5">
               {resultado.palabras
                 .filter((p) => p.enCv)
                 .map((p) => (
-                  <span
+                  <Badge
                     key={p.palabra}
-                    className="inline-flex items-center gap-1 border border-success-line bg-success-soft px-2 py-0.5 text-[11px] text-success-text"
+                    variant="success"
                   >
                     <CheckCircleIcon size={12} weight="fill" />
                     {p.palabra}
-                  </span>
+                  </Badge>
                 ))}
             </div>
           </div>
-        </div>
+        </Surface>
       )}
     </SeccionFormulario>
   )

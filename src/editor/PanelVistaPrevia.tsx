@@ -2,6 +2,9 @@
 
 import { useRef, useEffect, useState } from "react"
 import { WarningIcon } from "@phosphor-icons/react"
+import { Surface, surfaceVariants } from "@/components/atoms/Surface"
+import { Text } from "@/components/atoms/Text"
+import { cn } from "@/components/ui/cn"
 import { CurriculumVista, A4_WIDTH_PX, A4_HEIGHT_PX } from "@/cv/CurriculumVista"
 import { useCurriculumStore } from "@/lib/store"
 
@@ -47,21 +50,22 @@ export function PanelVistaPrevia() {
   return (
     <div
       ref={contenedorRef}
-      className="h-full overflow-y-auto bg-panel-muted p-3 sm:p-4 relative"
+      className={cn(surfaceVariants({ variant: "preview" }), "h-full overflow-y-auto p-3 sm:p-4 relative")}
     >
       {excede && (
-        <div
+        <Surface
+          variant="notice"
           data-no-print
-          className="sticky top-0 z-10 mb-3 mx-auto max-w-md flex items-start gap-2 border border-action-primary bg-action-soft px-3 py-2 text-[12px] text-text-main shadow-sm"
+          className="sticky top-0 z-10 mb-3 mx-auto max-w-md flex items-start gap-2 px-3 py-2 text-[12px]"
         >
           <WarningIcon size={16} weight="fill" className="shrink-0 mt-0.5 text-action-primary" />
           <div className="flex-1">
-            <p className="font-semibold">Tu CV ocupa {paginas} páginas</p>
-            <p className="text-text-muted leading-snug">
+            <Text variant="strong" className="text-[12px]">Tu CV ocupa {paginas} páginas</Text>
+            <Text variant="caption" className="leading-snug">
               Lo ideal es 1 página. Acorta el perfil, consolida experiencias antiguas o quita habilidades irrelevantes.
-            </p>
+            </Text>
           </div>
-        </div>
+        </Surface>
       )}
       <div
         className="mx-auto"

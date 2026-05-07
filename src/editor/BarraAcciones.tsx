@@ -14,6 +14,8 @@ import {
   FileArrowUpIcon,
 } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
+import { Surface } from "@/components/atoms/Surface"
+import { Text } from "@/components/atoms/Text"
 import { useCurriculumStore } from "@/lib/store"
 import { useTema, type Tema } from "@/lib/useTema"
 import { exportarJson, importarJson } from "@/lib/importar-exportar"
@@ -168,17 +170,19 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   }
 
   return (
-    <div data-no-print className="flex items-center justify-between border-b border-border-subtle bg-panel px-3 py-2.5 md:px-4">
+    <Surface data-no-print variant="toolbar" className="flex items-center justify-between px-3 py-2.5 md:px-4">
       <div className="flex items-center gap-1.5 min-w-0">
-        <h1
-          className="text-base font-extrabold text-text-main truncate cursor-default select-none"
+        <Text
+          as="h1"
+          variant="strong"
+          className="text-base font-extrabold truncate cursor-default select-none"
           onClick={handleTapTitulo}
         >
           <span className="md:hidden">CV Gratis</span>
           <span className="hidden md:inline">Generador de Curriculum</span>
-        </h1>
-        <span className="hidden md:inline text-xs text-text-muted">·</span>
-        <span className="hidden md:inline text-xs text-text-muted shrink-0">100% gratuito</span>
+        </Text>
+        <Text as="span" variant="caption" className="hidden md:inline">·</Text>
+        <Text as="span" variant="caption" className="hidden md:inline shrink-0">100% gratuito</Text>
       </div>
       <div className="flex items-center gap-1 md:gap-2 shrink-0">
         <Button variant="ghost" size="sm" className="hidden md:inline-flex" onClick={() => setEjemploAbierto(true)}>
@@ -219,11 +223,12 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
             <DotsThreeVerticalIcon size={18} />
           </Button>
           {menuAbierto && (
-            <div
+            <Surface
+              variant="popover"
               id={menuId}
               role="menu"
               onKeyDown={handleTeclaMenu}
-              className="absolute right-0 top-full mt-1 z-50 min-w-[180px] border border-border-subtle bg-panel py-1 shadow-lg"
+              className="absolute right-0 top-full mt-1 z-50 min-w-[180px] py-1"
             >
               <Button
                 ref={(el) => {
@@ -253,7 +258,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 <FileArrowUpIcon size={16} />
                 Importar JSON
               </Button>
-            </div>
+            </Surface>
           )}
           <input
             ref={inputArchivoRef}
@@ -274,6 +279,6 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
         </Button>
       </div>
       <DialogEjemploCv abierto={ejemploAbierto} onCerrar={() => setEjemploAbierto(false)} />
-    </div>
+    </Surface>
   )
 }

@@ -1,6 +1,8 @@
 "use client"
 
 import { useRef, useEffect, useState } from "react"
+import { surfaceVariants } from "@/components/atoms/Surface"
+import { cn } from "@/components/ui/cn"
 import { VistaCarta } from "@/cv/VistaCarta"
 import { A4_WIDTH_PX, A4_HEIGHT_PX } from "@/cv/CurriculumVista"
 import { useCurriculumStore } from "@/lib/store"
@@ -40,7 +42,7 @@ export function PanelVistaCarta() {
   return (
     <div
       ref={contenedorRef}
-      className="h-full overflow-y-auto bg-panel-muted p-3 sm:p-4"
+      className={cn(surfaceVariants({ variant: "preview" }), "h-full overflow-y-auto p-3 sm:p-4")}
     >
       <div
         className="mx-auto"

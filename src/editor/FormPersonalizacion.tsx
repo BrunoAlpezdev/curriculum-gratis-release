@@ -17,7 +17,9 @@ import {
   ETIQUETAS_SECCION_ORDENABLE,
   ORDEN_SECCIONES_INICIAL,
 } from "@/lib/constantes"
+import { Badge } from "@/components/atoms/Badge"
 import { Button } from "@/components/atoms/Button"
+import { Text } from "@/components/atoms/Text"
 import { cn } from "@/components/ui/cn"
 import type { ColorTema, PlantillaId, FuenteId, IdiomaCv, SeccionOrdenable } from "@/types"
 
@@ -67,7 +69,7 @@ export function FormPersonalizacion() {
       ]}
     >
       <fieldset className="flex flex-col gap-1.5">
-        <legend className="text-sm font-semibold text-text-muted">Idioma del CV</legend>
+        <Text as="legend" variant="label">Idioma del CV</Text>
         <div className="grid grid-cols-2 gap-2">
           {IDIOMAS_CV.map((i) => (
             <Button
@@ -79,15 +81,15 @@ export function FormPersonalizacion() {
               size="none"
               className="block p-2.5"
             >
-              <p className="text-sm font-semibold text-text-main">{i.etiqueta}</p>
-              <p className="text-xs text-text-muted mt-0.5">{i.descripcion}</p>
+              <Text variant="strong" className="text-sm">{i.etiqueta}</Text>
+              <Text variant="caption" className="mt-0.5">{i.descripcion}</Text>
             </Button>
           ))}
         </div>
       </fieldset>
 
       <fieldset className="flex flex-col gap-1.5">
-        <legend className="text-sm font-semibold text-text-muted">Plantilla</legend>
+        <Text as="legend" variant="label">Plantilla</Text>
         <div className="grid grid-cols-2 gap-2">
           {PLANTILLAS.map((p) => (
             <Button
@@ -100,21 +102,21 @@ export function FormPersonalizacion() {
               className="block p-3"
             >
               <div className="flex items-center gap-1.5">
-                <p className="text-sm font-semibold text-text-main">{p.etiqueta}</p>
+                <Text variant="strong" className="text-sm">{p.etiqueta}</Text>
                 {p.ats && (
-                  <span className="bg-panel-muted text-action-strong px-1.5 py-0.5 text-[10px] font-bold leading-none">
+                  <Badge variant="neutral" className="text-[10px]">
                     ATS
-                  </span>
+                  </Badge>
                 )}
               </div>
-              <p className="text-xs text-text-muted mt-0.5">{p.descripcion}</p>
+              <Text variant="caption" className="mt-0.5">{p.descripcion}</Text>
             </Button>
           ))}
         </div>
       </fieldset>
 
       <fieldset className="flex flex-col gap-1.5">
-        <legend className="text-sm font-semibold text-text-muted">Color</legend>
+        <Text as="legend" variant="label">Color</Text>
         <div className="flex gap-2 flex-wrap">
           {COLORES_TEMA.map((c) => (
             <Button
@@ -138,7 +140,7 @@ export function FormPersonalizacion() {
       </fieldset>
 
       <fieldset className="flex flex-col gap-1.5">
-        <legend className="text-sm font-semibold text-text-muted">Fuente</legend>
+        <Text as="legend" variant="label">Fuente</Text>
         <div className="grid grid-cols-1 gap-2">
           {FUENTES.map((f) => (
             <Button
@@ -150,25 +152,27 @@ export function FormPersonalizacion() {
               size="none"
               className="flex items-baseline gap-2 px-3 py-2"
             >
-              <span
-                className="text-sm font-semibold text-text-main"
+              <Text
+                as="span"
+                variant="strong"
+                className="text-sm"
                 style={{ fontFamily: FUENTE_CSS[f.valor] }}
               >
                 {f.etiqueta}
-              </span>
-              <span className="text-xs text-text-muted">{f.tipo}</span>
+              </Text>
+              <Text as="span" variant="caption">{f.tipo}</Text>
             </Button>
           ))}
         </div>
       </fieldset>
 
       <fieldset className="flex flex-col gap-1.5">
-        <legend className="text-sm font-semibold text-text-muted">
+        <Text as="legend" variant="label">
           Orden de secciones
-        </legend>
-        <p className="text-xs text-text-muted -mt-1">
+        </Text>
+        <Text variant="caption" className="-mt-1">
           Arrastra o usa las flechas. En Moderno, competencias e idiomas se muestran en el sidebar.
-        </p>
+        </Text>
         <div className="flex flex-col gap-1.5 mt-1" role="list">
           {ordenSecciones.map((id, i) => (
             <div
@@ -203,9 +207,9 @@ export function FormPersonalizacion() {
                 size={16}
                 className="text-text-muted cursor-grab active:cursor-grabbing shrink-0"
               />
-              <span className="flex-1 text-sm text-text-muted">
+              <Text as="span" variant="small" className="flex-1">
                 {ETIQUETAS_SECCION_ORDENABLE[id]}
-              </span>
+              </Text>
               <Button
                 type="button"
                 onClick={() => moverArriba(i)}

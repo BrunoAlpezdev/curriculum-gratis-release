@@ -1,4 +1,5 @@
 import { XIcon } from "@phosphor-icons/react"
+import { Surface } from "@/components/atoms/Surface"
 import { Button } from "@/components/atoms/Button"
 import { cn } from "@/components/ui/cn"
 
@@ -10,9 +11,11 @@ interface ChipProps {
 
 export function Chip({ children, onRemove, className }: ChipProps) {
   return (
-    <span
+    <Surface
+      as="span"
+      variant="panelMuted"
       className={cn(
-        "inline-flex items-center gap-1 border border-border-subtle bg-panel-muted px-3 py-1 text-sm text-text-main",
+        "inline-flex items-center gap-1 px-3 py-1 text-sm text-text-main",
         className,
       )}
     >
@@ -29,6 +32,6 @@ export function Chip({ children, onRemove, className }: ChipProps) {
           <XIcon size={14} weight="bold" />
         </Button>
       )}
-    </span>
+    </Surface>
   )
 }

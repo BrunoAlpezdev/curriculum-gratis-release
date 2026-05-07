@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect, useId } from "react"
 import { CaretLeftIcon, CaretRightIcon, CalendarBlankIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
+import { Surface } from "@/components/atoms/Surface"
+import { Text } from "@/components/atoms/Text"
 import { cn } from "@/components/ui/cn"
 import { MESES } from "@/lib/formato"
 
@@ -163,9 +165,9 @@ function VistaAnios({
         >
           <CaretLeftIcon size={16} className="text-text-muted" />
         </Button>
-        <span className="text-sm font-semibold text-text-main">
+        <Text as="span" variant="strong" className="text-sm">
           {paginaInicio} - {paginaInicio + ANIOS_POR_PAGINA - 1}
-        </span>
+        </Text>
         <Button
           type="button"
           onClick={() => setPaginaInicio((p) => Math.min(ANIO_MAX - (ANIO_MAX % ANIOS_POR_PAGINA), p + ANIOS_POR_PAGINA))}
@@ -261,9 +263,9 @@ export function SelectorFecha({
 
   return (
     <div ref={contenedorRef} className="relative flex flex-col gap-1.5">
-      <label id={autoId} className="text-sm font-semibold text-text-muted">
+      <Text as="label" id={autoId} variant="label">
         {label}
-      </label>
+      </Text>
       <Button
         type="button"
         aria-labelledby={autoId}
@@ -280,7 +282,7 @@ export function SelectorFecha({
       </Button>
 
       {abierto && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-50 border border-border-subtle bg-panel shadow-lg p-3 flex flex-col gap-2">
+        <Surface variant="popover" className="absolute top-full left-0 right-0 mt-1 z-50 flex flex-col gap-2 p-3">
           {vistaAnios ? (
             <VistaAnios
               anioVisible={anioVisible}
@@ -312,7 +314,7 @@ export function SelectorFecha({
               Presente
             </Button>
           )}
-        </div>
+        </Surface>
       )}
     </div>
   )

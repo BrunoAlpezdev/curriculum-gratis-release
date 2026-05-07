@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react"
 import { CaretDownIcon, CaretUpIcon, LightbulbIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
+import { Surface } from "@/components/atoms/Surface"
+import { Text } from "@/components/atoms/Text"
 import { cn } from "@/components/ui/cn"
 
 const PEEK_KEY = "curriculum-gratis:tip-peek"
@@ -75,7 +77,7 @@ export function SeccionFormulario({
   }
 
   return (
-    <div className="border border-border-subtle bg-panel">
+    <Surface variant="panel">
       <Button
         type="button"
         onClick={toggle}
@@ -85,7 +87,7 @@ export function SeccionFormulario({
       >
         <div className="flex items-center gap-2">
           <span className="text-action-strong">{icono}</span>
-          <h3 className="text-base font-extrabold text-text-main">{titulo}</h3>
+          <Text as="h3" variant="strong" className="text-base font-extrabold">{titulo}</Text>
         </div>
         {abierta ? (
           <CaretUpIcon size={16} className="text-text-muted" />
@@ -119,7 +121,7 @@ export function SeccionFormulario({
                     className={lightbulbAnimado ? "tip-wiggle" : ""}
                     onAnimationEnd={() => setLightbulbAnimado(false)}
                   />
-                  <span className="text-xs font-medium">Consejos</span>
+                  <Text as="span" variant="caption" className="font-medium text-action-strong">Consejos</Text>
                   <CaretDownIcon
                     size={12}
                      className={cn(
@@ -135,14 +137,14 @@ export function SeccionFormulario({
                   )}
                 >
                   <div className="overflow-hidden">
-                    <ul className="mt-2 border border-border-subtle bg-action-soft px-3 py-2.5 flex flex-col gap-1.5">
+                    <Surface as="ul" variant="notice" className="mt-2 flex flex-col gap-1.5 px-3 py-2.5 shadow-none">
                       {tip.map((t, i) => (
                         <li key={i} className="flex items-start gap-2 text-xs text-text-main leading-relaxed">
                           <span className="mt-0.5 shrink-0 text-action-primary">•</span>
                           {t}
                         </li>
                       ))}
-                    </ul>
+                    </Surface>
                   </div>
                 </div>
               </div>
@@ -151,6 +153,6 @@ export function SeccionFormulario({
           </div>
         </div>
       </div>
-    </div>
+    </Surface>
   )
 }

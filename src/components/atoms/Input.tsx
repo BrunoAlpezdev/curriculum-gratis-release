@@ -1,4 +1,5 @@
 import { useId } from "react"
+import { Text } from "@/components/atoms/Text"
 import { cn } from "@/components/ui/cn"
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -12,9 +13,9 @@ export function Input({ label, error, className, id, ...props }: InputProps) {
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={inputId} className="text-sm font-semibold text-text-muted">
+      <Text as="label" htmlFor={inputId} variant="label">
         {label}
-      </label>
+      </Text>
       <input
         id={inputId}
         className={cn(
@@ -24,7 +25,7 @@ export function Input({ label, error, className, id, ...props }: InputProps) {
         )}
         {...props}
       />
-      {error && <p className="text-xs text-danger">{error}</p>}
+      {error && <Text variant="caption" className="text-danger">{error}</Text>}
     </div>
   )
 }

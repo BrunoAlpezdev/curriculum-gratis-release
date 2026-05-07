@@ -8,6 +8,8 @@ import { PanelFormularioCarta } from "@/editor/PanelFormularioCarta"
 import { PanelVistaPrevia } from "@/editor/PanelVistaPrevia"
 import { PanelVistaCarta } from "@/editor/PanelVistaCarta"
 import { Button } from "@/components/atoms/Button"
+import { Surface } from "@/components/atoms/Surface"
+import { Text } from "@/components/atoms/Text"
 import { cn } from "@/components/ui/cn"
 import { useHidratado } from "@/lib/useHidratado"
 
@@ -21,20 +23,21 @@ export function Editor() {
 
   if (!hidratado) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <p className="text-sm text-text-muted">Cargando...</p>
-      </div>
+      <Surface variant="page" className="flex h-screen items-center justify-center">
+        <Text variant="small">Cargando...</Text>
+      </Surface>
     )
   }
 
   return (
-    <div className="flex h-dvh flex-col bg-app-bg text-text-main">
+    <Surface variant="page" className="flex h-dvh flex-col">
       <BarraAcciones modo={modo} />
 
       {/* Toggle CV / Carta */}
-      <div
+      <Surface
+        variant="stripMuted"
         data-no-print
-        className="flex items-center justify-center gap-1 border-b border-border-subtle bg-panel-muted px-2 py-2"
+        className="flex items-center justify-center gap-1 px-2 py-2"
         aria-label="Tipo de documento"
       >
         <Button
@@ -59,14 +62,15 @@ export function Editor() {
           <EnvelopeIcon size={14} />
           Carta de presentacion
         </Button>
-      </div>
+      </Surface>
 
       {/* Tabs mobile */}
-      <div
+      <Surface
+        variant="toolbar"
         data-no-print
         role="tablist"
         aria-label="Vista del editor"
-        className="flex md:hidden border-b border-border-subtle bg-panel"
+        className="flex md:hidden"
       >
         <Button
           type="button"
@@ -94,7 +98,7 @@ export function Editor() {
           <EyeIcon size={16} />
           Vista Previa
         </Button>
-      </div>
+      </Surface>
 
       {/* Layout principal */}
       <div className="flex flex-1 overflow-hidden">
@@ -119,6 +123,6 @@ export function Editor() {
           {modo === "cv" ? <PanelVistaPrevia /> : <PanelVistaCarta />}
         </div>
       </div>
-    </div>
+    </Surface>
   )
 }

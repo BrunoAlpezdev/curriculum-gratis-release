@@ -1,5 +1,6 @@
 import { TrashIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
+import { Surface } from "@/components/atoms/Surface"
 
 interface EntradaRepetibleProps {
   onEliminar: () => void
@@ -11,7 +12,7 @@ export function EntradaRepetible({
   children,
 }: EntradaRepetibleProps) {
   return (
-    <div className="relative border border-border-subtle bg-panel-muted p-4 flex flex-col gap-3">
+    <Surface variant="panelMuted" className="relative flex flex-col gap-3 p-4">
       <div className="absolute top-3 right-3">
         <Button
           variant="ghost"
@@ -24,6 +25,6 @@ export function EntradaRepetible({
         </Button>
       </div>
       {children}
-    </div>
+    </Surface>
   )
 }

@@ -4,6 +4,8 @@ import { useRef } from "react"
 import { UserIcon, CameraIcon, TrashIcon } from "@phosphor-icons/react"
 import { Input } from "@/components/atoms/Input"
 import { Button } from "@/components/atoms/Button"
+import { Surface } from "@/components/atoms/Surface"
+import { Text } from "@/components/atoms/Text"
 import { SeccionFormulario } from "@/components/molecules/SeccionFormulario"
 import { useCurriculumStore } from "@/lib/store"
 
@@ -49,18 +51,18 @@ export function FormDatosPersonales() {
       ]}
     >
       <div className="flex items-center gap-3">
-        <div className="relative shrink-0 h-16 w-16 overflow-hidden border border-border-subtle bg-panel-muted flex items-center justify-center">
+        <Surface variant="panelMuted" className="relative shrink-0 h-16 w-16 overflow-hidden flex items-center justify-center">
           {datos.foto ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={datos.foto} alt="Foto" className="h-full w-full object-cover" />
           ) : (
             <UserIcon size={28} className="text-text-muted" />
           )}
-        </div>
+        </Surface>
         <div className="flex flex-col gap-1.5">
-          <span className="text-xs text-text-muted">
+          <Text as="span" variant="caption">
             Foto (opcional, solo en plantillas visuales)
-          </span>
+          </Text>
           <div className="flex items-center gap-2">
             <Button
               variant="secondary"
