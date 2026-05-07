@@ -3,7 +3,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* Design system: papel cálido, tinta suave y acento institucional no-IA. */
+  --font-inter: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-roboto: Roboto, Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-lato: Lato, "Trebuchet MS", ui-sans-serif, system-ui, sans-serif;
+  --font-merriweather: Merriweather, Georgia, "Times New Roman", serif;
+  --font-libre-baskerville: "Libre Baskerville", Georgia, "Times New Roman", serif;
+  /* Design system: papel calido, tinta suave y acento institucional. */
   --ds-paper: #f3eddf;
   --ds-surface: #fbf7ec;
   --ds-surface-muted: #ebe1cf;
@@ -14,8 +19,42 @@
   --ds-accent: #8a4b2a;
   --ds-accent-strong: #65351f;
   --ds-accent-soft: #ead5c5;
+  --ds-danger: #b91c1c;
+  --ds-danger-strong: #991b1b;
+  --ds-danger-soft: #fee2e2;
+  --ds-danger-text: #991b1b;
+  --ds-danger-line: #fca5a5;
+  --ds-success: #059669;
+  --ds-success-soft: #d1fae5;
+  --ds-success-text: #065f46;
+  --ds-success-line: #6ee7b7;
+  --ds-warning: #d97706;
+  --ds-warning-soft: #fef3c7;
   --background: var(--ds-paper);
   --foreground: var(--ds-ink);
+  --app-bg: var(--ds-paper);
+  --panel-bg: var(--ds-surface);
+  --panel-muted-bg: var(--ds-surface-muted);
+  --text-main: var(--ds-ink);
+  --text-muted: var(--ds-ink-muted);
+  --border-subtle: var(--ds-line);
+  --border-strong: var(--ds-line-strong);
+  --action-primary: var(--ds-accent);
+  --action-primary-hover: var(--ds-accent-strong);
+  --action-primary-fg: var(--ds-surface);
+  --action-strong: var(--ds-accent-strong);
+  --action-soft: var(--ds-accent-soft);
+  --danger: var(--ds-danger);
+  --danger-hover: var(--ds-danger-strong);
+  --danger-soft: var(--ds-danger-soft);
+  --danger-text: var(--ds-danger-text);
+  --danger-line: var(--ds-danger-line);
+  --success: var(--ds-success);
+  --success-soft: var(--ds-success-soft);
+  --success-text: var(--ds-success-text);
+  --success-line: var(--ds-success-line);
+  --warning: var(--ds-warning);
+  --warning-soft: var(--ds-warning-soft);
 }
 
 .dark {
@@ -29,28 +68,76 @@
   --ds-accent: #d28a56;
   --ds-accent-strong: #efb178;
   --ds-accent-soft: #4b3528;
+  --ds-danger: #ef4444;
+  --ds-danger-strong: #f87171;
+  --ds-danger-soft: #4c1d1d;
+  --ds-danger-text: #fecaca;
+  --ds-danger-line: #b91c1c;
+  --ds-success: #34d399;
+  --ds-success-soft: #123a2b;
+  --ds-success-text: #bbf7d0;
+  --ds-success-line: #047857;
+  --ds-warning: #f59e0b;
+  --ds-warning-soft: #422b0b;
   --background: var(--ds-paper);
   --foreground: var(--ds-ink);
+  --app-bg: var(--ds-paper);
+  --panel-bg: var(--ds-surface);
+  --panel-muted-bg: var(--ds-surface-muted);
+  --text-main: var(--ds-ink);
+  --text-muted: var(--ds-ink-muted);
+  --border-subtle: var(--ds-line);
+  --border-strong: var(--ds-line-strong);
+  --action-primary: var(--ds-accent);
+  --action-primary-hover: var(--ds-accent-strong);
+  --action-primary-fg: var(--ds-paper);
+  --action-strong: var(--ds-accent-strong);
+  --action-soft: var(--ds-accent-soft);
+  --danger: var(--ds-danger);
+  --danger-hover: var(--ds-danger-strong);
+  --danger-soft: var(--ds-danger-soft);
+  --danger-text: var(--ds-danger-text);
+  --danger-line: var(--ds-danger-line);
+  --success: var(--ds-success);
+  --success-soft: var(--ds-success-soft);
+  --success-text: var(--ds-success-text);
+  --success-line: var(--ds-success-line);
+  --warning: var(--ds-warning);
+  --warning-soft: var(--ds-warning-soft);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-ds-paper: var(--ds-paper);
-  --color-ds-surface: var(--ds-surface);
-  --color-ds-surface-muted: var(--ds-surface-muted);
-  --color-ds-ink: var(--ds-ink);
-  --color-ds-ink-muted: var(--ds-ink-muted);
-  --color-ds-line: var(--ds-line);
-  --color-ds-line-strong: var(--ds-line-strong);
-  --color-ds-accent: var(--ds-accent);
-  --color-ds-accent-strong: var(--ds-accent-strong);
-  --color-ds-accent-soft: var(--ds-accent-soft);
+  --color-app-bg: var(--app-bg);
+  --color-panel: var(--panel-bg);
+  --color-panel-muted: var(--panel-muted-bg);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-action-primary: var(--action-primary);
+  --color-action-primary-hover: var(--action-primary-hover);
+  --color-action-primary-fg: var(--action-primary-fg);
+  --color-action-strong: var(--action-strong);
+  --color-action-soft: var(--action-soft);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-text: var(--danger-text);
+  --color-danger-line: var(--danger-line);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-text: var(--success-text);
+  --color-success-line: var(--success-line);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-inter);
 }
 
 @keyframes tip-wiggle {

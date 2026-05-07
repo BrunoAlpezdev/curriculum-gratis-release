@@ -8,7 +8,10 @@ import {
   MinusIcon,
   PlusIcon,
 } from "@phosphor-icons/react"
-import { Button } from "@/components/atoms/Button"
+import { Button, buttonVariants } from "@/components/atoms/Button"
+import { Surface } from "@/components/atoms/Surface"
+import { Text } from "@/components/atoms/Text"
+import { cn } from "@/components/ui/cn"
 
 const URL_PDF = "/Bruno_Alexis_Perez_Valenzuela_CV.pdf"
 const ZOOM_MIN = 75
@@ -53,32 +56,34 @@ export function DialogEjemploCv({ abierto, onCerrar }: Props) {
   }
 
   return (
-    <div
+    <Surface
+      variant="overlay"
       role="dialog"
       aria-modal="true"
       aria-label="CV de ejemplo"
-      className="fixed inset-0 z-50 flex items-stretch justify-center bg-ds-ink/65 backdrop-blur-sm md:items-center md:p-6"
+      className="fixed inset-0 z-50 flex items-stretch justify-center md:items-center md:p-6"
       onClick={onCerrar}
     >
-      <div
-        className="flex h-dvh w-full flex-col bg-ds-surface shadow-2xl md:h-[calc(100dvh-3rem)] md:max-w-3xl"
+      <Surface
+        variant="panel"
+        className="flex h-dvh w-full flex-col border-0 shadow-2xl md:h-[calc(100dvh-3rem)] md:max-w-3xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-ds-line px-4 py-3">
+        <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
           <div className="min-w-0">
-            <h2 className="text-sm font-semibold text-ds-ink">
+            <Text as="h2" variant="strong" className="text-sm">
               CV de ejemplo
-            </h2>
-            <p className="text-[11px] text-ds-ink-muted truncate">
+            </Text>
+            <Text variant="caption" className="truncate text-[11px]">
               Inspirate con este modelo. Tus datos no se modificaran.
-            </p>
+            </Text>
           </div>
           <div className="flex items-center gap-1 shrink-0">
             <a
               href={URL_PDF}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-9 items-center gap-1.5 px-2.5 text-xs font-semibold text-ds-ink-muted hover:bg-ds-surface-muted hover:text-ds-ink"
+              className={cn(buttonVariants({ variant: "ghost", size: "xs" }), "h-9")}
               title="Abrir en pestaña nueva"
             >
               <ArrowSquareOutIcon size={16} />
@@ -87,7 +92,7 @@ export function DialogEjemploCv({ abierto, onCerrar }: Props) {
             <a
               href={URL_PDF}
               download
-              className="inline-flex h-9 items-center gap-1.5 px-2.5 text-xs font-semibold text-ds-ink-muted hover:bg-ds-surface-muted hover:text-ds-ink md:hidden"
+              className={cn(buttonVariants({ variant: "ghost", size: "xs" }), "h-9 md:hidden")}
               title="Descargar PDF"
             >
               <DownloadSimpleIcon size={16} />
@@ -99,19 +104,19 @@ export function DialogEjemploCv({ abierto, onCerrar }: Props) {
           </div>
         </div>
 
-        <div className="relative flex-1 bg-ds-surface-muted min-h-0">
+        <Surface variant="preview" className="relative flex-1 min-h-0">
           <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center md:hidden">
-            <div className="max-w-xs border border-ds-line bg-ds-surface p-5">
-              <h3 className="text-base font-extrabold text-ds-ink">Ver CV de ejemplo</h3>
-              <p className="mt-2 text-sm leading-6 text-ds-ink-muted">
+            <Surface variant="panel" className="max-w-xs p-5">
+              <Text as="h3" variant="strong" className="text-base font-extrabold">Ver CV de ejemplo</Text>
+              <Text variant="small" className="mt-2 leading-6">
                 En celular el visor PDF del navegador puede fallar o verse cortado. Es mejor abrirlo en una pestaña nueva o descargarlo.
-              </p>
+              </Text>
               <div className="mt-4 flex flex-col gap-2">
                 <a
                   href={URL_PDF}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 bg-ds-accent px-4 text-sm font-bold text-ds-surface"
+                  className={cn(buttonVariants({ variant: "primary", size: "md" }), "min-h-11")}
                 >
                   <ArrowSquareOutIcon size={16} />
                   Abrir PDF
@@ -119,47 +124,51 @@ export function DialogEjemploCv({ abierto, onCerrar }: Props) {
                 <a
                   href={URL_PDF}
                   download
-                  className="inline-flex min-h-11 items-center justify-center gap-2 border border-ds-line bg-ds-paper px-4 text-sm font-bold text-ds-ink"
+                  className={cn(buttonVariants({ variant: "secondary", size: "md" }), "min-h-11 bg-app-bg")}
                 >
                   <DownloadSimpleIcon size={16} />
                   Descargar PDF
                 </a>
               </div>
-            </div>
+            </Surface>
           </div>
           <iframe
             src={urlPdfEmbebido}
             title="CV de ejemplo"
             className="hidden h-full w-full border-0 md:block"
           />
-          <div className="absolute bottom-3 right-3 z-10 hidden items-center border border-ds-line bg-ds-surface shadow-lg md:flex">
-            <button
+          <Surface variant="popover" className="absolute bottom-3 right-3 z-10 hidden items-center md:flex">
+            <Button
               type="button"
               onClick={reducirZoom}
               disabled={zoom <= ZOOM_MIN}
-              className="inline-flex h-10 w-10 items-center justify-center text-ds-ink-muted hover:bg-ds-surface-muted hover:text-ds-ink disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-ds-ink-muted"
+              variant="iconSubtle"
+              size="icon"
+              className="h-10 w-10 disabled:hover:bg-transparent disabled:hover:text-text-muted"
               aria-label="Reducir zoom"
             >
               <MinusIcon size={15} />
-            </button>
-            <span className="min-w-14 border-x border-ds-line px-2 text-center text-xs font-semibold text-ds-ink-muted">
+            </Button>
+            <Text as="span" variant="caption" className="min-w-14 border-x border-border-subtle px-2 text-center font-semibold">
               {zoom}%
-            </span>
-            <button
+            </Text>
+            <Button
               type="button"
               onClick={aumentarZoom}
               disabled={zoom >= ZOOM_MAX}
-              className="inline-flex h-10 w-10 items-center justify-center text-ds-ink-muted hover:bg-ds-surface-muted hover:text-ds-ink disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-ds-ink-muted"
+              variant="iconSubtle"
+              size="icon"
+              className="h-10 w-10 disabled:hover:bg-transparent disabled:hover:text-text-muted"
               aria-label="Aumentar zoom"
             >
               <PlusIcon size={15} />
-            </button>
-          </div>
+            </Button>
+          </Surface>
           {/* Fallback para navegadores mobile que no embeben PDF.
               Se ve solo si el iframe queda en blanco — el usuario puede tocar
               el boton "Abrir" del header para verlo en pestaña nueva. */}
-        </div>
-      </div>
-    </div>
+        </Surface>
+      </Surface>
+    </Surface>
   )
 }

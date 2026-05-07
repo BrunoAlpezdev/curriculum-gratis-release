@@ -4,16 +4,15 @@ import { getColorHex } from "@/lib/colores"
 import { formatearRangoFechas, formatearFechaEducacion, formatearFecha } from "@/lib/formato"
 import { FUENTES, ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 import { etiquetasCv } from "@/lib/etiquetas-cv"
+import {
+  CONTENT_WIDTH,
+  MARGIN,
+  PAGE_HEIGHT,
+  PAGE_WIDTH,
+  hexToRgb,
+  renderSeccion,
+} from "@/lib/generar-pdf-ats-helpers"
 
-const MARGIN = 20
-const PAGE_WIDTH = 210
-const PAGE_HEIGHT = 297
-const CONTENT_WIDTH = PAGE_WIDTH - MARGIN * 2
-
-/**
- * Genera un PDF con texto nativo (ATS-friendly).
- * Usado para las plantillas Clasico y Minimalista.
- */
 export function generarPdfAts(
   datos: DatosCurriculum,
   personalizacion: Personalizacion,
@@ -47,9 +46,6 @@ export function generarPdfAts(
     setColor(113, 113, 122)
   }
 
-  /* Escribe cada linea con un checkPage entre medio para que
-     bloques largos (perfil, descripciones) salten correctamente
-     de pagina en vez de overflowear al borde inferior. */
   function escribirLineas(lineas: string[], altoLinea: number) {
     for (const linea of lineas) {
       checkPage(altoLinea)
@@ -58,7 +54,6 @@ export function generarPdfAts(
     }
   }
 
-  // --- Header ---
   const dp = datos.datosPersonales
 
   pdf.setFont(fuenteBase, "bold")
@@ -93,14 +88,12 @@ export function generarPdfAts(
     y += 4
   }
 
-  // Linea separadora
   setAccent()
   pdf.setLineWidth(0.5)
   pdf.setDrawColor(color.r, color.g, color.b)
   pdf.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
   y += 6
 
-  // --- Perfil ---
   if (datos.perfil) {
     y = renderSeccion(pdf, e.perfilProfesional.toUpperCase(), y, color, fuenteBase)
     pdf.setFont(fuenteBase, "normal")
@@ -210,7 +203,6 @@ export function generarPdfAts(
         pdf.text(nombre, MARGIN, y)
 
         if (curso.institucion) {
-          /* "nombre, institucion" — institucion en peso normal, en linea con el nombre */
           const offsetX = MARGIN + pdf.getTextWidth(nombre)
           pdf.setFont(fuenteBase, "normal")
           setColor(82, 82, 91)
@@ -367,7 +359,6 @@ export function generarPdfAts(
     renderers[id]()
   }
 
-  // --- Informacion adicional (disponibilidad / pretensiones) ---
   if (datos.disponibilidad || datos.pretensionesRenta) {
     checkPage(12)
     y += 3
@@ -403,35 +394,4 @@ export function generarPdfAts(
 
   const nombre = dp.nombreCompleto.trim().replace(/\s+/g, "_") || "curriculum"
   pdf.save(`${nombre}_CV.pdf`)
-}
-
-function renderSeccion(
-  pdf: jsPDF,
-  titulo: string,
-  y: number,
-  color: { r: number; g: number; b: number },
-  fuenteBase: string,
-): number {
-  if (y + 10 > PAGE_HEIGHT - MARGIN) {
-    pdf.addPage()
-    y = MARGIN
-  }
-
-  pdf.setFont(fuenteBase, "bold")
-  pdf.setFontSize(10)
-  pdf.setTextColor(color.r, color.g, color.b)
-  pdf.text(titulo, MARGIN, y)
-  y += 1
-  pdf.setDrawColor(color.r, color.g, color.b)
-  pdf.setLineWidth(0.3)
-  pdf.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
-  y += 5
-  return y
-}
-
-function hexToRgb(hex: string): { r: number; g: number; b: number } {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return { r, g, b }
 }

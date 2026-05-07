@@ -1,4 +1,5 @@
 import { useId } from "react"
+import { Text } from "@/components/atoms/Text"
 import { cn } from "@/components/ui/cn"
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
@@ -18,13 +19,13 @@ export function Select({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={selectId} className="text-sm font-semibold text-ds-ink-muted">
+      <Text as="label" htmlFor={selectId} variant="label">
         {label}
-      </label>
+      </Text>
       <select
         id={selectId}
         className={cn(
-          "h-11 border border-ds-line bg-ds-surface px-3 text-base text-ds-ink transition-colors focus:border-ds-accent focus:ring-1 focus:ring-ds-accent focus:outline-none",
+          "h-11 border border-border-subtle bg-panel px-3 text-base text-text-main transition-colors focus:border-action-primary focus:ring-1 focus:ring-action-primary focus:outline-none",
           className,
         )}
         {...props}

@@ -2,6 +2,9 @@
 
 import { useState, useRef, useEffect, useId } from "react"
 import { CaretLeftIcon, CaretRightIcon, CalendarBlankIcon } from "@phosphor-icons/react"
+import { Button } from "@/components/atoms/Button"
+import { Surface } from "@/components/atoms/Surface"
+import { Text } from "@/components/atoms/Text"
 import { cn } from "@/components/ui/cn"
 import { MESES } from "@/lib/formato"
 
@@ -73,61 +76,61 @@ function VistaMeses({
   return (
     <>
       <div className="flex items-center justify-between">
-        <button
+        <Button
           type="button"
           onClick={onAnioAnterior}
-          className="p-1.5 hover:bg-ds-surface-muted transition-colors cursor-pointer"
+          variant="iconSubtle"
+          size="none"
+          className="p-1.5"
         >
-          <CaretLeftIcon size={16} className="text-ds-ink-muted" />
-        </button>
-        <button
+          <CaretLeftIcon size={16} className="text-text-muted" />
+        </Button>
+        <Button
           type="button"
           onClick={onClickAnio}
-          className="text-sm font-semibold text-ds-ink hover:text-ds-accent-strong transition-colors cursor-pointer px-2 py-0.5 hover:bg-ds-surface-muted"
+          variant="ghost"
+          size="none"
+          className="px-2 py-0.5 text-sm text-text-main hover:text-action-strong"
         >
           {anioVisible}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={onAnioSiguiente}
-          className="p-1.5 hover:bg-ds-surface-muted transition-colors cursor-pointer"
+          variant="iconSubtle"
+          size="none"
+          className="p-1.5"
         >
-          <CaretRightIcon size={16} className="text-ds-ink-muted" />
-        </button>
+          <CaretRightIcon size={16} className="text-text-muted" />
+        </Button>
       </div>
       <div className="grid grid-cols-3 gap-1">
         {MESES_LISTA.map((m) => {
           const seleccionado =
             mesSeleccionado === m.valor && anioSeleccionado === anioVisible
           return (
-            <button
+            <Button
               key={m.valor}
               type="button"
               onClick={() => onSeleccionarMes(m.valor)}
-              className={cn(
-                "py-2 text-sm font-semibold transition-colors cursor-pointer",
-                seleccionado
-                  ? "bg-ds-accent text-ds-surface"
-                  : "text-ds-ink-muted hover:bg-ds-surface-muted hover:text-ds-ink",
-              )}
+              variant={seleccionado ? "segmentedActive" : "ghost"}
+              size="none"
+              className="py-2 text-sm"
             >
               {m.etiqueta}
-            </button>
+            </Button>
           )
         })}
       </div>
-      <button
+      <Button
         type="button"
         onClick={onSoloAnio}
-        className={cn(
-          "w-full py-1.5 text-xs font-semibold transition-colors cursor-pointer border",
-          anioEsSeleccionado
-            ? "bg-ds-accent text-ds-surface border-ds-accent"
-            : "text-ds-ink-muted border-ds-line hover:bg-ds-surface-muted hover:text-ds-ink",
-        )}
+        variant={anioEsSeleccionado ? "segmentedActive" : "secondary"}
+        size="none"
+        className="w-full border py-1.5 text-xs"
       >
         Solo {anioVisible}
-      </button>
+      </Button>
     </>
   )
 }
@@ -153,41 +156,40 @@ function VistaAnios({
   return (
     <>
       <div className="flex items-center justify-between">
-        <button
+        <Button
           type="button"
           onClick={() => setPaginaInicio((p) => Math.max(ANIO_MIN - (ANIO_MIN % ANIOS_POR_PAGINA), p - ANIOS_POR_PAGINA))}
-          className="p-1.5 hover:bg-ds-surface-muted transition-colors cursor-pointer"
+          variant="iconSubtle"
+          size="none"
+          className="p-1.5"
         >
-          <CaretLeftIcon size={16} className="text-ds-ink-muted" />
-        </button>
-        <span className="text-sm font-semibold text-ds-ink">
+          <CaretLeftIcon size={16} className="text-text-muted" />
+        </Button>
+        <Text as="span" variant="strong" className="text-sm">
           {paginaInicio} - {paginaInicio + ANIOS_POR_PAGINA - 1}
-        </span>
-        <button
+        </Text>
+        <Button
           type="button"
           onClick={() => setPaginaInicio((p) => Math.min(ANIO_MAX - (ANIO_MAX % ANIOS_POR_PAGINA), p + ANIOS_POR_PAGINA))}
-          className="p-1.5 hover:bg-ds-surface-muted transition-colors cursor-pointer"
+          variant="iconSubtle"
+          size="none"
+          className="p-1.5"
         >
-          <CaretRightIcon size={16} className="text-ds-ink-muted" />
-        </button>
+          <CaretRightIcon size={16} className="text-text-muted" />
+        </Button>
       </div>
       <div className="grid grid-cols-3 gap-1">
         {aniosPagina.map((a) => (
-          <button
+          <Button
             key={a}
             type="button"
             onClick={() => onSeleccionar(a)}
-            className={cn(
-              "py-2 text-sm font-semibold transition-colors cursor-pointer",
-              a === anioSeleccionado
-                ? "bg-ds-accent text-ds-surface"
-                : a === anioVisible
-                  ? "bg-ds-surface-muted text-ds-ink"
-                  : "text-ds-ink-muted hover:bg-ds-surface-muted hover:text-ds-ink",
-            )}
+            variant={a === anioSeleccionado ? "segmentedActive" : "ghost"}
+            size="none"
+            className={cn("py-2 text-sm", a === anioVisible && a !== anioSeleccionado && "bg-panel-muted text-text-main")}
           >
             {a}
-          </button>
+          </Button>
         ))}
       </div>
     </>
@@ -261,24 +263,26 @@ export function SelectorFecha({
 
   return (
     <div ref={contenedorRef} className="relative flex flex-col gap-1.5">
-      <label id={autoId} className="text-sm font-semibold text-ds-ink-muted">
+      <Text as="label" id={autoId} variant="label">
         {label}
-      </label>
-      <button
+      </Text>
+      <Button
         type="button"
         aria-labelledby={autoId}
         onClick={toggleAbierto}
+        variant="plain"
+        size="none"
         className={cn(
-          "h-11 border border-ds-line bg-ds-surface px-3 text-base text-left transition-colors focus:border-ds-accent focus:ring-1 focus:ring-ds-accent focus:outline-none cursor-pointer flex items-center gap-2",
-          tieneValor || esPresente ? "text-ds-ink" : "text-ds-ink-muted/70",
+          "h-11 border border-border-subtle bg-panel px-3 text-base text-left transition-colors focus:border-action-primary focus:ring-1 focus:ring-action-primary focus:outline-none cursor-pointer flex items-center gap-2",
+          tieneValor || esPresente ? "text-text-main" : "text-text-muted/70",
         )}
       >
-        <CalendarBlankIcon size={16} className="text-ds-ink-muted shrink-0" />
+        <CalendarBlankIcon size={16} className="text-text-muted shrink-0" />
         {textoMostrado}
-      </button>
+      </Button>
 
       {abierto && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-50 border border-ds-line bg-ds-surface shadow-lg p-3 flex flex-col gap-2">
+        <Surface variant="popover" className="absolute top-full left-0 right-0 mt-1 z-50 flex flex-col gap-2 p-3">
           {vistaAnios ? (
             <VistaAnios
               anioVisible={anioVisible}
@@ -300,20 +304,17 @@ export function SelectorFecha({
 
           {/* Boton Presente */}
           {permitirPresente && (
-            <button
+            <Button
               type="button"
               onClick={seleccionarPresente}
-              className={cn(
-                "w-full py-2 text-sm font-semibold transition-colors cursor-pointer border",
-                esPresente
-                  ? "bg-ds-accent text-ds-surface border-ds-accent"
-                  : "text-ds-ink-muted border-ds-line hover:bg-ds-surface-muted hover:text-ds-ink",
-              )}
+              variant={esPresente ? "segmentedActive" : "secondary"}
+              size="none"
+              className="w-full border py-2 text-sm"
             >
               Presente
-            </button>
+            </Button>
           )}
-        </div>
+        </Surface>
       )}
     </div>
   )

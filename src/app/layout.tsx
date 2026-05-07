@@ -1,21 +1,7 @@
 import type { Metadata } from "next"
-import { Inter, Roboto, Lato, Merriweather, Libre_Baskerville } from "next/font/google"
+import Script from "next/script"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-roboto" })
-const lato = Lato({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-lato" })
-const merriweather = Merriweather({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-merriweather" })
-const libreBaskerville = Libre_Baskerville({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-libre-baskerville" })
-
-const clasesVariablesFuentes = [
-  inter.variable,
-  roboto.variable,
-  lato.variable,
-  merriweather.variable,
-  libreBaskerville.variable,
-].join(" ")
 
 const SITE_URL = "https://curriculum-gratis.cl"
 const TITLE = "Curriculum Vitae Gratis Chile 2026 | Crear CV en PDF"
@@ -28,36 +14,6 @@ export const metadata: Metadata = {
     template: "%s | Curriculum Gratis",
   },
   description: DESCRIPTION,
-  keywords: [
-    "curriculum gratis",
-    "curriculum vitae gratis",
-    "curriculum vitae chile",
-    "curriculum vitae 2026",
-    "cv gratis",
-    "cv chile",
-    "cv 2026",
-    "crear curriculum",
-    "crear cv",
-    "crear cv gratis",
-    "hacer cv gratis",
-    "curriculum pdf",
-    "curriculum online",
-    "cv online gratis",
-    "plantilla curriculum",
-    "plantilla cv gratis",
-    "plantillas cv gratis",
-    "curriculum profesional",
-    "hacer curriculum gratis",
-    "generador de curriculum",
-    "curriculum sin registro",
-    "curriculum chile",
-    "curriculum latinoamerica",
-    "curriculum descargar pdf",
-    "formato cv gratis",
-    "formato curriculum vitae gratis",
-    "formato harvard cv",
-    "cv ats",
-  ],
   authors: [{ name: "Curriculum Gratis" }],
   creator: "Curriculum Gratis",
   metadataBase: new URL(SITE_URL),
@@ -96,15 +52,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es" className={`${inter.className} ${clasesVariablesFuentes}`} suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("tema");var d=t==="oscuro"||(t!=="claro"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}})()`,
-          }}
-        />
-      </head>
+    <html lang="es" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased">
+        <Script id="tema-inicial" strategy="beforeInteractive">
+          {`(function(){try{var t=localStorage.getItem("tema");var d=t==="oscuro"||(t!=="claro"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}})()`}
+        </Script>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

@@ -1,4 +1,5 @@
 import { useId } from "react"
+import { Text } from "@/components/atoms/Text"
 import { cn } from "@/components/ui/cn"
 
 interface TextareaProps
@@ -19,22 +20,23 @@ export function Textarea({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label
+      <Text
+        as="label"
         htmlFor={textareaId}
-        className="text-sm font-semibold text-ds-ink-muted"
+        variant="label"
       >
         {label}
-      </label>
+      </Text>
       <textarea
         id={textareaId}
         className={cn(
-          "min-h-[96px] border border-ds-line bg-ds-surface px-3 py-2 text-base text-ds-ink placeholder:text-ds-ink-muted/70 transition-colors focus:border-ds-accent focus:ring-1 focus:ring-ds-accent focus:outline-none resize-y",
-          error && "border-red-500 focus:border-red-500 focus:ring-red-500",
+          "min-h-[96px] border border-border-subtle bg-panel px-3 py-2 text-base text-text-main placeholder:text-text-muted/70 transition-colors focus:border-action-primary focus:ring-1 focus:ring-action-primary focus:outline-none resize-y",
+          error && "border-danger focus:border-danger focus:ring-danger",
           className,
         )}
         {...props}
       />
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <Text variant="caption" className="text-danger">{error}</Text>}
     </div>
   )
 }

@@ -1,4 +1,9 @@
 import Link from "next/link"
+import { Badge } from "@/components/atoms/Badge"
+import { buttonVariants } from "@/components/atoms/Button"
+import { Surface } from "@/components/atoms/Surface"
+import { Text } from "@/components/atoms/Text"
+import { cn } from "@/components/ui/cn"
 import { Editor } from "@/editor/Editor"
 
 const JSON_LD = {
@@ -178,118 +183,120 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(HOW_TO_JSON_LD) }}
       />
 
-      <main className="bg-ds-paper text-ds-ink">
-        <section className="border-b-4 border-ds-accent bg-ds-paper px-4 py-8 md:px-6 md:py-12">
+      <Surface as="main" variant="page">
+        <Surface as="section" variant="stripAccent" className="px-4 py-8 md:px-6 md:py-12">
           <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-[1fr_360px] md:items-start">
             <div className="max-w-3xl">
-              <p className="mb-4 inline-flex border border-ds-accent bg-ds-surface px-3 py-1 text-sm font-bold text-ds-accent-strong">
+              <Badge variant="accent" size="md" className="mb-4">
                 Curriculum gratis para Chile
-              </p>
-              <h1 className="text-4xl font-extrabold leading-[1.04] tracking-tight text-ds-ink md:text-6xl">
+              </Badge>
+              <Text as="h1" variant="hero">
                 Cree su curriculum gratis y descárguelo en PDF
-              </h1>
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-ds-ink-muted">
+              </Text>
+              <Text variant="bodyLarge" className="mt-5 max-w-2xl">
                 Complete sus datos paso a paso, revise cómo queda y descargue un curriculum listo para enviar. No necesita registrarse ni saber usar programas complicados.
-              </p>
+              </Text>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <a
                   href="#editor"
-                  className="inline-flex min-h-14 items-center justify-center bg-ds-accent px-6 text-base font-bold text-ds-surface transition hover:bg-ds-accent-strong focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ds-accent"
+                  className={cn(buttonVariants({ variant: "primary", size: "lg" }), "min-h-14 text-base")}
                 >
                   Empezar ahora
                 </a>
                 <a
                   href="#como-funciona"
-                  className="inline-flex min-h-14 items-center justify-center border-2 border-ds-line-strong bg-ds-surface px-6 text-base font-bold text-ds-ink transition hover:bg-ds-surface-muted focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ds-line-strong"
+                  className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "min-h-14 border-2 text-base")}
                 >
                   Ver cómo funciona
                 </a>
               </div>
-              <ul className="mt-6 grid gap-2 text-base font-medium text-ds-ink-muted sm:grid-cols-2">
+              <ul className="mt-6 grid gap-2 text-base font-medium text-text-muted sm:grid-cols-2">
                 {TRUST_ITEMS.map((item) => (
                   <li key={item} className="flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 bg-ds-accent" />
+                    <Badge size="sm" variant="solid" className="h-2.5 w-2.5 p-0" />
                     {item}
                   </li>
                 ))}
               </ul>
             </div>
 
-            <aside className="border-2 border-ds-line-strong bg-ds-surface p-5">
-              <p className="text-sm font-bold uppercase tracking-[0.08em] text-ds-ink-muted">
+            <Surface as="aside" variant="cardStrong" className="p-5">
+              <Text variant="eyebrow" className="text-text-muted">
                 Antes de empezar
-              </p>
-              <h2 className="mt-2 text-2xl font-extrabold text-ds-ink">
+              </Text>
+              <Text as="h2" variant="panelTitle" className="mt-2">
                 Tenga a mano su información laboral
-              </h2>
-              <p className="mt-3 text-base leading-7 text-ds-ink-muted">
+              </Text>
+              <Text className="mt-3">
                 Puede completar solo lo que tenga. Si le falta algo, la herramienta igual funciona y puede volver después.
-              </p>
-              <div className="mt-5 border-t border-ds-line pt-4 text-sm leading-6 text-ds-ink-muted">
+              </Text>
+              <Text as="div" variant="small" className="mt-5 border-t border-border-subtle pt-4 leading-6">
                 Sirve para crear CV gratis, curriculum vitae gratis, formato CV simple y curriculum para postular en Chile.
-              </div>
-            </aside>
+              </Text>
+            </Surface>
           </div>
-        </section>
+        </Surface>
 
-        <section id="como-funciona" className="border-b border-ds-line bg-ds-surface px-4 py-10 md:px-6">
+        <Surface as="section" id="como-funciona" variant="strip" className="px-4 py-10 md:px-6">
           <div className="mx-auto max-w-6xl">
             <div className="max-w-2xl">
-              <p className="text-sm font-bold uppercase tracking-[0.08em] text-ds-accent-strong">
+              <Text variant="eyebrow">
                 Cómo funciona
-              </p>
-              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-ds-ink md:text-4xl">
+              </Text>
+              <Text as="h2" variant="sectionTitle" className="mt-2">
                 Tres pasos, sin vueltas
-              </h2>
+              </Text>
             </div>
             <div className="mt-7 grid gap-4 md:grid-cols-3">
               {STEPS.map((step) => (
-                <article key={step.number} className="border-2 border-ds-line-strong bg-ds-paper p-5">
-                  <span className="inline-flex h-10 w-10 items-center justify-center bg-ds-accent text-lg font-extrabold text-ds-surface">
+                <Surface as="article" key={step.number} variant="cardOnPage" className="p-5">
+                  <Badge variant="solid" size="square">
                     {step.number}
-                  </span>
-                  <h3 className="mt-4 text-xl font-extrabold text-ds-ink">{step.title}</h3>
-                  <p className="mt-2 text-base leading-7 text-ds-ink-muted">{step.text}</p>
-                </article>
+                  </Badge>
+                  <Text as="h3" variant="cardTitle" className="mt-4 text-xl">{step.title}</Text>
+                  <Text className="mt-2">{step.text}</Text>
+                </Surface>
               ))}
             </div>
           </div>
-        </section>
+        </Surface>
 
-        <section className="border-b border-ds-line bg-ds-paper px-4 py-10 md:px-6">
+        <Surface as="section" variant="page" className="border-b border-border-subtle px-4 py-10 md:px-6">
           <div className="mx-auto max-w-6xl">
             <div className="grid gap-6 md:grid-cols-[320px_1fr] md:items-start">
               <div>
-                <p className="text-sm font-bold uppercase tracking-[0.08em] text-ds-accent-strong">
+                <Text variant="eyebrow">
                   Ayuda rápida
-                </p>
-                <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-ds-ink">
+                </Text>
+                <Text as="h2" variant="sectionTitle" className="mt-2 md:text-3xl">
                   Elija lo que necesita
-                </h2>
-                <p className="mt-3 text-base leading-7 text-ds-ink-muted">
+                </Text>
+                <Text className="mt-3">
                   Estos accesos sirven si busca un formato específico o quiere entender qué tipo de curriculum le conviene.
-                </p>
+                </Text>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 {KEYWORD_GROUPS.map((group) => (
-                  <Link
+                  <Surface
+                    as={Link}
+                    variant="interactiveCard"
                     key={group.title}
                     href={group.href}
-                    className="block border border-ds-line bg-ds-surface p-4 transition hover:border-ds-accent hover:bg-ds-accent-soft"
+                    className="block p-4"
                   >
-                    <h3 className="text-lg font-extrabold text-ds-ink">{group.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-ds-ink-muted">{group.text}</p>
-                  </Link>
+                    <Text as="h3" variant="cardTitle">{group.title}</Text>
+                    <Text variant="small" className="mt-2 leading-6">{group.text}</Text>
+                  </Surface>
                 ))}
               </div>
             </div>
           </div>
-        </section>
+        </Surface>
 
         <section id="editor" className="scroll-mt-0" aria-label="Editor de curriculum vitae gratis">
           <Editor />
         </section>
-      </main>
+      </Surface>
     </>
   )
 }

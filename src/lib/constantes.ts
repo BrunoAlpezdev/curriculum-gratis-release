@@ -48,16 +48,15 @@ export const NIVELES_IDIOMA: { valor: NivelIdioma; etiqueta: string }[] = [
 export const COLORES_TEMA: {
   valor: ColorTema
   etiqueta: string
-  clase: string
   hex: string
 } [] = [
-  { valor: "gris", etiqueta: "Gris", clase: "bg-gray-700", hex: "#374151" },
-  { valor: "azul", etiqueta: "Azul", clase: "bg-blue-600", hex: "#2563eb" },
-  { valor: "verde", etiqueta: "Verde", clase: "bg-emerald-600", hex: "#059669" },
-  { valor: "rojo", etiqueta: "Rojo", clase: "bg-red-600", hex: "#dc2626" },
-  { valor: "morado", etiqueta: "Morado", clase: "bg-purple-600", hex: "#9333ea" },
-  { valor: "teal", etiqueta: "Teal", clase: "bg-teal-600", hex: "#0d9488" },
-  { valor: "naranja", etiqueta: "Naranja", clase: "bg-orange-600", hex: "#ea580c" },
+  { valor: "gris", etiqueta: "Gris", hex: "#374151" },
+  { valor: "azul", etiqueta: "Azul", hex: "#2563eb" },
+  { valor: "verde", etiqueta: "Verde", hex: "#059669" },
+  { valor: "rojo", etiqueta: "Rojo", hex: "#dc2626" },
+  { valor: "morado", etiqueta: "Morado", hex: "#9333ea" },
+  { valor: "teal", etiqueta: "Teal", hex: "#0d9488" },
+  { valor: "naranja", etiqueta: "Naranja", hex: "#ea580c" },
 ]
 
 export const PLANTILLAS: { valor: PlantillaId; etiqueta: string; descripcion: string; ats: boolean }[] = [
