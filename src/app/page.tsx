@@ -1,8 +1,18 @@
 import Link from "next/link"
+import {
+  CheckCircleIcon,
+  EnvelopeIcon,
+  FilePdfIcon,
+  FileTextIcon,
+  MagicWandIcon,
+  ShieldCheckIcon,
+  TargetIcon,
+} from "@phosphor-icons/react/dist/ssr"
 import { Badge } from "@/components/atoms/Badge"
 import { buttonVariants } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
+import { MarketingValueCard } from "@/components/molecules/MarketingValueCard"
 import { SiteFooter } from "@/components/molecules/SiteFooter"
 import { SiteHeader } from "@/components/molecules/SiteHeader"
 import { cn } from "@/components/ui/cn"
@@ -151,6 +161,31 @@ const TRUST_ITEMS = [
   "Edicion local en su navegador",
 ]
 
+const HERO_VALUES = [
+  {
+    icon: <FilePdfIcon size={17} weight="fill" />,
+    title: "PDF listo para postular",
+    text: "Descarga CV y carta con plantillas profesionales.",
+  },
+  {
+    icon: <TargetIcon size={17} weight="fill" />,
+    title: "ATS local",
+    text: "Compara tu CV contra una oferta sin enviar datos.",
+  },
+  {
+    icon: <MagicWandIcon size={17} weight="fill" />,
+    title: "IA opcional",
+    text: "Mejora perfil y carta solo cuando tu lo decides.",
+  },
+]
+
+const PACKAGE_ITEMS = [
+  { icon: <FileTextIcon size={15} />, label: "CV editable", value: "local" },
+  { icon: <TargetIcon size={15} />, label: "Checklist + ATS", value: "incluido" },
+  { icon: <EnvelopeIcon size={15} />, label: "Envio por correo", value: "opcional" },
+  { icon: <ShieldCheckIcon size={15} />, label: "Copias locales", value: "seguro" },
+]
+
 const STEPS = [
   {
     number: "1",
@@ -188,57 +223,83 @@ export default function Home() {
       <Surface variant="page">
         <SiteHeader />
         <Surface as="main" variant="page">
-          <Surface as="section" variant="stripAccent" className="px-4 py-8 md:px-6 md:py-12">
-          <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-[1fr_360px] md:items-start">
-            <div className="max-w-3xl">
-              <Badge variant="accent" size="md" className="mb-4">
-                Curriculum gratis para Chile
-              </Badge>
-              <Text as="h1" variant="hero">
-                Cree su curriculum gratis y descárguelo en PDF
-              </Text>
-              <Text variant="bodyLarge" className="mt-5 max-w-2xl">
-                Complete sus datos paso a paso, revise cómo queda y descargue un curriculum listo para enviar. No necesita registrarse ni saber usar programas complicados.
-              </Text>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="#editor"
-                  className={cn(buttonVariants({ variant: "primary", size: "lg" }), "min-h-14 text-base")}
-                >
-                  Empezar ahora
-                </a>
-                <a
-                  href="#como-funciona"
-                  className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "min-h-14 border-2 text-base")}
-                >
-                  Ver cómo funciona
-                </a>
+          <Surface as="section" variant="hero" className="px-4 py-10 md:px-6 md:py-16">
+            <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1fr_420px] lg:items-center">
+              <div className="max-w-4xl">
+                <Badge variant="accent" size="md" className="mb-5">
+                  Curriculum gratis para Chile
+                </Badge>
+                <Text as="h1" variant="heroDisplay">
+                  Tu postulacion lista, no solo tu CV.
+                </Text>
+                <Text variant="bodyLarge" className="mt-6 max-w-2xl">
+                  Arma un curriculum claro, revisa compatibilidad ATS, genera carta de presentacion y descarga el PDF sin registro. IA y correo estan disponibles solo si quieres usarlos.
+                </Text>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <a
+                    href="#editor"
+                    className={cn(buttonVariants({ variant: "primary", size: "lg" }), "min-h-14 text-base")}
+                  >
+                    Crear mi CV gratis
+                  </a>
+                  <a
+                    href="/plantillas-cv-gratis"
+                    className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "min-h-14 border-2 text-base")}
+                  >
+                    Ver plantillas
+                  </a>
+                </div>
+                <div className="mt-7 grid gap-3 sm:grid-cols-3">
+                  {HERO_VALUES.map((item) => (
+                    <MarketingValueCard key={item.title} {...item} />
+                  ))}
+                </div>
               </div>
-              <ul className="mt-6 grid gap-2 text-base font-medium text-text-muted sm:grid-cols-2">
-                {TRUST_ITEMS.map((item) => (
-                  <li key={item} className="flex items-center gap-2">
-                    <Badge size="sm" variant="solid" className="h-2.5 w-2.5 p-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
 
-            <Surface as="aside" variant="cardStrong" className="p-5">
-              <Text variant="eyebrow" className="text-text-muted">
-                Antes de empezar
-              </Text>
-              <Text as="h2" variant="panelTitle" className="mt-2">
-                Tenga a mano su información laboral
-              </Text>
-              <Text className="mt-3">
-                Puede completar solo lo que tenga. Si le falta algo, la herramienta igual funciona y puede volver después.
-              </Text>
-              <Text as="div" variant="small" className="mt-5 border-t border-border-subtle pt-4 leading-6">
-                Sirve para crear CV gratis, curriculum vitae gratis, formato CV simple y curriculum para postular en Chile.
-              </Text>
-            </Surface>
-          </div>
+              <Surface as="aside" variant="heroCard" className="p-5">
+                <div className="flex items-start justify-between gap-3 border-b-2 border-border-strong pb-4">
+                  <div>
+                    <Text variant="eyebrow" className="text-text-muted">
+                      Paquete de postulacion
+                    </Text>
+                    <Text as="h2" variant="panelTitle" className="mt-2">
+                      CV + carta + revision
+                    </Text>
+                  </div>
+                  <Badge variant="solid">2026</Badge>
+                </div>
+
+                <div className="mt-4 grid gap-2">
+                  {PACKAGE_ITEMS.map((item) => (
+                    <Surface key={item.label} variant="metricCard" className="flex items-center justify-between gap-3 p-3">
+                      <span className="flex items-center gap-2 text-sm font-bold text-text-main">
+                        <span className="text-action-primary">{item.icon}</span>
+                        {item.label}
+                      </span>
+                      <Badge variant="neutral">{item.value}</Badge>
+                    </Surface>
+                  ))}
+                </div>
+
+                <Surface variant="notice" className="mt-4 p-3">
+                  <Text as="p" variant="strong" className="text-sm">
+                    Empieza aunque no tengas todo listo
+                  </Text>
+                  <Text variant="caption" className="mt-1 leading-relaxed">
+                    Completa lo que tengas, guarda copias locales y vuelve despues. El editor no exige cuenta.
+                  </Text>
+                </Surface>
+
+                <ul className="mt-4 grid gap-2 text-sm font-semibold text-text-muted">
+                  {TRUST_ITEMS.map((item) => (
+                    <li key={item} className="flex items-center gap-2">
+                      <CheckCircleIcon size={15} weight="fill" className="text-success" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </Surface>
+            </div>
           </Surface>
 
           <Surface as="section" id="como-funciona" variant="strip" className="px-4 py-10 md:px-6">

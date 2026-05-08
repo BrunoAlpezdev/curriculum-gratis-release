@@ -6,10 +6,12 @@ const textVariants = cva("", {
   variants: {
     variant: {
       hero: "text-4xl font-extrabold leading-[1.04] tracking-tight text-text-main md:text-6xl",
+      heroDisplay: "text-5xl font-extrabold leading-[0.98] tracking-[-0.04em] text-text-main md:text-7xl",
       pageTitle: "text-4xl font-extrabold leading-[1.06] tracking-tight text-text-main md:text-6xl",
       sectionTitle: "text-3xl font-extrabold tracking-tight text-text-main md:text-4xl",
       panelTitle: "text-2xl font-extrabold text-text-main",
       cardTitle: "text-lg font-extrabold text-text-main",
+      metric: "text-3xl font-extrabold leading-none tracking-tight text-action-strong",
       body: "text-base leading-7 text-text-muted",
       bodyLarge: "text-lg leading-8 text-text-muted",
       label: "text-sm font-semibold text-text-muted",
