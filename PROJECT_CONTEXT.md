@@ -16,8 +16,8 @@ Promesa actual del producto:
 - Importar/exportar datos como JSON.
 - Guardar y restaurar copias locales del CV/carta en el mismo navegador.
 - Enviar el CV por correo usando backend Next/Vercel cuando `RESEND_API_KEY` esta configurada.
-- Mejorar redaccion del perfil profesional con Gemini cuando `GEMINI_API_KEY` esta configurada.
-- Generar cuerpo de carta de presentacion con Gemini desde CV, empresa, cargo y oferta opcional.
+- Mejorar redaccion del perfil profesional con Gemini cuando `GEMINI_API_KEY` esta configurada, con sugerencia revisable, regeneracion y copia local antes de aplicar.
+- Generar cuerpo de carta de presentacion con Gemini desde CV, empresa, cargo y oferta opcional, con sugerencia revisable, regeneracion y copia local antes de aplicar.
 - Analizar match ATS localmente contra una oferta laboral.
 - Revisar calidad basica del CV con checklist local.
 - Mantener privacidad por defecto: edicion, copias locales, checklist, ATS y descarga funcionan en el navegador; email e IA envian datos solo cuando el usuario activa esas funciones opcionales.
@@ -51,6 +51,7 @@ Promesa actual del producto:
 - `src/components/molecules/SiteHeader.tsx` y `src/components/molecules/SiteFooter.tsx`: navegacion y cierre global para home/paginas SEO, con CTA al editor y copy de privacidad.
 - `src/components/molecules/MarketingValueCard.tsx`: card reusable para bloques de valor en paginas de marketing/SEO.
 - `src/components/molecules/TemplateOptionCard.tsx`: card reusable para mostrar plantillas y CTA con plantilla preseleccionada.
+- `src/components/molecules/AiSuggestionPanel.tsx`: panel reusable para sugerencias IA; centraliza aviso, aplicar, regenerar y descartar.
 - `src/editor/AplicarPlantillaUrl.tsx`: aplica `?plantilla=<id>` al store cuando la home carga el editor.
 
 ## Estado y Datos

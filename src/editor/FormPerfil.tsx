@@ -6,11 +6,16 @@ import { Button } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
 import { Textarea } from "@/components/atoms/Textarea"
+import { AiSuggestionPanel } from "@/components/molecules/AiSuggestionPanel"
 import { SeccionFormulario } from "@/components/molecules/SeccionFormulario"
+import { guardarCopiaLocal } from "@/lib/copias-locales"
 import { useCurriculumStore } from "@/lib/store"
 
 export function FormPerfil() {
   const perfil = useCurriculumStore((s) => s.datos.perfil)
+  const datos = useCurriculumStore((s) => s.datos)
+  const personalizacion = useCurriculumStore((s) => s.personalizacion)
+  const carta = useCurriculumStore((s) => s.carta)
   const titulo = useCurriculumStore((s) => s.datos.datosPersonales.titulo)
   const setPerfil = useCurriculumStore((s) => s.setPerfil)
   const [generando, setGenerando] = useState(false)
@@ -35,6 +40,12 @@ export function FormPerfil() {
     } finally {
       setGenerando(false)
     }
+  }
+
+  function aplicarSugerencia() {
+    guardarCopiaLocal("Respaldo antes de aplicar IA en perfil", datos, personalizacion, carta)
+    setPerfil(sugerencia)
+    setSugerencia("")
   }
 
   return (
@@ -68,7 +79,7 @@ export function FormPerfil() {
           {generando ? "Mejorando..." : "Mejorar redaccion con IA"}
         </Button>
         <Text variant="caption">
-          Opcional: envia este perfil a Gemini para reescribirlo. La sugerencia no debe inventar experiencia ni datos nuevos.
+          Opcional: envia este perfil a Gemini para reescribirlo. Antes de aplicar una sugerencia se guarda una copia local.
         </Text>
       </div>
       {error && (
@@ -79,24 +90,15 @@ export function FormPerfil() {
         </Surface>
       )}
       {sugerencia && (
-        <Surface variant="notice" className="flex flex-col gap-3 px-3 py-3">
-          <div>
-            <Text as="p" variant="strong" className="text-sm">
-              Sugerencia editable
-            </Text>
-            <Text variant="small" className="mt-1 leading-relaxed">
-              {sugerencia}
-            </Text>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button type="button" size="sm" onClick={() => setPerfil(sugerencia)}>
-              Usar sugerencia
-            </Button>
-            <Button type="button" variant="secondary" size="sm" onClick={() => setSugerencia("") }>
-              Descartar
-            </Button>
-          </div>
-        </Surface>
+        <AiSuggestionPanel
+          title="Sugerencia editable"
+          text={sugerencia}
+          applyLabel="Usar sugerencia"
+          onApply={aplicarSugerencia}
+          onRegenerate={mejorarPerfil}
+          onDismiss={() => setSugerencia("")}
+          loading={generando}
+        />
       )}
     </SeccionFormulario>
   )

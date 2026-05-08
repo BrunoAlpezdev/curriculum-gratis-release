@@ -7,8 +7,10 @@ import { Input } from "@/components/atoms/Input"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
 import { Textarea } from "@/components/atoms/Textarea"
+import { AiSuggestionPanel } from "@/components/molecules/AiSuggestionPanel"
 import { SeccionFormulario } from "@/components/molecules/SeccionFormulario"
 import { textoCv } from "@/lib/analisis-ats"
+import { guardarCopiaLocal } from "@/lib/copias-locales"
 import { useCurriculumStore } from "@/lib/store"
 
 const PLANTILLAS_CUERPO = [
@@ -46,6 +48,7 @@ Agradezco de antemano su consideracion.`,
 
 export function FormCarta() {
   const datos = useCurriculumStore((s) => s.datos)
+  const personalizacion = useCurriculumStore((s) => s.personalizacion)
   const carta = useCurriculumStore((s) => s.carta)
   const set = useCurriculumStore((s) => s.setCarta)
   const [oferta, setOferta] = useState("")
@@ -77,6 +80,12 @@ export function FormCarta() {
     } finally {
       setGenerando(false)
     }
+  }
+
+  function aplicarSugerencia() {
+    guardarCopiaLocal("Respaldo antes de aplicar IA en carta", datos, personalizacion, carta)
+    set({ cuerpo: sugerencia })
+    setSugerencia("")
   }
 
   return (
@@ -157,7 +166,7 @@ export function FormCarta() {
           {generando ? "Generando..." : "Generar cuerpo con IA"}
         </Button>
         <Text variant="caption">
-          Opcional: envia datos resumidos de tu CV y la oferta a Gemini. Revisa siempre la carta antes de enviarla.
+          Opcional: envia datos resumidos de tu CV y la oferta a Gemini. Antes de aplicar una sugerencia se guarda una copia local.
         </Text>
       </div>
 
@@ -170,24 +179,16 @@ export function FormCarta() {
       )}
 
       {sugerencia && (
-        <Surface variant="notice" className="flex flex-col gap-3 px-3 py-3">
-          <div>
-            <Text as="p" variant="strong" className="text-sm">
-              Carta sugerida
-            </Text>
-            <Text variant="small" className="mt-1 whitespace-pre-line leading-relaxed">
-              {sugerencia}
-            </Text>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button type="button" size="sm" onClick={() => set({ cuerpo: sugerencia })}>
-              Usar sugerencia
-            </Button>
-            <Button type="button" variant="secondary" size="sm" onClick={() => setSugerencia("")}>
-              Descartar
-            </Button>
-          </div>
-        </Surface>
+        <AiSuggestionPanel
+          title="Carta sugerida"
+          text={sugerencia}
+          applyLabel="Usar sugerencia"
+          onApply={aplicarSugerencia}
+          onRegenerate={generarCarta}
+          onDismiss={() => setSugerencia("")}
+          loading={generando}
+          multiline
+        />
       )}
 
       <Textarea
