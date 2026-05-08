@@ -43,10 +43,18 @@ export interface PalabraClave {
   enCv: boolean
 }
 
+export interface RecomendacionAts {
+  id: string
+  titulo: string
+  descripcion: string
+  palabras: string[]
+}
+
 export interface ResultadoAnalisis {
   totalClaves: number
   encontradas: number
   palabras: PalabraClave[]
+  recomendaciones: RecomendacionAts[]
 }
 
 export function textoCv(datos: DatosCurriculum): string {
@@ -82,7 +90,7 @@ export function textoCv(datos: DatosCurriculum): string {
 export function analizar(jobDescription: string, datos: DatosCurriculum): ResultadoAnalisis {
   const tokens = tokenizar(jobDescription)
   if (tokens.length === 0) {
-    return { totalClaves: 0, encontradas: 0, palabras: [] }
+    return { totalClaves: 0, encontradas: 0, palabras: [], recomendaciones: [] }
   }
 
   const frecuencias = new Map<string, number>()
@@ -103,5 +111,57 @@ export function analizar(jobDescription: string, datos: DatosCurriculum): Result
     .slice(0, 30)
 
   const encontradas = palabras.filter((p) => p.enCv).length
-  return { totalClaves: palabras.length, encontradas, palabras }
+  return {
+    totalClaves: palabras.length,
+    encontradas,
+    palabras,
+    recomendaciones: crearRecomendaciones(datos, palabras),
+  }
+}
+
+function crearRecomendaciones(
+  datos: DatosCurriculum,
+  palabras: PalabraClave[],
+): RecomendacionAts[] {
+  const faltantes = palabras.filter((p) => !p.enCv).slice(0, 10)
+  if (faltantes.length === 0) return []
+
+  const principales = faltantes.slice(0, 5).map((p) => p.palabra)
+  const recomendaciones: RecomendacionAts[] = [
+    {
+      id: "perfil",
+      titulo: "Ajusta el perfil profesional",
+      descripcion: "Si estas palabras representan experiencia real, mencionalas en el perfil con una frase natural sobre tu foco profesional.",
+      palabras: principales,
+    },
+  ]
+
+  if (datos.experiencia.length > 0) {
+    recomendaciones.push({
+      id: "experiencia",
+      titulo: "Conecta keywords con logros reales",
+      descripcion: "Revisa tus experiencias y agrega evidencia concreta: contexto, accion e impacto medible. No pegues keywords sueltas.",
+      palabras: faltantes.slice(0, 6).map((p) => p.palabra),
+    })
+  }
+
+  if (datos.proyectos.length > 0) {
+    recomendaciones.push({
+      id: "proyectos",
+      titulo: "Usa proyectos para respaldar habilidades",
+      descripcion: "Si alguna keyword corresponde a tecnologia, herramienta o metodo usado, agregala al proyecto donde realmente la aplicaste.",
+      palabras: faltantes.slice(0, 6).map((p) => p.palabra),
+    })
+  }
+
+  if (datos.habilidades.length < 12) {
+    recomendaciones.push({
+      id: "habilidades",
+      titulo: "Refina la lista de competencias",
+      descripcion: "Agrega solo habilidades que puedas defender en entrevista. Prioriza las que se repiten mas en la oferta.",
+      palabras: faltantes.slice(0, Math.min(6, 12 - datos.habilidades.length)).map((p) => p.palabra),
+    })
+  }
+
+  return recomendaciones
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { FormPersonalizacion } from "@/editor/FormPersonalizacion"
+import { FormCalidadCv } from "@/editor/FormCalidadCv"
 import { FormDatosPersonales } from "@/editor/FormDatosPersonales"
 import { FormPerfil } from "@/editor/FormPerfil"
 import { FormExperiencia } from "@/editor/FormExperiencia"
@@ -20,6 +21,7 @@ export function PanelFormulario() {
   return (
     <Surface variant="page" className="flex flex-col gap-4 overflow-y-auto p-3 sm:p-4">
       <FormPersonalizacion />
+      <FormCalidadCv />
       <FormDatosPersonales />
       <FormPerfil />
       <FormExperiencia />

@@ -15,6 +15,7 @@ Promesa actual del producto:
 - Descargar PDF.
 - Importar/exportar datos como JSON.
 - Analizar match ATS localmente contra una oferta laboral.
+- Revisar calidad basica del CV con checklist local.
 - Mantener privacidad: los datos no salen del dispositivo.
 
 ## Stack
@@ -61,6 +62,7 @@ Estado persistido actual:
 
 - `src/editor/PanelFormulario.tsx`: compone todas las secciones del formulario de CV.
 - `src/editor/FormPersonalizacion.tsx`: idioma, plantilla, color, fuente y orden de secciones. Ya existe drag and drop basico + flechas para reordenar secciones.
+- `src/editor/FormCalidadCv.tsx`: checklist local de calidad del CV con puntaje, urgentes y recomendaciones.
 - `src/editor/FormDatosPersonales.tsx`: datos personales y enlaces.
 - `src/editor/FormPerfil.tsx`: perfil profesional.
 - `src/editor/FormExperiencia.tsx`: experiencia laboral repetible.
@@ -107,7 +109,8 @@ Regla actual:
 
 ## ATS Local
 
-- `src/lib/analisis-ats.ts`: tokeniza oferta laboral, elimina stopwords, calcula hasta 30 keywords frecuentes y marca si aparecen en el CV.
+- `src/lib/analisis-ats.ts`: tokeniza oferta laboral, elimina stopwords, calcula hasta 30 keywords frecuentes, marca si aparecen en el CV y genera recomendaciones locales por seccion.
+- `src/lib/calidad-cv.ts`: reglas puras para evaluar calidad basica del CV sin backend ni IA.
 - No usa backend ni IA.
 - `FormAnalisisAts.tsx` lo presenta como porcentaje y badges de keywords presentes/faltantes.
 
