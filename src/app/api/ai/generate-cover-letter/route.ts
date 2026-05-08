@@ -1,7 +1,9 @@
+import { auth } from "@clerk/nextjs/server"
 import { verificarRateLimit } from "@/lib/rate-limit"
 
-const RATE_LIMIT_MAX = 8
-const RATE_LIMIT_WINDOW_SECONDS = 60 * 60
+const RATE_LIMIT_ANONIMO = 1
+const RATE_LIMIT_FREE = 5
+const RATE_LIMIT_WINDOW_SECONDS = 24 * 60 * 60
 const MAX_INPUT_CHARS = 5000
 const MIN_OUTPUT_CHARS = 180
 
@@ -23,11 +25,15 @@ export async function POST(request: Request) {
     return Response.json({ error: "IA no configurada." }, { status: 503 })
   }
 
+  const { userId } = await auth()
   const rateLimit = await verificarRateLimit(request, {
     namespace: "ai:cover-letter",
-    limit: RATE_LIMIT_MAX,
+    limit: userId ? RATE_LIMIT_FREE : RATE_LIMIT_ANONIMO,
     windowSeconds: RATE_LIMIT_WINDOW_SECONDS,
-    message: "Demasiadas solicitudes de IA. Intenta mas tarde.",
+    message: userId
+      ? "Alcanzaste tu limite diario de cartas con IA. Intenta nuevamente manana."
+      : "Alcanzaste el limite anonimo de cartas con IA. Inicia sesion gratis para mas usos diarios.",
+    identity: userId ? { type: "user", id: userId } : undefined,
   })
   if (rateLimit) return rateLimit
 

@@ -5,6 +5,10 @@ interface RateLimitConfig {
   limit: number
   windowSeconds: number
   message: string
+  identity?: {
+    type: "user" | "ip"
+    id: string
+  }
 }
 
 interface RedisResponse<T> {
@@ -28,11 +32,16 @@ function obtenerIp(request: Request): string {
   return forwarded?.split(",")[0]?.trim() || realIp || cloudflareIp || "unknown"
 }
 
-function crearClave(namespace: string, request: Request): string {
-  const ip = obtenerIp(request)
+function crearClave(namespace: string, request: Request, identity?: RateLimitConfig["identity"]): string {
   const salt = process.env.RATE_LIMIT_SALT ?? "curriculum-gratis"
-  const hash = createHash("sha256").update(`${salt}:${ip}`).digest("hex").slice(0, 32)
-  return `cg:rate-limit:${namespace}:${hash}`
+  if (identity?.type === "user") {
+    const hash = createHash("sha256").update(`${salt}:user:${identity.id}`).digest("hex").slice(0, 32)
+    return `cg:rate-limit:${namespace}:user:${hash}`
+  }
+
+  const ip = identity?.type === "ip" ? identity.id : obtenerIp(request)
+  const hash = createHash("sha256").update(`${salt}:ip:${ip}`).digest("hex").slice(0, 32)
+  return `cg:rate-limit:${namespace}:ip:${hash}`
 }
 
 function crearHeaders(limit: number, remaining: number, resetSeconds: number): HeadersInit {
@@ -76,7 +85,7 @@ async function comandoRedis<T>(path: string, token: string): Promise<T | null> {
 }
 
 export async function verificarRateLimit(request: Request, config: RateLimitConfig): Promise<Response | null> {
-  const key = crearClave(config.namespace, request)
+  const key = crearClave(config.namespace, request, config.identity)
   const redis = obtenerRedisConfig()
   if (!redis) return limitarEnMemoria(key, config)
 

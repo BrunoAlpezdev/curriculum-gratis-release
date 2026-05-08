@@ -79,7 +79,7 @@ export function FormPerfil() {
           {generando ? "Mejorando..." : "Mejorar redaccion con IA"}
         </Button>
         <Text variant="caption">
-          Opcional: envia este perfil a Gemini para reescribirlo. Antes de aplicar una sugerencia se guarda una copia local.
+          Opcional: envia este perfil a Gemini para reescribirlo. Tienes 2 usos diarios sin cuenta y 10 con cuenta gratis; antes de aplicar una sugerencia se guarda una copia local.
         </Text>
       </div>
       {error && (
