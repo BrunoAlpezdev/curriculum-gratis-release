@@ -3,6 +3,8 @@ import { Badge } from "@/components/atoms/Badge"
 import { buttonVariants } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
+import { SiteFooter } from "@/components/molecules/SiteFooter"
+import { SiteHeader } from "@/components/molecules/SiteHeader"
 import { cn } from "@/components/ui/cn"
 import { Editor } from "@/editor/Editor"
 
@@ -183,8 +185,10 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(HOW_TO_JSON_LD) }}
       />
 
-      <Surface as="main" variant="page">
-        <Surface as="section" variant="stripAccent" className="px-4 py-8 md:px-6 md:py-12">
+      <Surface variant="page">
+        <SiteHeader />
+        <Surface as="main" variant="page">
+          <Surface as="section" variant="stripAccent" className="px-4 py-8 md:px-6 md:py-12">
           <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-[1fr_360px] md:items-start">
             <div className="max-w-3xl">
               <Badge variant="accent" size="md" className="mb-4">
@@ -235,9 +239,9 @@ export default function Home() {
               </Text>
             </Surface>
           </div>
-        </Surface>
+          </Surface>
 
-        <Surface as="section" id="como-funciona" variant="strip" className="px-4 py-10 md:px-6">
+          <Surface as="section" id="como-funciona" variant="strip" className="px-4 py-10 md:px-6">
           <div className="mx-auto max-w-6xl">
             <div className="max-w-2xl">
               <Text variant="eyebrow">
@@ -259,9 +263,9 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </Surface>
+          </Surface>
 
-        <Surface as="section" variant="page" className="border-b border-border-subtle px-4 py-10 md:px-6">
+          <Surface as="section" variant="page" className="border-b border-border-subtle px-4 py-10 md:px-6">
           <div className="mx-auto max-w-6xl">
             <div className="grid gap-6 md:grid-cols-[320px_1fr] md:items-start">
               <div>
@@ -291,11 +295,13 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </Surface>
+          </Surface>
 
-        <section id="editor" className="scroll-mt-0" aria-label="Editor de curriculum vitae gratis">
-          <Editor />
-        </section>
+          <section id="editor" className="scroll-mt-0" aria-label="Editor de curriculum vitae gratis">
+            <Editor />
+          </section>
+        </Surface>
+        <SiteFooter />
       </Surface>
     </>
   )

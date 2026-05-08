@@ -3,6 +3,8 @@ import { Badge } from "@/components/atoms/Badge"
 import { buttonVariants } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
+import { SiteFooter } from "@/components/molecules/SiteFooter"
+import { SiteHeader } from "@/components/molecules/SiteHeader"
 import { cn } from "@/components/ui/cn"
 
 export interface SeoPageContent {
@@ -40,12 +42,14 @@ export function SeoPage({ content }: SeoPageProps) {
   }
 
   return (
-    <Surface as="main" variant="page" className="min-h-screen">
+    <Surface variant="page" className="min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <SiteHeader />
 
+      <Surface as="main" variant="page">
       <Surface as="section" variant="stripAccent" className="px-4 py-10 md:px-6 md:py-14">
         <div className="mx-auto max-w-5xl">
           <Badge variant="accent" size="md" className="mb-4">
@@ -116,6 +120,8 @@ export function SeoPage({ content }: SeoPageProps) {
           </div>
         </div>
       </Surface>
+      </Surface>
+      <SiteFooter />
     </Surface>
   )
 }
