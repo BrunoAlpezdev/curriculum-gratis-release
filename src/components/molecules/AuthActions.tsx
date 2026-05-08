@@ -1,6 +1,7 @@
 "use client"
 
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
+import { Badge } from "@/components/atoms/Badge"
 import { Button } from "@/components/atoms/Button"
 
 interface AuthActionsProps {
@@ -25,6 +26,9 @@ export function AuthActions({ compact = false }: AuthActionsProps) {
         )}
       </Show>
       <Show when="signed-in">
+        <Badge variant="success" className="hidden sm:inline-flex">
+          Free
+        </Badge>
         <UserButton
           appearance={{
             elements: {

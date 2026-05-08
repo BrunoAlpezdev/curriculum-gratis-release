@@ -1,11 +1,9 @@
 import { auth } from "@clerk/nextjs/server"
 import { verificarRateLimit } from "@/lib/rate-limit"
+import { USAGE_LIMITS, USAGE_WINDOW_SECONDS } from "@/lib/usage-limits"
 
 const RESEND_API_URL = "https://api.resend.com/emails"
 const MAX_ATTACHMENT_BYTES = 8 * 1024 * 1024
-const RATE_LIMIT_ANONIMO = 2
-const RATE_LIMIT_FREE = 5
-const RATE_LIMIT_WINDOW_SECONDS = 24 * 60 * 60
 
 function emailValido(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
@@ -22,8 +20,8 @@ export async function POST(request: Request) {
   const { userId } = await auth()
   const rateLimit = await verificarRateLimit(request, {
     namespace: "email:send-cv",
-    limit: userId ? RATE_LIMIT_FREE : RATE_LIMIT_ANONIMO,
-    windowSeconds: RATE_LIMIT_WINDOW_SECONDS,
+    limit: userId ? USAGE_LIMITS.free.email : USAGE_LIMITS.anonymous.email,
+    windowSeconds: USAGE_WINDOW_SECONDS,
     message: userId
       ? "Alcanzaste tu limite diario de envios por correo. Intenta nuevamente manana."
       : "Alcanzaste el limite anonimo de envios. Inicia sesion gratis para mas envios diarios.",

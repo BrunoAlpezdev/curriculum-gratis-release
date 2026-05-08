@@ -1,9 +1,7 @@
 import { auth } from "@clerk/nextjs/server"
 import { verificarRateLimit } from "@/lib/rate-limit"
+import { USAGE_LIMITS, USAGE_WINDOW_SECONDS } from "@/lib/usage-limits"
 
-const RATE_LIMIT_ANONIMO = 1
-const RATE_LIMIT_FREE = 5
-const RATE_LIMIT_WINDOW_SECONDS = 24 * 60 * 60
 const MAX_INPUT_CHARS = 5000
 const MIN_OUTPUT_CHARS = 180
 
@@ -28,8 +26,8 @@ export async function POST(request: Request) {
   const { userId } = await auth()
   const rateLimit = await verificarRateLimit(request, {
     namespace: "ai:cover-letter",
-    limit: userId ? RATE_LIMIT_FREE : RATE_LIMIT_ANONIMO,
-    windowSeconds: RATE_LIMIT_WINDOW_SECONDS,
+    limit: userId ? USAGE_LIMITS.free.aiCoverLetter : USAGE_LIMITS.anonymous.aiCoverLetter,
+    windowSeconds: USAGE_WINDOW_SECONDS,
     message: userId
       ? "Alcanzaste tu limite diario de cartas con IA. Intenta nuevamente manana."
       : "Alcanzaste el limite anonimo de cartas con IA. Inicia sesion gratis para mas usos diarios.",

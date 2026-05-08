@@ -11,6 +11,13 @@ interface RateLimitConfig {
   }
 }
 
+export interface RateLimitStatus {
+  limit: number
+  used: number
+  remaining: number
+  resetAt: string
+}
+
 interface RedisResponse<T> {
   result?: T
   error?: string
@@ -53,6 +60,15 @@ function crearHeaders(limit: number, remaining: number, resetSeconds: number): H
   }
 }
 
+function crearStatus(limit: number, used: number, resetSeconds: number): RateLimitStatus {
+  return {
+    limit,
+    used: Math.max(0, used),
+    remaining: Math.max(0, limit - used),
+    resetAt: new Date(Date.now() + resetSeconds * 1000).toISOString(),
+  }
+}
+
 function limitarEnMemoria(key: string, config: RateLimitConfig): Response | null {
   const ahora = Date.now()
   const resetAt = ahora + config.windowSeconds * 1000
@@ -82,6 +98,27 @@ async function comandoRedis<T>(path: string, token: string): Promise<T | null> {
   const body = await respuesta.json().catch(() => null) as RedisResponse<T> | null
   if (!body || body.error) return null
   return body.result ?? null
+}
+
+export async function obtenerRateLimitStatus(request: Request, config: RateLimitConfig): Promise<RateLimitStatus> {
+  const key = crearClave(config.namespace, request, config.identity)
+  const redis = obtenerRedisConfig()
+  if (!redis) {
+    const actual = memoria.get(key)
+    if (!actual || actual.resetAt <= Date.now()) return crearStatus(config.limit, 0, config.windowSeconds)
+    return crearStatus(config.limit, actual.count, Math.max(1, Math.ceil((actual.resetAt - Date.now()) / 1000)))
+  }
+
+  const encodedKey = encodeURIComponent(key)
+  const [rawCount, ttl] = await Promise.all([
+    comandoRedis<string | number>(`${redis.url}/get/${encodedKey}`, redis.token),
+    comandoRedis<number>(`${redis.url}/ttl/${encodedKey}`, redis.token),
+  ])
+  const count = typeof rawCount === "number" ? rawCount : Number(rawCount ?? 0)
+  const used = Number.isFinite(count) ? count : 0
+  const resetSeconds = typeof ttl === "number" && ttl > 0 ? ttl : config.windowSeconds
+
+  return crearStatus(config.limit, used, resetSeconds)
 }
 
 export async function verificarRateLimit(request: Request, config: RateLimitConfig): Promise<Response | null> {

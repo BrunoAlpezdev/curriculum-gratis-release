@@ -10,6 +10,7 @@ import { AiSuggestionPanel } from "@/components/molecules/AiSuggestionPanel"
 import { SeccionFormulario } from "@/components/molecules/SeccionFormulario"
 import { guardarCopiaLocal } from "@/lib/copias-locales"
 import { useCurriculumStore } from "@/lib/store"
+import { useUsageLimits } from "@/lib/use-usage-limits"
 
 export function FormPerfil() {
   const perfil = useCurriculumStore((s) => s.datos.perfil)
@@ -18,6 +19,7 @@ export function FormPerfil() {
   const carta = useCurriculumStore((s) => s.carta)
   const titulo = useCurriculumStore((s) => s.datos.datosPersonales.titulo)
   const setPerfil = useCurriculumStore((s) => s.setPerfil)
+  const { usage, refresh: refreshUsage } = useUsageLimits()
   const [generando, setGenerando] = useState(false)
   const [sugerencia, setSugerencia] = useState("")
   const [error, setError] = useState("")
@@ -35,6 +37,7 @@ export function FormPerfil() {
       const body = await respuesta.json().catch(() => ({})) as { texto?: string; error?: string }
       if (!respuesta.ok) throw new Error(body.error ?? "No se pudo mejorar el perfil.")
       setSugerencia(body.texto ?? "")
+      void refreshUsage()
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo mejorar el perfil.")
     } finally {
@@ -79,8 +82,17 @@ export function FormPerfil() {
           {generando ? "Mejorando..." : "Mejorar redaccion con IA"}
         </Button>
         <Text variant="caption">
-          Opcional: envia este perfil a Gemini para reescribirlo. Tienes 2 usos diarios sin cuenta y 10 con cuenta gratis; antes de aplicar una sugerencia se guarda una copia local.
+          Opcional: envia este perfil a Gemini para reescribirlo. Antes de aplicar una sugerencia se guarda una copia local.
         </Text>
+        {usage && (
+          <Text variant="caption" className="font-semibold text-action-strong">
+            {usage.limits.aiProfile.remaining > 0
+              ? `Te quedan ${usage.limits.aiProfile.remaining} de ${usage.limits.aiProfile.limit} usos de IA hoy${usage.tier === "free" ? " en tu cuenta Free" : " sin cuenta"}.`
+              : usage.tier === "anonymous"
+                ? "Se acabaron tus usos sin cuenta. Inicia sesion gratis para mas usos de IA hoy."
+                : "Alcanzaste tu limite diario Free. Vuelve manana para mas usos de IA."}
+          </Text>
+        )}
       </div>
       {error && (
         <Surface variant="panelMuted" className="border-danger-line bg-danger-soft px-3 py-2">
