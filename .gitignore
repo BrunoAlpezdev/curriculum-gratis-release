@@ -42,3 +42,7 @@ next-env.d.ts
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+# local MCP client configuration (can include OAuth/session data or tokens)
+/.cursor/mcp.json
+/.vscode/mcp.json
