@@ -159,7 +159,7 @@ Regla visual:
 - `src/app/sitemap.ts`: sitemap.
 - `src/app/robots.ts`: robots.
 - `src/app/opengraph-image.tsx`: OG image generada.
-- `src/app/icon.tsx`: icono generado.
+- `src/app/icon.tsx`: favicon generado con monograma `CV`, fondo acento, borde y sombra solida del estilo de paneles del sitio.
 
 Roles SEO actuales:
 
@@ -178,6 +178,22 @@ Estado actual:
 - Rate limit persistente: configurar `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` o `KV_REST_API_URL` + `KV_REST_API_TOKEN`. `RATE_LIMIT_SALT` es opcional para hashear identificadores de IP con salt propio.
 - No hay base de datos.
 - No hay auth.
+
+Stack recomendado para evolucionar a cuentas, IA con limites por usuario, guardado cloud y pagos:
+
+- Auth: Clerk. Motivo: integracion rapida con Next.js App Router, UI/sesiones listas, login social/email y `userId` estable para rate limits, uso IA y futuro guardado cloud.
+- Base de datos: Neon Postgres. Motivo: Postgres administrado, buen encaje con Vercel, barato para empezar y suficiente para CVs guardados, uso IA, suscripciones y auditoria basica.
+- ORM: Drizzle. Motivo: tipado liviano, SQL explicito y migraciones controlables sin cargar demasiado el proyecto.
+- Pagos: Stripe. Motivo: estandar para suscripciones, customer portal, invoices y webhooks confiables. Clerk no reemplaza Stripe; Clerk identifica usuarios y Stripe cobra/gestiona planes.
+
+Orden recomendado de implementacion:
+
+- 1. Clerk opcional: agregar login sin bloquear editor local ni descargas.
+- 2. Rate limits por usuario: anonimo por IP con limite bajo; usuario logueado por `userId` con limite mayor para IA/correo.
+- 3. Neon + Drizzle: crear tablas `users`, `resumes`, `cover_letters`, `usage_events` y `subscriptions`.
+- 4. Guardado cloud: permitir guardar/restaurar CVs asociados al `userId`, manteniendo `localStorage` como experiencia base.
+- 5. Stripe: agregar planes Free/Pro, webhooks y customer portal.
+- 6. Features Pro futuras: mas IA, CVs cloud ilimitados, historial/versiones, plantillas premium, export DOCX o portal publico.
 
 Si se agregan features con backend, preferir:
 
