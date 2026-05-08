@@ -12,7 +12,9 @@ const content: SeoPageContent = {
   eyebrow: "Formato Harvard CV",
   title: "Formato CV Harvard gratis para un curriculum claro y profesional",
   description:
-    "El formato Harvard prioriza orden, lectura rapida y contenido relevante. Es ideal cuando necesitas un CV sobrio, directo y facil de revisar.",
+    "Pagina enfocada en CV sobrio tipo Harvard: estructura limpia, lectura rapida y plantillas compatibles con ATS.",
+  primaryCta: { label: "Usar plantilla Clasico", href: "/editor?plantilla=clasico" },
+  secondaryCta: { label: "Comparar plantillas ATS", href: "/plantillas-cv-gratis" },
   primaryKeyword: "formato harvard cv",
   relatedKeywords: [
     "cv harvard",
@@ -32,7 +34,7 @@ const content: SeoPageContent = {
     },
     {
       title: "Como hacerlo gratis",
-      body: "Usa la plantilla Clasico o Minimalista, completa tus datos, revisa que el CV no se extienda innecesariamente y descarga el PDF final sin registro.",
+      body: "Usa la plantilla Clasico si quieres una estructura Harvard directa, o Minimalista si prefieres una version mas ligera. Completa tus datos, revisa que el CV no se extienda innecesariamente y descarga el PDF final sin registro.",
     },
   ],
   faq: [

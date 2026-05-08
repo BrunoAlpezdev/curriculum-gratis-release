@@ -42,7 +42,7 @@ export function SeccionFormulario({
   titulo,
   icono,
   children,
-  defaultAbierta = true,
+  defaultAbierta = false,
   tip,
 }: SeccionFormularioProps) {
   const [abierta, setAbierta] = useState(defaultAbierta)

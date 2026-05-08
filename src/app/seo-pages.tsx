@@ -3,12 +3,22 @@ import { Badge } from "@/components/atoms/Badge"
 import { buttonVariants } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
+import { SiteFooter } from "@/components/molecules/SiteFooter"
+import { SiteHeader } from "@/components/molecules/SiteHeader"
 import { cn } from "@/components/ui/cn"
 
 export interface SeoPageContent {
   eyebrow: string
   title: string
   description: string
+  primaryCta?: {
+    label: string
+    href: string
+  }
+  secondaryCta?: {
+    label: string
+    href: string
+  }
   primaryKeyword: string
   relatedKeywords: string[]
   sections: Array<{
@@ -40,12 +50,14 @@ export function SeoPage({ content }: SeoPageProps) {
   }
 
   return (
-    <Surface as="main" variant="page" className="min-h-screen">
+    <Surface variant="page" className="min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <SiteHeader />
 
+      <Surface as="main" variant="page">
       <Surface as="section" variant="stripAccent" className="px-4 py-10 md:px-6 md:py-14">
         <div className="mx-auto max-w-5xl">
           <Badge variant="accent" size="md" className="mb-4">
@@ -59,16 +71,16 @@ export function SeoPage({ content }: SeoPageProps) {
           </Text>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link
-              href="/#editor"
+              href={content.primaryCta?.href ?? "/editor"}
               className={cn(buttonVariants({ variant: "primary", size: "lg" }), "min-h-14 text-base")}
             >
-              Empezar mi curriculum
+              {content.primaryCta?.label ?? "Empezar mi curriculum"}
             </Link>
             <Link
-              href="/"
+              href={content.secondaryCta?.href ?? "/"}
               className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "min-h-14 border-2 text-base")}
             >
-              Volver al inicio
+              {content.secondaryCta?.label ?? "Volver al inicio"}
             </Link>
           </div>
         </div>
@@ -116,6 +128,8 @@ export function SeoPage({ content }: SeoPageProps) {
           </div>
         </div>
       </Surface>
+      </Surface>
+      <SiteFooter />
     </Surface>
   )
 }

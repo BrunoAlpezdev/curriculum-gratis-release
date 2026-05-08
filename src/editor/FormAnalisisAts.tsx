@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { TargetIcon, CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react"
+import { TargetIcon, CheckCircleIcon, XCircleIcon, ArrowRightIcon } from "@phosphor-icons/react"
 import { Badge } from "@/components/atoms/Badge"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
@@ -73,6 +73,9 @@ export function FormAnalisisAts() {
           </Text>
 
           <div className="flex flex-col gap-2">
+            <Text as="p" variant="label">
+              Keywords faltantes
+            </Text>
             <div className="flex flex-wrap gap-1.5">
               {resultado.palabras
                 .filter((p) => !p.enCv)
@@ -87,6 +90,9 @@ export function FormAnalisisAts() {
                   </Badge>
                 ))}
             </div>
+            <Text as="p" variant="label" className="mt-1">
+              Keywords presentes
+            </Text>
             <div className="flex flex-wrap gap-1.5">
               {resultado.palabras
                 .filter((p) => p.enCv)
@@ -101,6 +107,36 @@ export function FormAnalisisAts() {
                 ))}
             </div>
           </div>
+
+          {resultado.recomendaciones.length > 0 && (
+            <div className="flex flex-col gap-2 border-t border-border-subtle pt-3">
+              <Text as="p" variant="label">
+                Acciones sugeridas
+              </Text>
+              {resultado.recomendaciones.map((recomendacion) => (
+                <Surface key={recomendacion.id} variant="panel" className="p-3 shadow-none">
+                  <div className="flex items-start gap-2">
+                    <ArrowRightIcon size={16} className="mt-0.5 shrink-0 text-action-primary" />
+                    <div className="min-w-0 flex-1">
+                      <Text as="p" variant="strong" className="text-sm">
+                        {recomendacion.titulo}
+                      </Text>
+                      <Text variant="caption" className="mt-1 leading-relaxed">
+                        {recomendacion.descripcion}
+                      </Text>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {recomendacion.palabras.map((palabra) => (
+                          <Badge key={palabra} variant="accent">
+                            {palabra}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </Surface>
+              ))}
+            </div>
+          )}
         </Surface>
       )}
     </SeccionFormulario>

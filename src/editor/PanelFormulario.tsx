@@ -1,6 +1,7 @@
 "use client"
 
 import { FormPersonalizacion } from "@/editor/FormPersonalizacion"
+import { FormCalidadCv } from "@/editor/FormCalidadCv"
 import { FormDatosPersonales } from "@/editor/FormDatosPersonales"
 import { FormPerfil } from "@/editor/FormPerfil"
 import { FormExperiencia } from "@/editor/FormExperiencia"
@@ -20,6 +21,7 @@ export function PanelFormulario() {
   return (
     <Surface variant="page" className="flex flex-col gap-4 overflow-y-auto p-3 sm:p-4">
       <FormPersonalizacion />
+      <FormCalidadCv />
       <FormDatosPersonales />
       <FormPerfil />
       <FormExperiencia />
@@ -42,8 +44,7 @@ export function PanelFormulario() {
               Privacidad garantizada
             </Text>
             <Text variant="small" className="leading-relaxed">
-              Tus datos nunca salen de tu dispositivo. No guardamos ninguna
-              información en bases de datos ni servidores externos.
+              El editor, las copias locales, el analisis ATS, el checklist y la descarga PDF funcionan en tu navegador. Solo las funciones opcionales de correo e IA envian datos al servidor para completar esa accion, y nada de eso se guarda.
             </Text>
             <Text variant="small" className="font-semibold text-action-strong">
               Dedicado a Camila Valenzuela &lt;3

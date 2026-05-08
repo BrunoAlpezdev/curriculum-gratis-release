@@ -17,6 +17,14 @@ export function generarPdfAts(
   datos: DatosCurriculum,
   personalizacion: Personalizacion,
 ) {
+  const { pdf, nombreArchivo } = crearPdfAts(datos, personalizacion)
+  pdf.save(nombreArchivo)
+}
+
+export function crearPdfAts(
+  datos: DatosCurriculum,
+  personalizacion: Personalizacion,
+) {
   const color = hexToRgb(getColorHex(personalizacion.color))
   const fuenteBase = FUENTES.find((f) => f.valor === personalizacion.fuente)?.jsPdf ?? "helvetica"
   const e = etiquetasCv(personalizacion.idiomaCv)
@@ -393,5 +401,5 @@ export function generarPdfAts(
   }
 
   const nombre = dp.nombreCompleto.trim().replace(/\s+/g, "_") || "curriculum"
-  pdf.save(`${nombre}_CV.pdf`)
+  return { pdf, nombreArchivo: `${nombre}_CV.pdf` }
 }

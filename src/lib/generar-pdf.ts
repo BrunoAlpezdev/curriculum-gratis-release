@@ -18,22 +18,38 @@ export async function generarPdf(
   datos: DatosCurriculum,
   personalizacion: Personalizacion,
 ) {
+  const { pdf, nombreArchivo } = await crearPdf(datos, personalizacion)
+  pdf.save(nombreArchivo)
+}
+
+export async function generarPdfBlob(
+  datos: DatosCurriculum,
+  personalizacion: Personalizacion,
+): Promise<{ blob: Blob; nombreArchivo: string }> {
+  const { pdf, nombreArchivo } = await crearPdf(datos, personalizacion)
+  return { blob: pdf.output("blob"), nombreArchivo }
+}
+
+async function crearPdf(
+  datos: DatosCurriculum,
+  personalizacion: Personalizacion,
+) {
   const plantilla = PLANTILLAS.find((p) => p.valor === personalizacion.plantilla)
 
   if (plantilla?.ats) {
-    const { generarPdfAts } = await import("@/lib/generar-pdf-ats")
-    generarPdfAts(datos, personalizacion)
-  } else {
-    await generarPdfVisual(datos.datosPersonales.nombreCompleto, personalizacion)
+    const { crearPdfAts } = await import("@/lib/generar-pdf-ats")
+    return crearPdfAts(datos, personalizacion)
   }
+
+  return crearPdfVisual(datos.datosPersonales.nombreCompleto, personalizacion)
 }
 
-async function generarPdfVisual(
+async function crearPdfVisual(
   nombreCompleto: string,
   personalizacion: Personalizacion,
 ) {
   const el = document.getElementById("curriculum-pdf")
-  if (!el) return
+  if (!el) throw new Error("No se encontro la vista previa del CV.")
 
   /* scrollHeight incluye overflow invisible; offsetHeight solo el box renderizado.
      En flex columns el contenido a veces queda flush al border y offsetHeight
@@ -189,7 +205,7 @@ async function generarPdfVisual(
   }
 
   const nombre = nombreCompleto.trim().replace(/\s+/g, "_") || "curriculum"
-  pdf.save(`${nombre}_CV.pdf`)
+  return { pdf, nombreArchivo: `${nombre}_CV.pdf` }
 }
 
 /* Cuenta pixeles cercanos al blanco por fila del canvas, pero SOLO en la

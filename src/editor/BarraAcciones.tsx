@@ -1,7 +1,9 @@
 "use client"
 
+import Link from "next/link"
 import { useState, useRef, useEffect, useId } from "react"
 import {
+  ArrowLeftIcon,
   DownloadSimpleIcon,
   ArrowCounterClockwiseIcon,
   SpinnerIcon,
@@ -12,13 +14,21 @@ import {
   DotsThreeVerticalIcon,
   FileArrowDownIcon,
   FileArrowUpIcon,
+  CopyIcon,
+  ClockCounterClockwiseIcon,
+  EnvelopeIcon,
 } from "@phosphor-icons/react"
-import { Button } from "@/components/atoms/Button"
+import { Button, buttonVariants } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
+import { cn } from "@/components/ui/cn"
 import { useCurriculumStore } from "@/lib/store"
 import { useTema, type Tema } from "@/lib/useTema"
 import { exportarJson, importarJson } from "@/lib/importar-exportar"
+import { exportarTexto } from "@/lib/exportar-texto"
+import { guardarCopiaLocal, type CopiaLocalCv } from "@/lib/copias-locales"
+import { DialogCopiasLocales } from "@/editor/DialogCopiasLocales"
+import { DialogEnviarCv } from "@/editor/DialogEnviarCv"
 import { DialogEjemploCv } from "@/editor/DialogEjemploCv"
 import { generarDatosMock } from "@/editor/datos-ejemplo"
 import type { Modo } from "@/editor/Editor"
@@ -52,6 +62,8 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   const [descargando, setDescargando] = useState(false)
   const [menuAbierto, setMenuAbierto] = useState(false)
   const [ejemploAbierto, setEjemploAbierto] = useState(false)
+  const [copiasAbierto, setCopiasAbierto] = useState(false)
+  const [enviarAbierto, setEnviarAbierto] = useState(false)
   const menuId = useId()
   const datos = useCurriculumStore((s) => s.datos)
   const carta = useCurriculumStore((s) => s.carta)
@@ -59,6 +71,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   const reiniciarStore = useCurriculumStore((s) => s.reiniciar)
   const setDatos = useCurriculumStore((s) => s.setDatos)
   const setPersonalizacion = useCurriculumStore((s) => s.setPersonalizacion)
+  const setCarta = useCurriculumStore((s) => s.setCarta)
   const tapsRef = useRef<number[]>([])
   const menuRef = useRef<HTMLDivElement>(null)
   const botonMenuRef = useRef<HTMLButtonElement>(null)
@@ -118,9 +131,41 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
     setMenuAbierto(false)
   }
 
+  function exportarFormatoTexto(formato: "txt" | "md") {
+    exportarTexto(modo, formato, datos, personalizacion, carta)
+    setMenuAbierto(false)
+  }
+
   function pedirImportar() {
     inputArchivoRef.current?.click()
     setMenuAbierto(false)
+  }
+
+  function guardarCopia(nombreSugerido?: string) {
+    const nombreBase = datos.datosPersonales.nombreCompleto.trim() || "Curriculum"
+    const nombre = window.prompt("Nombre de la copia local", nombreSugerido ?? `${nombreBase} - copia`)
+    if (nombre === null) return
+    guardarCopiaLocal(nombre, datos, personalizacion, carta)
+    setMenuAbierto(false)
+  }
+
+  function abrirCopias() {
+    setCopiasAbierto(true)
+    setMenuAbierto(false)
+  }
+
+  function abrirEnviar() {
+    setEnviarAbierto(true)
+    setMenuAbierto(false)
+  }
+
+  function restaurarCopia(copia: CopiaLocalCv) {
+    if (!window.confirm("Esto reemplazará el CV y la carta actuales. ¿Continuar?")) return
+    guardarCopiaLocal("Respaldo antes de restaurar", datos, personalizacion, carta)
+    setDatos(copia.datos)
+    setPersonalizacion(copia.personalizacion)
+    setCarta(copia.carta)
+    setCopiasAbierto(false)
   }
 
   async function handleArchivo(e: React.ChangeEvent<HTMLInputElement>) {
@@ -133,6 +178,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
       return
     }
     if (!window.confirm("Esto reemplazará los datos actuales. ¿Continuar?")) return
+    guardarCopiaLocal("Respaldo antes de importar", datos, personalizacion, carta)
     setDatos(resultado.datos)
     setPersonalizacion(resultado.personalizacion)
   }
@@ -149,6 +195,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
 
   function reiniciar() {
     if (window.confirm("¿Seguro que quieres reiniciar? Se borrarán todos los datos del curriculum.")) {
+      guardarCopiaLocal("Respaldo antes de reiniciar", datos, personalizacion, carta)
       reiniciarStore()
     }
   }
@@ -172,6 +219,13 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   return (
     <Surface data-no-print variant="toolbar" className="flex items-center justify-between px-3 py-2.5 md:px-4">
       <div className="flex items-center gap-1.5 min-w-0">
+        <Link
+          href="/"
+          className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "min-h-10 shrink-0")}
+        >
+          <ArrowLeftIcon size={16} />
+          <span className="hidden sm:inline">Volver</span>
+        </Link>
         <Text
           as="h1"
           variant="strong"
@@ -250,6 +304,34 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 }}
                 type="button"
                 role="menuitem"
+                onClick={() => exportarFormatoTexto("txt")}
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
+              >
+                <FileArrowDownIcon size={16} />
+                Exportar TXT
+              </Button>
+              <Button
+                ref={(el) => {
+                  opcionesMenuRef.current[2] = el
+                }}
+                type="button"
+                role="menuitem"
+                onClick={() => exportarFormatoTexto("md")}
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
+              >
+                <FileArrowDownIcon size={16} />
+                Exportar Markdown
+              </Button>
+              <Button
+                ref={(el) => {
+                  opcionesMenuRef.current[3] = el
+                }}
+                type="button"
+                role="menuitem"
                 onClick={pedirImportar}
                 variant="menu"
                 size="none"
@@ -257,6 +339,48 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
               >
                 <FileArrowUpIcon size={16} />
                 Importar JSON
+              </Button>
+              <Button
+                ref={(el) => {
+                  opcionesMenuRef.current[4] = el
+                }}
+                type="button"
+                role="menuitem"
+                onClick={() => guardarCopia()}
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
+              >
+                <CopyIcon size={16} />
+                Guardar copia local
+              </Button>
+              <Button
+                ref={(el) => {
+                  opcionesMenuRef.current[5] = el
+                }}
+                type="button"
+                role="menuitem"
+                onClick={abrirCopias}
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
+              >
+                <ClockCounterClockwiseIcon size={16} />
+                Ver copias locales
+              </Button>
+              <Button
+                ref={(el) => {
+                  opcionesMenuRef.current[6] = el
+                }}
+                type="button"
+                role="menuitem"
+                onClick={abrirEnviar}
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
+              >
+                <EnvelopeIcon size={16} />
+                Enviar CV por correo
               </Button>
             </Surface>
           )}
@@ -279,6 +403,8 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
         </Button>
       </div>
       <DialogEjemploCv abierto={ejemploAbierto} onCerrar={() => setEjemploAbierto(false)} />
+      <DialogCopiasLocales abierto={copiasAbierto} onCerrar={() => setCopiasAbierto(false)} onRestaurar={restaurarCopia} />
+      <DialogEnviarCv abierto={enviarAbierto} datos={datos} personalizacion={personalizacion} onCerrar={() => setEnviarAbierto(false)} />
     </Surface>
   )
 }
