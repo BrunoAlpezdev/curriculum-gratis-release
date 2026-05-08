@@ -72,7 +72,7 @@ Estado persistido actual:
 ## Formularios del Editor
 
 - `src/editor/PanelFormulario.tsx`: compone todas las secciones del formulario de CV.
-- `src/editor/FormPersonalizacion.tsx`: idioma, plantilla, color, fuente y orden de secciones. Ya existe drag and drop basico + flechas para reordenar secciones.
+- `src/editor/FormPersonalizacion.tsx`: idioma, plantilla, color, fuente y orden de secciones. Es la unica seccion abierta por defecto; ya existe drag and drop basico + flechas para reordenar secciones.
 - `src/editor/FormCalidadCv.tsx`: checklist local de calidad del CV con puntaje, urgentes y recomendaciones. En CV vacio no marca como listas reglas que aun no tienen datos para evaluar.
 - `src/editor/FormDatosPersonales.tsx`: datos personales y enlaces.
 - `src/editor/FormPerfil.tsx`: perfil profesional y mejora acotada con IA.
@@ -139,7 +139,7 @@ Regla actual:
 - `src/components/atoms/Badge.tsx`: etiquetas y estados.
 - `src/components/atoms/Input.tsx`, `Textarea.tsx`, `Select.tsx`, `SelectorFecha.tsx`: controles de formulario.
 - `src/components/atoms/Chip.tsx`: chips.
-- `src/components/molecules/SeccionFormulario.tsx`: contenedor reutilizable de secciones con tips; por defecto las secciones del editor parten colapsadas.
+- `src/components/molecules/SeccionFormulario.tsx`: contenedor reutilizable de secciones con tips; por defecto las secciones parten colapsadas salvo que pasen `defaultAbierta`.
 - `src/components/molecules/EntradaRepetible.tsx`: wrapper para items repetibles.
 - `src/components/ui/cn.ts`: merge de clases.
 

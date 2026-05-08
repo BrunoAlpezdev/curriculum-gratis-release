@@ -60,6 +60,7 @@ export function FormPersonalizacion() {
     <SeccionFormulario
       titulo="Personalizar"
       icono={<PaletteIcon size={18} />}
+      defaultAbierta
       tip={[
         "Plantilla: las marcadas con ATS pasan los filtros automáticos de las empresas grandes. Si envías tu CV por un portal de empleo, usa una de esas.",
         "Color: azul o negro para roles corporativos, finanzas, derecho. Colores más fuertes si postulas a diseño o creatividad.",
