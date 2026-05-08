@@ -1,6 +1,7 @@
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000
 const RATE_LIMIT_MAX = 8
 const MAX_INPUT_CHARS = 5000
+const MIN_OUTPUT_CHARS = 180
 
 const usosPorIp = new Map<string, { count: number; resetAt: number }>()
 
@@ -94,7 +95,8 @@ export async function POST(request: Request) {
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
         temperature: 0.45,
-        maxOutputTokens: 420,
+        maxOutputTokens: 900,
+        thinkingConfig: { thinkingBudget: 0 },
       },
     }),
   })
@@ -112,6 +114,10 @@ export async function POST(request: Request) {
   const cuerpo = extraerTextoGemini(data)
   if (!cuerpo) {
     return Response.json({ error: "Gemini no devolvio una carta util." }, { status: 502 })
+  }
+  if (cuerpo.length < MIN_OUTPUT_CHARS) {
+    console.error("Gemini generate-cover-letter returned short text", cuerpo)
+    return Response.json({ error: "Gemini devolvio una carta incompleta. Intenta nuevamente." }, { status: 502 })
   }
 
   return Response.json({ cuerpo })

@@ -1,6 +1,7 @@
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000
 const RATE_LIMIT_MAX = 10
 const MAX_INPUT_CHARS = 1600
+const MIN_OUTPUT_CHARS = 80
 
 const usosPorIp = new Map<string, { count: number; resetAt: number }>()
 
@@ -85,7 +86,8 @@ export async function POST(request: Request) {
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
         temperature: 0.35,
-        maxOutputTokens: 180,
+        maxOutputTokens: 420,
+        thinkingConfig: { thinkingBudget: 0 },
       },
     }),
   })
@@ -103,6 +105,10 @@ export async function POST(request: Request) {
   const texto = extraerTextoGemini(data)
   if (!texto) {
     return Response.json({ error: "Gemini no devolvio una sugerencia util." }, { status: 502 })
+  }
+  if (texto.length < MIN_OUTPUT_CHARS) {
+    console.error("Gemini improve-profile returned short text", texto)
+    return Response.json({ error: "Gemini devolvio una sugerencia incompleta. Intenta nuevamente." }, { status: 502 })
   }
 
   return Response.json({ texto })
