@@ -17,6 +17,7 @@ Promesa actual del producto:
 - Guardar y restaurar copias locales del CV/carta en el mismo navegador.
 - Enviar el CV por correo usando backend Next/Vercel cuando `RESEND_API_KEY` esta configurada.
 - Mejorar redaccion del perfil profesional con Gemini cuando `GEMINI_API_KEY` esta configurada.
+- Generar cuerpo de carta de presentacion con Gemini desde CV, empresa, cargo y oferta opcional.
 - Analizar match ATS localmente contra una oferta laboral.
 - Revisar calidad basica del CV con checklist local.
 - Mantener privacidad: los datos no salen del dispositivo.
@@ -77,7 +78,7 @@ Estado persistido actual:
 - `src/editor/FormReferencias.tsx`: referencias repetibles.
 - `src/editor/FormInfoAdicional.tsx`: disponibilidad y pretensiones de renta.
 - `src/editor/FormAnalisisAts.tsx`: pega una oferta laboral y calcula coincidencia local de keywords contra el CV.
-- `src/editor/PanelFormularioCarta.tsx` y `src/editor/FormCarta.tsx`: formulario de carta de presentacion.
+- `src/editor/PanelFormularioCarta.tsx` y `src/editor/FormCarta.tsx`: formulario de carta de presentacion y generacion IA del cuerpo.
 
 ## Preview y Render de Documentos
 
@@ -157,6 +158,7 @@ Estado actual:
 
 - `src/app/api/send-cv/route.ts`: envia CV por correo via Resend. Requiere `RESEND_API_KEY`; `RESEND_FROM_EMAIL` es opcional.
 - `src/app/api/ai/improve-profile/route.ts`: reescribe el perfil profesional con Gemini. Requiere `GEMINI_API_KEY`; `GEMINI_MODEL` es opcional.
+- `src/app/api/ai/generate-cover-letter/route.ts`: genera cuerpo de carta con Gemini desde resumen del CV y oferta opcional.
 - No hay base de datos.
 - No hay auth.
 

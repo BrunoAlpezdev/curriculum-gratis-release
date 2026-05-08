@@ -1,11 +1,14 @@
 "use client"
 
-import { EnvelopeIcon } from "@phosphor-icons/react"
+import { useState } from "react"
+import { EnvelopeIcon, SparkleIcon, SpinnerIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
 import { Input } from "@/components/atoms/Input"
+import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
 import { Textarea } from "@/components/atoms/Textarea"
 import { SeccionFormulario } from "@/components/molecules/SeccionFormulario"
+import { textoCv } from "@/lib/analisis-ats"
 import { useCurriculumStore } from "@/lib/store"
 
 const PLANTILLAS_CUERPO = [
@@ -42,8 +45,39 @@ Agradezco de antemano su consideracion.`,
 ]
 
 export function FormCarta() {
+  const datos = useCurriculumStore((s) => s.datos)
   const carta = useCurriculumStore((s) => s.carta)
   const set = useCurriculumStore((s) => s.setCarta)
+  const [oferta, setOferta] = useState("")
+  const [generando, setGenerando] = useState(false)
+  const [sugerencia, setSugerencia] = useState("")
+  const [error, setError] = useState("")
+
+  async function generarCarta() {
+    setGenerando(true)
+    setSugerencia("")
+    setError("")
+    try {
+      const respuesta = await fetch("/api/ai/generate-cover-letter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          resumenCv: textoCv(datos),
+          empresa: carta.empresaDestino,
+          cargo: carta.cargoPostulado,
+          destinatario: carta.destinatario,
+          oferta,
+        }),
+      })
+      const body = await respuesta.json().catch(() => ({})) as { cuerpo?: string; error?: string }
+      if (!respuesta.ok) throw new Error(body.error ?? "No se pudo generar la carta.")
+      setSugerencia(body.cuerpo ?? "")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo generar la carta.")
+    } finally {
+      setGenerando(false)
+    }
+  }
 
   return (
     <SeccionFormulario
@@ -101,6 +135,60 @@ export function FormCarta() {
           ))}
         </div>
       </div>
+
+      <Textarea
+        label="Oferta laboral para IA (opcional)"
+        placeholder="Pega aqui la descripcion del cargo para personalizar la carta..."
+        value={oferta}
+        onChange={(e) => setOferta(e.target.value)}
+        rows={4}
+      />
+
+      <div className="flex flex-col gap-2">
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          onClick={generarCarta}
+          disabled={generando || !carta.empresaDestino.trim() || !carta.cargoPostulado.trim()}
+          className="w-fit"
+        >
+          {generando ? <SpinnerIcon size={16} className="animate-spin" /> : <SparkleIcon size={16} />}
+          {generando ? "Generando..." : "Generar cuerpo con IA"}
+        </Button>
+        <Text variant="caption">
+          Usa los datos de tu CV y la oferta opcional. Revisa siempre antes de enviar.
+        </Text>
+      </div>
+
+      {error && (
+        <Surface variant="panelMuted" className="border-danger-line bg-danger-soft px-3 py-2">
+          <Text variant="small" className="text-danger-text">
+            {error}
+          </Text>
+        </Surface>
+      )}
+
+      {sugerencia && (
+        <Surface variant="notice" className="flex flex-col gap-3 px-3 py-3">
+          <div>
+            <Text as="p" variant="strong" className="text-sm">
+              Carta sugerida
+            </Text>
+            <Text variant="small" className="mt-1 whitespace-pre-line leading-relaxed">
+              {sugerencia}
+            </Text>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" size="sm" onClick={() => set({ cuerpo: sugerencia })}>
+              Usar sugerencia
+            </Button>
+            <Button type="button" variant="secondary" size="sm" onClick={() => setSugerencia("")}>
+              Descartar
+            </Button>
+          </div>
+        </Surface>
+      )}
 
       <Textarea
         label="Cuerpo de la carta"
