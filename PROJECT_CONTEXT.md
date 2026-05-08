@@ -118,6 +118,7 @@ Regla actual:
 - `src/lib/useTema.ts`: tema claro/oscuro/sistema persistido en `localStorage` con clave `tema`.
 - `src/lib/useHidratado.ts`: evita render sensible a `localStorage` antes de hidratacion.
 - `src/lib/copias-locales.ts`: snapshots locales de CV/carta con clave `curriculum-gratis:copias-locales`.
+- `src/lib/rate-limit.ts`: rate limit compartido para Route Handlers. Usa Redis REST persistente si existen `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN` o `KV_REST_API_URL`/`KV_REST_API_TOKEN`; si no, cae a memoria local para desarrollo.
 
 ## ATS Local
 
@@ -168,9 +169,10 @@ Roles SEO actuales:
 
 Estado actual:
 
-- `src/app/api/send-cv/route.ts`: envia CV por correo via Resend. Requiere `RESEND_API_KEY`; `RESEND_FROM_EMAIL` es opcional.
-- `src/app/api/ai/improve-profile/route.ts`: reescribe el perfil profesional con Gemini. Requiere `GEMINI_API_KEY`; `GEMINI_MODEL` es opcional y por defecto usa `gemini-2.5-flash`.
-- `src/app/api/ai/generate-cover-letter/route.ts`: genera cuerpo de carta con Gemini desde resumen del CV y oferta opcional.
+- `src/app/api/send-cv/route.ts`: envia CV por correo via Resend. Requiere `RESEND_API_KEY`; `RESEND_FROM_EMAIL` es opcional. Limitado a 5 envios por IP/hora.
+- `src/app/api/ai/improve-profile/route.ts`: reescribe el perfil profesional con Gemini. Requiere `GEMINI_API_KEY`; `GEMINI_MODEL` es opcional y por defecto usa `gemini-2.5-flash`. Limitado a 10 solicitudes por IP/hora.
+- `src/app/api/ai/generate-cover-letter/route.ts`: genera cuerpo de carta con Gemini desde resumen del CV y oferta opcional. Limitado a 8 solicitudes por IP/hora.
+- Rate limit persistente: configurar `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` o `KV_REST_API_URL` + `KV_REST_API_TOKEN`. `RATE_LIMIT_SALT` es opcional para hashear identificadores de IP con salt propio.
 - No hay base de datos.
 - No hay auth.
 
@@ -179,7 +181,7 @@ Si se agregan features con backend, preferir:
 - Route Handlers en `src/app/api/.../route.ts` para emails, IA, webhooks o endpoints JSON.
 - Server Actions solo cuando calcen naturalmente con formularios y mutaciones server-side.
 - Runtime Node.js por defecto salvo necesidad clara de Edge.
-- Rate limit externo si hay abuso/costo, por ejemplo Upstash Redis o Vercel KV.
+- Mantener rate limit externo para funciones con costo/abuso usando Redis REST; no depender solo de memoria en produccion.
 
 Features que probablemente requieren backend:
 

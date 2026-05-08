@@ -1,29 +1,12 @@
+import { verificarRateLimit } from "@/lib/rate-limit"
+
 const RESEND_API_URL = "https://api.resend.com/emails"
 const MAX_ATTACHMENT_BYTES = 8 * 1024 * 1024
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000
 const RATE_LIMIT_MAX = 5
-
-const enviosPorIp = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT_WINDOW_SECONDS = 60 * 60
 
 function emailValido(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-}
-
-function obtenerIp(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for")
-  return forwarded?.split(",")[0]?.trim() || "unknown"
-}
-
-function rateLimitOk(ip: string): boolean {
-  const ahora = Date.now()
-  const actual = enviosPorIp.get(ip)
-  if (!actual || actual.resetAt <= ahora) {
-    enviosPorIp.set(ip, { count: 1, resetAt: ahora + RATE_LIMIT_WINDOW_MS })
-    return true
-  }
-  if (actual.count >= RATE_LIMIT_MAX) return false
-  actual.count += 1
-  return true
 }
 
 export async function POST(request: Request) {
@@ -34,10 +17,13 @@ export async function POST(request: Request) {
     return Response.json({ error: "Envio de correo no configurado." }, { status: 503 })
   }
 
-  const ip = obtenerIp(request)
-  if (!rateLimitOk(ip)) {
-    return Response.json({ error: "Demasiados envios. Intenta de nuevo mas tarde." }, { status: 429 })
-  }
+  const rateLimit = await verificarRateLimit(request, {
+    namespace: "email:send-cv",
+    limit: RATE_LIMIT_MAX,
+    windowSeconds: RATE_LIMIT_WINDOW_SECONDS,
+    message: "Demasiados envios. Intenta de nuevo mas tarde.",
+  })
+  if (rateLimit) return rateLimit
 
   let body: unknown
   try {

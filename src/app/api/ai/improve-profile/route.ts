@@ -1,26 +1,9 @@
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000
+import { verificarRateLimit } from "@/lib/rate-limit"
+
 const RATE_LIMIT_MAX = 10
+const RATE_LIMIT_WINDOW_SECONDS = 60 * 60
 const MAX_INPUT_CHARS = 1600
 const MIN_OUTPUT_CHARS = 80
-
-const usosPorIp = new Map<string, { count: number; resetAt: number }>()
-
-function obtenerIp(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for")
-  return forwarded?.split(",")[0]?.trim() || "unknown"
-}
-
-function rateLimitOk(ip: string): boolean {
-  const ahora = Date.now()
-  const actual = usosPorIp.get(ip)
-  if (!actual || actual.resetAt <= ahora) {
-    usosPorIp.set(ip, { count: 1, resetAt: ahora + RATE_LIMIT_WINDOW_MS })
-    return true
-  }
-  if (actual.count >= RATE_LIMIT_MAX) return false
-  actual.count += 1
-  return true
-}
 
 function extraerTextoGemini(valor: unknown): string {
   const raiz = valor as {
@@ -40,10 +23,13 @@ export async function POST(request: Request) {
     return Response.json({ error: "IA no configurada." }, { status: 503 })
   }
 
-  const ip = obtenerIp(request)
-  if (!rateLimitOk(ip)) {
-    return Response.json({ error: "Demasiadas solicitudes de IA. Intenta mas tarde." }, { status: 429 })
-  }
+  const rateLimit = await verificarRateLimit(request, {
+    namespace: "ai:profile",
+    limit: RATE_LIMIT_MAX,
+    windowSeconds: RATE_LIMIT_WINDOW_SECONDS,
+    message: "Demasiadas solicitudes de IA. Intenta mas tarde.",
+  })
+  if (rateLimit) return rateLimit
 
   let body: unknown
   try {
