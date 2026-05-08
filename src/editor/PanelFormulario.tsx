@@ -44,7 +44,7 @@ export function PanelFormulario() {
               Privacidad garantizada
             </Text>
             <Text variant="small" className="leading-relaxed">
-              El editor, las copias locales, el analisis ATS, el checklist y la descarga PDF funcionan en tu navegador. Solo las funciones opcionales de correo e IA envian datos al servidor para completar esa accion.
+              El editor, las copias locales, el analisis ATS, el checklist y la descarga PDF funcionan en tu navegador. Solo las funciones opcionales de correo e IA envian datos al servidor para completar esa accion, y nada de eso se guarda.
             </Text>
             <Text variant="small" className="font-semibold text-action-strong">
               Dedicado a Camila Valenzuela &lt;3

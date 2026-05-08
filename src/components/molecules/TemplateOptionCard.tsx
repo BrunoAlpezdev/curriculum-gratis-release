@@ -144,7 +144,7 @@ export function TemplateOptionCard({ id, nombre, descripcion, ats }: TemplateOpt
         </ul>
 
         <Link
-          href={`/?plantilla=${id}#editor`}
+          href={`/editor?plantilla=${id}`}
           className={cn(buttonVariants({ variant: "primary", size: "sm" }), "mt-auto w-fit min-h-10")}
         >
           Usar esta plantilla

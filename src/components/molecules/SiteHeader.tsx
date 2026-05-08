@@ -50,7 +50,7 @@ export function SiteHeader() {
           <span className="hidden border border-dashed border-border-subtle px-3 py-2 text-xs font-bold text-text-muted md:inline-flex">
             Login futuro
           </span>
-          <Link href="/#editor" className={cn(buttonVariants({ variant: "primary", size: "sm" }), "min-h-10") }>
+          <Link href="/editor" className={cn(buttonVariants({ variant: "primary", size: "sm" }), "min-h-10") }>
             Crear CV
           </Link>
         </div>

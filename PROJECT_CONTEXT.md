@@ -21,7 +21,7 @@ Promesa actual del producto:
 - Generar cuerpo de carta de presentacion con Gemini desde CV, empresa, cargo y oferta opcional, con sugerencia revisable, regeneracion y copia local antes de aplicar.
 - Analizar match ATS localmente contra una oferta laboral.
 - Revisar calidad basica del CV con checklist local.
-- Mantener privacidad por defecto: edicion, copias locales, checklist, ATS y descarga funcionan en el navegador; email e IA envian datos solo cuando el usuario activa esas funciones opcionales.
+- Mantener privacidad por defecto: edicion, copias locales, checklist, ATS y descarga funcionan en el navegador; email e IA envian datos solo cuando el usuario activa esas funciones opcionales y el servidor no guarda esos datos.
 
 ## Stack
 
@@ -46,14 +46,15 @@ Promesa actual del producto:
 
 ## Entrada Principal
 
-- `src/app/page.tsx`: landing principal + editor embebido. Incluye JSON-LD de WebApplication, FAQ y HowTo, bloques SEO/trust y links a paginas SEO.
+- `src/app/page.tsx`: landing principal. Incluye JSON-LD de WebApplication, FAQ y HowTo, bloques SEO/trust, links a paginas SEO y CTA hacia `/editor`.
+- `src/app/editor/page.tsx`: ruta dedicada del editor. No usa header ni footer global; renderiza `AplicarPlantillaUrl` + `Editor` y tiene metadata noindex.
 - `src/app/layout.tsx`: metadata global, tema inicial antes de hidratacion, JSON-LD SoftwareApplication y Vercel Analytics.
-- `src/editor/Editor.tsx`: shell client-side del editor. Controla modo `cv`/`carta`, tab mobile `editar`/`preview`, barra superior, panel de formulario y panel de vista previa.
+- `src/editor/Editor.tsx`: shell client-side del editor dedicado. Controla modo `cv`/`carta`, tab mobile `editar`/`preview`, barra superior, panel de formulario y panel de vista previa.
 - `src/components/molecules/SiteHeader.tsx` y `src/components/molecules/SiteFooter.tsx`: navegacion y cierre global para home/paginas SEO, con CTA al editor y copy de privacidad.
 - `src/components/molecules/MarketingValueCard.tsx`: card reusable para bloques de valor en paginas de marketing/SEO.
 - `src/components/molecules/TemplateOptionCard.tsx`: card reusable para mostrar plantillas y CTA con plantilla preseleccionada.
 - `src/components/molecules/AiSuggestionPanel.tsx`: panel reusable para sugerencias IA; centraliza aviso, aplicar, regenerar y descartar.
-- `src/editor/AplicarPlantillaUrl.tsx`: aplica `?plantilla=<id>` al store cuando la home carga el editor.
+- `src/editor/AplicarPlantillaUrl.tsx`: aplica `?plantilla=<id>` al store cuando carga `/editor`.
 
 ## Estado y Datos
 
@@ -72,7 +73,7 @@ Estado persistido actual:
 
 - `src/editor/PanelFormulario.tsx`: compone todas las secciones del formulario de CV.
 - `src/editor/FormPersonalizacion.tsx`: idioma, plantilla, color, fuente y orden de secciones. Ya existe drag and drop basico + flechas para reordenar secciones.
-- `src/editor/FormCalidadCv.tsx`: checklist local de calidad del CV con puntaje, urgentes y recomendaciones.
+- `src/editor/FormCalidadCv.tsx`: checklist local de calidad del CV con puntaje, urgentes y recomendaciones. En CV vacio no marca como listas reglas que aun no tienen datos para evaluar.
 - `src/editor/FormDatosPersonales.tsx`: datos personales y enlaces.
 - `src/editor/FormPerfil.tsx`: perfil profesional y mejora acotada con IA.
 - `src/editor/FormExperiencia.tsx`: experiencia laboral repetible.
@@ -138,7 +139,7 @@ Regla actual:
 - `src/components/atoms/Badge.tsx`: etiquetas y estados.
 - `src/components/atoms/Input.tsx`, `Textarea.tsx`, `Select.tsx`, `SelectorFecha.tsx`: controles de formulario.
 - `src/components/atoms/Chip.tsx`: chips.
-- `src/components/molecules/SeccionFormulario.tsx`: contenedor reutilizable de secciones con tips.
+- `src/components/molecules/SeccionFormulario.tsx`: contenedor reutilizable de secciones con tips; por defecto las secciones del editor parten colapsadas.
 - `src/components/molecules/EntradaRepetible.tsx`: wrapper para items repetibles.
 - `src/components/ui/cn.ts`: merge de clases.
 

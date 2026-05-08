@@ -1,7 +1,9 @@
 "use client"
 
+import Link from "next/link"
 import { useState, useRef, useEffect, useId } from "react"
 import {
+  ArrowLeftIcon,
   DownloadSimpleIcon,
   ArrowCounterClockwiseIcon,
   SpinnerIcon,
@@ -16,9 +18,10 @@ import {
   ClockCounterClockwiseIcon,
   EnvelopeIcon,
 } from "@phosphor-icons/react"
-import { Button } from "@/components/atoms/Button"
+import { Button, buttonVariants } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
+import { cn } from "@/components/ui/cn"
 import { useCurriculumStore } from "@/lib/store"
 import { useTema, type Tema } from "@/lib/useTema"
 import { exportarJson, importarJson } from "@/lib/importar-exportar"
@@ -216,6 +219,13 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   return (
     <Surface data-no-print variant="toolbar" className="flex items-center justify-between px-3 py-2.5 md:px-4">
       <div className="flex items-center gap-1.5 min-w-0">
+        <Link
+          href="/"
+          className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "min-h-10 shrink-0")}
+        >
+          <ArrowLeftIcon size={16} />
+          <span className="hidden sm:inline">Volver</span>
+        </Link>
         <Text
           as="h1"
           variant="strong"

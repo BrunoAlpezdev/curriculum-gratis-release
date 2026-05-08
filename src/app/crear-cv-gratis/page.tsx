@@ -13,7 +13,7 @@ const content: SeoPageContent = {
   title: "Crear CV gratis online y descargarlo en PDF",
   description:
     "Entrada directa para completar datos, revisar el CV y descargarlo en PDF. Ideal si ya quieres empezar, sin comparar formatos primero.",
-  primaryCta: { label: "Crear mi CV ahora", href: "/#editor" },
+  primaryCta: { label: "Crear mi CV ahora", href: "/editor" },
   secondaryCta: { label: "Ver plantillas primero", href: "/plantillas-cv-gratis" },
   primaryKeyword: "crear cv gratis",
   relatedKeywords: [

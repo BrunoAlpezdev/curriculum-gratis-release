@@ -71,7 +71,7 @@ export function SeoPage({ content }: SeoPageProps) {
           </Text>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link
-              href={content.primaryCta?.href ?? "/#editor"}
+              href={content.primaryCta?.href ?? "/editor"}
               className={cn(buttonVariants({ variant: "primary", size: "lg" }), "min-h-14 text-base")}
             >
               {content.primaryCta?.label ?? "Empezar mi curriculum"}

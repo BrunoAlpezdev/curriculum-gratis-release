@@ -13,7 +13,7 @@ const content: SeoPageContent = {
   title: "Formato CV Harvard gratis para un curriculum claro y profesional",
   description:
     "Pagina enfocada en CV sobrio tipo Harvard: estructura limpia, lectura rapida y plantillas compatibles con ATS.",
-  primaryCta: { label: "Usar plantilla Clasico", href: "/?plantilla=clasico#editor" },
+  primaryCta: { label: "Usar plantilla Clasico", href: "/editor?plantilla=clasico" },
   secondaryCta: { label: "Comparar plantillas ATS", href: "/plantillas-cv-gratis" },
   primaryKeyword: "formato harvard cv",
   relatedKeywords: [

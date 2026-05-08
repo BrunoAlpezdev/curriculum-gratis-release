@@ -119,7 +119,7 @@ export default function PlantillasCvGratisPage() {
                 Si postulas por portales masivos, parte con Clasico o Minimalista. Si enviaras el CV directo a una persona, Moderno o Colorido pueden ayudarte a diferenciarte.
               </Text>
             </div>
-            <Link href="/#editor" className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "min-h-14 border-2") }>
+            <Link href="/editor" className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "min-h-14 border-2") }>
               Empezar sin elegir
               <ArrowRightIcon size={16} />
             </Link>

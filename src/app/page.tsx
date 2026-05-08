@@ -16,8 +16,6 @@ import { MarketingValueCard } from "@/components/molecules/MarketingValueCard"
 import { SiteFooter } from "@/components/molecules/SiteFooter"
 import { SiteHeader } from "@/components/molecules/SiteHeader"
 import { cn } from "@/components/ui/cn"
-import { AplicarPlantillaUrl } from "@/editor/AplicarPlantillaUrl"
-import { Editor } from "@/editor/Editor"
 
 const JSON_LD = {
   "@context": "https://schema.org",
@@ -238,7 +236,7 @@ export default function Home() {
                 </Text>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <a
-                    href="#editor"
+                    href="/editor"
                     className={cn(buttonVariants({ variant: "primary", size: "lg" }), "min-h-14 text-base")}
                   >
                     Crear mi CV gratis
@@ -358,11 +356,6 @@ export default function Home() {
             </div>
           </div>
           </Surface>
-
-          <section id="editor" className="scroll-mt-0" aria-label="Editor de curriculum vitae gratis">
-            <AplicarPlantillaUrl />
-            <Editor />
-          </section>
         </Surface>
         <SiteFooter />
       </Surface>

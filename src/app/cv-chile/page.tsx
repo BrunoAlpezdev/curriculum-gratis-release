@@ -13,7 +13,7 @@ const content: SeoPageContent = {
   title: "CV Chile 2026: crea tu curriculum vitae gratis",
   description:
     "Guia practica para armar un curriculum pensado para procesos laborales en Chile, con secciones relevantes, claridad y descarga PDF.",
-  primaryCta: { label: "Crear CV para Chile", href: "/#editor" },
+  primaryCta: { label: "Crear CV para Chile", href: "/editor" },
   secondaryCta: { label: "Ver plantillas recomendadas", href: "/plantillas-cv-gratis" },
   primaryKeyword: "cv chile",
   relatedKeywords: [

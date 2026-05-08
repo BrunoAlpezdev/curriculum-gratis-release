@@ -71,6 +71,8 @@ export function analizarCalidadCv(datos: DatosCurriculum): ResultadoCalidadCv {
     ...datos.educacion.map((edu) => fechaInvertida(edu.fechaInicio, edu.fechaFin)),
   ].some(Boolean)
   const tieneTrayectoria = datos.experiencia.length > 0 || datos.proyectos.length > 0
+  const tieneFechasParaRevisar = datos.experiencia.some((exp) => limpio(exp.fechaInicio) || limpio(exp.fechaFin)) ||
+    datos.educacion.some((edu) => limpio(edu.fechaInicio) || limpio(edu.fechaFin))
 
   const revisiones: RevisionCalidad[] = [
     crearRevision(
@@ -109,7 +111,7 @@ export function analizarCalidadCv(datos: DatosCurriculum): ResultadoCalidadCv {
       "error",
     ),
     crearRevision(
-      datos.experiencia.length === 0 || experienciasCompletas === datos.experiencia.length,
+      datos.experiencia.length > 0 && experienciasCompletas === datos.experiencia.length,
       {
         id: "experiencia-completa",
         titulo: "Experiencias completas",
@@ -117,7 +119,7 @@ export function analizarCalidadCv(datos: DatosCurriculum): ResultadoCalidadCv {
       },
     ),
     crearRevision(
-      datos.experiencia.length === 0 || experienciasConLogros > 0,
+      datos.experiencia.length > 0 && experienciasConLogros > 0,
       {
         id: "logros-medibles",
         titulo: "Logros medibles",
@@ -125,7 +127,7 @@ export function analizarCalidadCv(datos: DatosCurriculum): ResultadoCalidadCv {
       },
     ),
     crearRevision(
-      !fechasInvalidas,
+      tieneFechasParaRevisar && !fechasInvalidas,
       {
         id: "fechas",
         titulo: "Fechas coherentes",
