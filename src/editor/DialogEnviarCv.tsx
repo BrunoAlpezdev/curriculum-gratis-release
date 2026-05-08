@@ -6,6 +6,7 @@ import { Button } from "@/components/atoms/Button"
 import { Input } from "@/components/atoms/Input"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
+import { useUsageLimits } from "@/lib/use-usage-limits"
 import type { DatosCurriculum, Personalizacion } from "@/types"
 
 interface Props {
@@ -30,6 +31,7 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState("")
   const [enviado, setEnviado] = useState(false)
+  const { usage, refresh: refreshUsage } = useUsageLimits()
 
   useEffect(() => {
     if (!abierto) return
@@ -69,6 +71,7 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
       const body = await respuesta.json().catch(() => ({})) as { error?: string }
       if (!respuesta.ok) throw new Error(body.error ?? "No se pudo enviar el correo.")
       setEnviado(true)
+      void refreshUsage()
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo enviar el correo.")
     } finally {
@@ -96,8 +99,17 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
               Enviar CV por correo
             </Text>
             <Text variant="caption" className="mt-1 leading-relaxed">
-              Generamos el PDF en tu navegador y lo enviamos como adjunto mediante nuestro servidor y proveedor de email. Nada se guarda; sin cuenta tienes 2 envios diarios y con cuenta gratis tienes 5.
+              Generamos el PDF en tu navegador y lo enviamos como adjunto mediante nuestro servidor y proveedor de email. Nada se guarda.
             </Text>
+            {usage && (
+              <Text variant="caption" className="mt-1 font-semibold text-action-strong">
+                {usage.limits.email.remaining > 0
+                  ? `Te quedan ${usage.limits.email.remaining} de ${usage.limits.email.limit} envios hoy${usage.tier === "free" ? " en tu cuenta Free" : " sin cuenta"}.`
+                  : usage.tier === "anonymous"
+                    ? "Se acabaron tus envios sin cuenta. Inicia sesion gratis para mas envios hoy."
+                    : "Alcanzaste tu limite diario Free de envios. Vuelve manana."}
+              </Text>
+            )}
           </div>
           <Button variant="ghost" size="icon" onClick={onCerrar} title="Cerrar">
             <XIcon size={18} />

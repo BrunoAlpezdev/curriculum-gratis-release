@@ -12,6 +12,7 @@ import { SeccionFormulario } from "@/components/molecules/SeccionFormulario"
 import { textoCv } from "@/lib/analisis-ats"
 import { guardarCopiaLocal } from "@/lib/copias-locales"
 import { useCurriculumStore } from "@/lib/store"
+import { useUsageLimits } from "@/lib/use-usage-limits"
 
 const PLANTILLAS_CUERPO = [
   {
@@ -51,6 +52,7 @@ export function FormCarta() {
   const personalizacion = useCurriculumStore((s) => s.personalizacion)
   const carta = useCurriculumStore((s) => s.carta)
   const set = useCurriculumStore((s) => s.setCarta)
+  const { usage, refresh: refreshUsage } = useUsageLimits()
   const [oferta, setOferta] = useState("")
   const [generando, setGenerando] = useState(false)
   const [sugerencia, setSugerencia] = useState("")
@@ -75,6 +77,7 @@ export function FormCarta() {
       const body = await respuesta.json().catch(() => ({})) as { cuerpo?: string; error?: string }
       if (!respuesta.ok) throw new Error(body.error ?? "No se pudo generar la carta.")
       setSugerencia(body.cuerpo ?? "")
+      void refreshUsage()
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo generar la carta.")
     } finally {
@@ -166,8 +169,17 @@ export function FormCarta() {
           {generando ? "Generando..." : "Generar cuerpo con IA"}
         </Button>
         <Text variant="caption">
-          Opcional: envia datos resumidos de tu CV y la oferta a Gemini. Tienes 1 carta diaria sin cuenta y 5 con cuenta gratis; antes de aplicar una sugerencia se guarda una copia local.
+          Opcional: envia datos resumidos de tu CV y la oferta a Gemini. Antes de aplicar una sugerencia se guarda una copia local.
         </Text>
+        {usage && (
+          <Text variant="caption" className="font-semibold text-action-strong">
+            {usage.limits.aiCoverLetter.remaining > 0
+              ? `Te quedan ${usage.limits.aiCoverLetter.remaining} de ${usage.limits.aiCoverLetter.limit} cartas con IA hoy${usage.tier === "free" ? " en tu cuenta Free" : " sin cuenta"}.`
+              : usage.tier === "anonymous"
+                ? "Se acabaron tus cartas con IA sin cuenta. Inicia sesion gratis para mas usos hoy."
+                : "Alcanzaste tu limite diario Free de cartas con IA. Vuelve manana."}
+          </Text>
+        )}
       </div>
 
       {error && (

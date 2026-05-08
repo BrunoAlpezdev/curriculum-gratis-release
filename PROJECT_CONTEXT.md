@@ -53,7 +53,7 @@ Promesa actual del producto:
 - `src/proxy.ts`: integra `clerkMiddleware()` siguiendo la convencion Next.js 16 `proxy.ts`; no protege rutas todavia.
 - `src/editor/Editor.tsx`: shell client-side del editor dedicado. Controla modo `cv`/`carta`, tab mobile `editar`/`preview`, barra superior, panel de formulario y panel de vista previa.
 - `src/components/molecules/SiteHeader.tsx` y `src/components/molecules/SiteFooter.tsx`: navegacion y cierre global para home/paginas SEO, con CTA al editor y copy de privacidad.
-- `src/components/molecules/AuthActions.tsx`: botones opcionales de Clerk para iniciar sesion/crear cuenta o mostrar `UserButton`.
+- `src/components/molecules/AuthActions.tsx`: botones opcionales de Clerk para iniciar sesion/crear cuenta o mostrar badge `Free` + `UserButton`.
 - `src/components/molecules/MarketingValueCard.tsx`: card reusable para bloques de valor en paginas de marketing/SEO.
 - `src/components/molecules/TemplateOptionCard.tsx`: card reusable para mostrar plantillas y CTA con plantilla preseleccionada.
 - `src/components/molecules/AiSuggestionPanel.tsx`: panel reusable para sugerencias IA; centraliza aviso, aplicar, regenerar y descartar.
@@ -125,6 +125,8 @@ Regla actual:
 - `src/lib/copias-locales.ts`: snapshots locales de CV/carta con clave `curriculum-gratis:copias-locales`.
 - `src/lib/exportar-texto.ts`: genera y descarga CV o carta en TXT/Markdown desde el documento activo del editor.
 - `src/lib/rate-limit.ts`: rate limit compartido para Route Handlers. Usa Redis REST persistente si existen `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN` o `KV_REST_API_URL`/`KV_REST_API_TOKEN`; si no, cae a memoria local para desarrollo.
+- `src/lib/usage-limits.ts`: fuente unica de limites por tier/feature para IA y correo.
+- `src/lib/use-usage-limits.ts`: hook client-side para consultar contadores restantes desde `/api/usage`.
 
 ## ATS Local
 
@@ -178,6 +180,7 @@ Estado actual:
 - `src/app/api/send-cv/route.ts`: envia CV por correo via Resend. Requiere `RESEND_API_KEY`; `RESEND_FROM_EMAIL` es opcional. Limites diarios: anonimo 2 envios por IP, free logueado 5 envios por `userId`.
 - `src/app/api/ai/improve-profile/route.ts`: reescribe el perfil profesional con Gemini. Requiere `GEMINI_API_KEY`; `GEMINI_MODEL` es opcional y por defecto usa `gemini-2.5-flash`. Limites diarios: anonimo 2 usos por IP, free logueado 10 usos por `userId`.
 - `src/app/api/ai/generate-cover-letter/route.ts`: genera cuerpo de carta con Gemini desde resumen del CV y oferta opcional. Limites diarios: anonimo 1 uso por IP, free logueado 5 usos por `userId`.
+- `src/app/api/usage/route.ts`: devuelve tier actual y contadores restantes sin consumir usos. Usado por perfil, carta y dialogo de correo.
 - Rate limit persistente: configurar `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` o `KV_REST_API_URL` + `KV_REST_API_TOKEN`. `RATE_LIMIT_SALT` es opcional para hashear identificadores de IP con salt propio.
 - Auth opcional con Clerk: `ClerkProvider` esta integrado en `src/app/layout.tsx`, `clerkMiddleware()` en `src/proxy.ts`, y UI de sesion en navbar/editor. El editor local, descargas, checklist y ATS no requieren login.
 - Env vars Clerk para Vercel/produccion: `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` y `CLERK_SECRET_KEY`. En desarrollo puede usarse keyless mode de Clerk.
