@@ -282,7 +282,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
               id={menuId}
               role="menu"
               onKeyDown={handleTeclaMenu}
-              className="absolute right-0 top-full mt-1 z-50 min-w-[180px] py-1"
+              className="absolute right-0 top-full mt-1 z-50 min-w-[260px] py-1"
             >
               <Button
                 ref={(el) => {
@@ -293,7 +293,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 onClick={exportar}
                 variant="menu"
                 size="none"
-                className="px-3 py-2 text-sm"
+                className="whitespace-nowrap px-3 py-2 text-sm"
               >
                 <FileArrowDownIcon size={16} />
                 Exportar JSON
@@ -307,7 +307,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 onClick={() => exportarFormatoTexto("txt")}
                 variant="menu"
                 size="none"
-                className="px-3 py-2 text-sm"
+                className="whitespace-nowrap px-3 py-2 text-sm"
               >
                 <FileArrowDownIcon size={16} />
                 Exportar TXT
@@ -321,7 +321,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 onClick={() => exportarFormatoTexto("md")}
                 variant="menu"
                 size="none"
-                className="px-3 py-2 text-sm"
+                className="whitespace-nowrap px-3 py-2 text-sm"
               >
                 <FileArrowDownIcon size={16} />
                 Exportar Markdown
@@ -335,7 +335,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 onClick={pedirImportar}
                 variant="menu"
                 size="none"
-                className="px-3 py-2 text-sm"
+                className="whitespace-nowrap px-3 py-2 text-sm"
               >
                 <FileArrowUpIcon size={16} />
                 Importar JSON
@@ -349,7 +349,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 onClick={() => guardarCopia()}
                 variant="menu"
                 size="none"
-                className="px-3 py-2 text-sm"
+                className="whitespace-nowrap px-3 py-2 text-sm"
               >
                 <CopyIcon size={16} />
                 Guardar copia local
@@ -363,7 +363,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 onClick={abrirCopias}
                 variant="menu"
                 size="none"
-                className="px-3 py-2 text-sm"
+                className="whitespace-nowrap px-3 py-2 text-sm"
               >
                 <ClockCounterClockwiseIcon size={16} />
                 Ver copias locales
@@ -377,7 +377,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 onClick={abrirEnviar}
                 variant="menu"
                 size="none"
-                className="px-3 py-2 text-sm"
+                className="whitespace-nowrap px-3 py-2 text-sm"
               >
                 <EnvelopeIcon size={16} />
                 Enviar CV por correo
