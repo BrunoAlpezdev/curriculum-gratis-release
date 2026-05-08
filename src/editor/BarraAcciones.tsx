@@ -21,6 +21,7 @@ import {
 import { Button, buttonVariants } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
+import { AuthActions } from "@/components/molecules/AuthActions"
 import { cn } from "@/components/ui/cn"
 import { useCurriculumStore } from "@/lib/store"
 import { useTema, type Tema } from "@/lib/useTema"
@@ -262,6 +263,9 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
           <ArrowCounterClockwiseIcon size={16} />
           Reiniciar
         </Button>
+        <div className="hidden lg:block">
+          <AuthActions compact />
+        </div>
 
         <div ref={menuRef} className="relative">
           <Button

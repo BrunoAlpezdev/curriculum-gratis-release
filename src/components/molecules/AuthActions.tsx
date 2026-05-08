@@ -1,0 +1,38 @@
+"use client"
+
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
+import { Button } from "@/components/atoms/Button"
+
+interface AuthActionsProps {
+  compact?: boolean
+}
+
+export function AuthActions({ compact = false }: AuthActionsProps) {
+  return (
+    <div className="flex items-center gap-2">
+      <Show when="signed-out">
+        <SignInButton mode="modal">
+          <Button type="button" variant="secondary" size="sm" className="min-h-10 whitespace-nowrap">
+            Iniciar sesion
+          </Button>
+        </SignInButton>
+        {!compact && (
+          <SignUpButton mode="modal">
+            <Button type="button" variant="ghost" size="sm" className="min-h-10 whitespace-nowrap">
+              Crear cuenta
+            </Button>
+          </SignUpButton>
+        )}
+      </Show>
+      <Show when="signed-in">
+        <UserButton
+          appearance={{
+            elements: {
+              userButtonAvatarBox: "h-9 w-9 border-2 border-border-strong shadow-[2px_2px_0_var(--color-border-strong)]",
+            },
+          }}
+        />
+      </Show>
+    </div>
+  )
+}

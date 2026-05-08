@@ -4,6 +4,7 @@ import { Badge } from "@/components/atoms/Badge"
 import { buttonVariants } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
+import { AuthActions } from "@/components/molecules/AuthActions"
 import { cn } from "@/components/ui/cn"
 
 const NAV_LINKS = [
@@ -47,9 +48,9 @@ export function SiteHeader() {
           <Badge variant="neutral" className="hidden md:inline-flex">
             Sin registro
           </Badge>
-          <span className="hidden border border-dashed border-border-subtle px-3 py-2 text-xs font-bold text-text-muted md:inline-flex">
-            Login futuro
-          </span>
+          <div className="hidden md:block">
+            <AuthActions compact />
+          </div>
           <Link href="/editor" className={cn(buttonVariants({ variant: "primary", size: "sm" }), "min-h-10") }>
             Crear CV
           </Link>

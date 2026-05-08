@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Script from "next/script"
+import { ClerkProvider } from "@clerk/nextjs"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
@@ -54,26 +55,28 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <Script id="tema-inicial" strategy="beforeInteractive">
-          {`(function(){try{var t=localStorage.getItem("tema");var d=t==="oscuro"||(t!=="claro"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}})()`}
-        </Script>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
-              name: "Curriculum Gratis",
-              url: SITE_URL,
-              applicationCategory: "BusinessApplication",
-              operatingSystem: "Web",
-              offers: { "@type": "Offer", price: "0", priceCurrency: "CLP" },
-              description: DESCRIPTION,
-            }),
-          }}
-        />
-        {children}
-        <Analytics />
+        <ClerkProvider>
+          <Script id="tema-inicial" strategy="beforeInteractive">
+            {`(function(){try{var t=localStorage.getItem("tema");var d=t==="oscuro"||(t!=="claro"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}})()`}
+          </Script>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "SoftwareApplication",
+                name: "Curriculum Gratis",
+                url: SITE_URL,
+                applicationCategory: "BusinessApplication",
+                operatingSystem: "Web",
+                offers: { "@type": "Offer", price: "0", priceCurrency: "CLP" },
+                description: DESCRIPTION,
+              }),
+            }}
+          />
+          {children}
+          <Analytics />
+        </ClerkProvider>
       </body>
     </html>
   )
