@@ -15,6 +15,7 @@ Promesa actual del producto:
 - Descargar PDF.
 - Importar/exportar datos como JSON.
 - Guardar y restaurar copias locales del CV/carta en el mismo navegador.
+- Enviar el CV por correo usando backend Next/Vercel cuando `RESEND_API_KEY` esta configurada.
 - Analizar match ATS localmente contra una oferta laboral.
 - Revisar calidad basica del CV con checklist local.
 - Mantener privacidad: los datos no salen del dispositivo.
@@ -104,6 +105,7 @@ Regla actual:
 
 - `src/editor/BarraAcciones.tsx`: descargar PDF, reiniciar datos, cambiar tema, abrir ejemplo, exportar JSON e importar JSON.
 - `src/editor/DialogCopiasLocales.tsx`: lista, restaura y elimina copias locales.
+- `src/editor/DialogEnviarCv.tsx`: genera el PDF en cliente y lo envia a `POST /api/send-cv` como adjunto base64.
 - `src/editor/DialogEjemploCv.tsx`: muestra/gestiona ejemplo de CV.
 - `src/editor/datos-ejemplo.ts`: datos mock; tambien se cargan con tap secreto en el titulo.
 - `src/lib/useTema.ts`: tema claro/oscuro/sistema persistido en `localStorage` con clave `tema`.
@@ -152,10 +154,10 @@ Regla visual:
 
 Estado actual:
 
-- No hay `src/app/api`.
+- `src/app/api/send-cv/route.ts`: envia CV por correo via Resend. Requiere `RESEND_API_KEY`; `RESEND_FROM_EMAIL` es opcional.
 - No hay base de datos.
 - No hay auth.
-- No hay llamadas server-side a IA/email.
+- No hay llamadas server-side a IA.
 
 Si se agregan features con backend, preferir:
 

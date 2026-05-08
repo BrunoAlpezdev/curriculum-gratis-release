@@ -14,6 +14,7 @@ import {
   FileArrowUpIcon,
   CopyIcon,
   ClockCounterClockwiseIcon,
+  EnvelopeIcon,
 } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
@@ -23,6 +24,7 @@ import { useTema, type Tema } from "@/lib/useTema"
 import { exportarJson, importarJson } from "@/lib/importar-exportar"
 import { guardarCopiaLocal, type CopiaLocalCv } from "@/lib/copias-locales"
 import { DialogCopiasLocales } from "@/editor/DialogCopiasLocales"
+import { DialogEnviarCv } from "@/editor/DialogEnviarCv"
 import { DialogEjemploCv } from "@/editor/DialogEjemploCv"
 import { generarDatosMock } from "@/editor/datos-ejemplo"
 import type { Modo } from "@/editor/Editor"
@@ -57,6 +59,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   const [menuAbierto, setMenuAbierto] = useState(false)
   const [ejemploAbierto, setEjemploAbierto] = useState(false)
   const [copiasAbierto, setCopiasAbierto] = useState(false)
+  const [enviarAbierto, setEnviarAbierto] = useState(false)
   const menuId = useId()
   const datos = useCurriculumStore((s) => s.datos)
   const carta = useCurriculumStore((s) => s.carta)
@@ -139,6 +142,11 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
 
   function abrirCopias() {
     setCopiasAbierto(true)
+    setMenuAbierto(false)
+  }
+
+  function abrirEnviar() {
+    setEnviarAbierto(true)
     setMenuAbierto(false)
   }
 
@@ -316,6 +324,20 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 <ClockCounterClockwiseIcon size={16} />
                 Ver copias locales
               </Button>
+              <Button
+                ref={(el) => {
+                  opcionesMenuRef.current[4] = el
+                }}
+                type="button"
+                role="menuitem"
+                onClick={abrirEnviar}
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
+              >
+                <EnvelopeIcon size={16} />
+                Enviar CV por correo
+              </Button>
             </Surface>
           )}
           <input
@@ -338,6 +360,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
       </div>
       <DialogEjemploCv abierto={ejemploAbierto} onCerrar={() => setEjemploAbierto(false)} />
       <DialogCopiasLocales abierto={copiasAbierto} onCerrar={() => setCopiasAbierto(false)} onRestaurar={restaurarCopia} />
+      <DialogEnviarCv abierto={enviarAbierto} datos={datos} personalizacion={personalizacion} onCerrar={() => setEnviarAbierto(false)} />
     </Surface>
   )
 }
