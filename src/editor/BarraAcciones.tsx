@@ -22,6 +22,7 @@ import { Text } from "@/components/atoms/Text"
 import { useCurriculumStore } from "@/lib/store"
 import { useTema, type Tema } from "@/lib/useTema"
 import { exportarJson, importarJson } from "@/lib/importar-exportar"
+import { exportarTexto } from "@/lib/exportar-texto"
 import { guardarCopiaLocal, type CopiaLocalCv } from "@/lib/copias-locales"
 import { DialogCopiasLocales } from "@/editor/DialogCopiasLocales"
 import { DialogEnviarCv } from "@/editor/DialogEnviarCv"
@@ -124,6 +125,11 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
 
   function exportar() {
     exportarJson(datos, personalizacion)
+    setMenuAbierto(false)
+  }
+
+  function exportarFormatoTexto(formato: "txt" | "md") {
+    exportarTexto(modo, formato, datos, personalizacion, carta)
     setMenuAbierto(false)
   }
 
@@ -288,6 +294,34 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 }}
                 type="button"
                 role="menuitem"
+                onClick={() => exportarFormatoTexto("txt")}
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
+              >
+                <FileArrowDownIcon size={16} />
+                Exportar TXT
+              </Button>
+              <Button
+                ref={(el) => {
+                  opcionesMenuRef.current[2] = el
+                }}
+                type="button"
+                role="menuitem"
+                onClick={() => exportarFormatoTexto("md")}
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
+              >
+                <FileArrowDownIcon size={16} />
+                Exportar Markdown
+              </Button>
+              <Button
+                ref={(el) => {
+                  opcionesMenuRef.current[3] = el
+                }}
+                type="button"
+                role="menuitem"
                 onClick={pedirImportar}
                 variant="menu"
                 size="none"
@@ -298,7 +332,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
               </Button>
               <Button
                 ref={(el) => {
-                  opcionesMenuRef.current[2] = el
+                  opcionesMenuRef.current[4] = el
                 }}
                 type="button"
                 role="menuitem"
@@ -312,7 +346,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
               </Button>
               <Button
                 ref={(el) => {
-                  opcionesMenuRef.current[3] = el
+                  opcionesMenuRef.current[5] = el
                 }}
                 type="button"
                 role="menuitem"
@@ -326,7 +360,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
               </Button>
               <Button
                 ref={(el) => {
-                  opcionesMenuRef.current[4] = el
+                  opcionesMenuRef.current[6] = el
                 }}
                 type="button"
                 role="menuitem"

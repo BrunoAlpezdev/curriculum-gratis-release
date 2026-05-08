@@ -13,6 +13,7 @@ Promesa actual del producto:
 - Personalizar plantilla, color, fuente, idioma y orden de secciones.
 - Ver preview en tiempo real.
 - Descargar PDF.
+- Exportar CV o carta como TXT/Markdown para copiar a portales laborales u otros editores.
 - Importar/exportar datos como JSON.
 - Guardar y restaurar copias locales del CV/carta en el mismo navegador.
 - Enviar el CV por correo usando backend Next/Vercel cuando `RESEND_API_KEY` esta configurada.
@@ -110,7 +111,7 @@ Regla actual:
 
 ## Acciones Globales
 
-- `src/editor/BarraAcciones.tsx`: descargar PDF, reiniciar datos, cambiar tema, abrir ejemplo, exportar JSON e importar JSON.
+- `src/editor/BarraAcciones.tsx`: descargar PDF, reiniciar datos, cambiar tema, abrir ejemplo, exportar JSON, exportar TXT/Markdown e importar JSON.
 - `src/editor/DialogCopiasLocales.tsx`: lista, restaura y elimina copias locales.
 - `src/editor/DialogEnviarCv.tsx`: genera el PDF en cliente y lo envia a `POST /api/send-cv` como adjunto base64.
 - `src/editor/DialogEjemploCv.tsx`: muestra/gestiona ejemplo de CV.
@@ -118,6 +119,7 @@ Regla actual:
 - `src/lib/useTema.ts`: tema claro/oscuro/sistema persistido en `localStorage` con clave `tema`.
 - `src/lib/useHidratado.ts`: evita render sensible a `localStorage` antes de hidratacion.
 - `src/lib/copias-locales.ts`: snapshots locales de CV/carta con clave `curriculum-gratis:copias-locales`.
+- `src/lib/exportar-texto.ts`: genera y descarga CV o carta en TXT/Markdown desde el documento activo del editor.
 - `src/lib/rate-limit.ts`: rate limit compartido para Route Handlers. Usa Redis REST persistente si existen `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN` o `KV_REST_API_URL`/`KV_REST_API_TOKEN`; si no, cae a memoria local para desarrollo.
 
 ## ATS Local
