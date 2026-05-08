@@ -192,7 +192,7 @@ Stack recomendado para evolucionar a cuentas, IA con limites por usuario, guarda
 - Auth: Clerk. Motivo: integracion rapida con Next.js App Router, UI/sesiones listas, login social/email y `userId` estable para rate limits, uso IA y futuro guardado cloud.
 - Base de datos: Neon Postgres. Motivo: Postgres administrado, buen encaje con Vercel, barato para empezar y suficiente para CVs guardados, uso IA, suscripciones y auditoria basica.
 - ORM: Drizzle. Motivo: tipado liviano, SQL explicito y migraciones controlables sin cargar demasiado el proyecto.
-- Pagos: Stripe. Motivo: estandar para suscripciones, customer portal, invoices y webhooks confiables. Clerk no reemplaza Stripe; Clerk identifica usuarios y Stripe cobra/gestiona planes.
+- Pagos: Mercado Pago. Motivo: opcion mas simple y reconocible para usuarios en Chile/LatAm, checkout rapido, pagos en CLP y menor friccion inicial que integrar Transbank/Webpay directo. Clerk identifica usuarios; Mercado Pago cobra y los webhooks activan planes.
 
 Orden recomendado de implementacion:
 
@@ -200,7 +200,7 @@ Orden recomendado de implementacion:
 - 2. Rate limits por usuario: anonimo por IP con limite bajo; usuario logueado por `userId` con limite mayor para IA/correo. Implementado para tier anonimo/free.
 - 3. Neon + Drizzle: crear tablas `users`, `resumes`, `cover_letters`, `usage_events` y `subscriptions`.
 - 4. Guardado cloud: permitir guardar/restaurar CVs asociados al `userId`, manteniendo `localStorage` como experiencia base.
-- 5. Stripe: agregar planes Free/Pro, webhooks y customer portal.
+- 5. Mercado Pago: agregar checkout Pro, webhooks de pago y activacion de plan en base de datos.
 - 6. Features Pro futuras: mas IA, CVs cloud ilimitados, historial/versiones, plantillas premium, export DOCX o portal publico.
 
 Si se agregan features con backend, preferir:
