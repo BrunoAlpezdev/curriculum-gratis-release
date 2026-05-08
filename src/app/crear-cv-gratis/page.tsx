@@ -28,7 +28,7 @@ const content: SeoPageContent = {
     },
     {
       title: "Sin registro y con datos privados",
-      body: "No necesitas crear una cuenta ni entregar tu email. La informacion queda guardada en tu navegador, por eso puedes volver despues y seguir editando tu CV.",
+      body: "No necesitas crear una cuenta para editar y descargar. La informacion queda guardada en tu navegador; solo se envia al servidor si usas funciones opcionales como correo o IA.",
     },
     {
       title: "Descarga tu curriculum en PDF",

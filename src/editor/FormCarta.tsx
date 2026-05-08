@@ -157,7 +157,7 @@ export function FormCarta() {
           {generando ? "Generando..." : "Generar cuerpo con IA"}
         </Button>
         <Text variant="caption">
-          Usa los datos de tu CV y la oferta opcional. Revisa siempre antes de enviar.
+          Opcional: envia datos resumidos de tu CV y la oferta a Gemini. Revisa siempre la carta antes de enviarla.
         </Text>
       </div>
 

@@ -96,7 +96,7 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
               Enviar CV por correo
             </Text>
             <Text variant="caption" className="mt-1 leading-relaxed">
-              Generamos el PDF en tu navegador y lo enviamos como adjunto.
+              Generamos el PDF en tu navegador y lo enviamos como adjunto mediante nuestro servidor y proveedor de email.
             </Text>
           </div>
           <Button variant="ghost" size="icon" onClick={onCerrar} title="Cerrar">

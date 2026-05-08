@@ -4,7 +4,7 @@ Este archivo es la fuente primaria de contexto del proyecto. Antes de grepear o 
 
 ## Resumen
 
-`curriculum-gratis` es un generador gratuito de curriculum vitae y cartas de presentacion para Chile. Hoy funciona como app frontend-only: no hay cuentas, base de datos ni backend propio. Los datos viven en el navegador mediante Zustand persist y `localStorage`.
+`curriculum-gratis` es un generador gratuito de curriculum vitae y cartas de presentacion para Chile. La edicion principal funciona localmente sin cuentas ni base de datos: los datos viven en el navegador mediante Zustand persist y `localStorage`. Algunas funciones opcionales usan backend de Next.js dentro del mismo repo para email e IA.
 
 Promesa actual del producto:
 
@@ -20,7 +20,7 @@ Promesa actual del producto:
 - Generar cuerpo de carta de presentacion con Gemini desde CV, empresa, cargo y oferta opcional.
 - Analizar match ATS localmente contra una oferta laboral.
 - Revisar calidad basica del CV con checklist local.
-- Mantener privacidad: los datos no salen del dispositivo.
+- Mantener privacidad por defecto: edicion, copias locales, checklist, ATS y descarga funcionan en el navegador; email e IA envian datos solo cuando el usuario activa esas funciones opcionales.
 
 ## Stack
 
@@ -39,7 +39,7 @@ Promesa actual del producto:
 - Leer `node_modules/next/dist/docs/` antes de tocar APIs o convenciones de Next.js 16.
 - Mantener nombres propios del dominio en espanol cuando el codigo ya sigue ese patron.
 - No duplicar estilos visuales si existe un atomo reutilizable.
-- No romper la promesa frontend-only sin una decision explicita.
+- No afirmar que todo es frontend-only: email e IA usan backend opcional. Mantener claro que la edicion principal sigue siendo local.
 - Si se agrega backend de Next, debe vivir en este repo mediante Route Handlers o Server Actions y desplegar en Vercel junto con la app.
 - No agregar secrets al repo. API keys van en variables de entorno de Vercel/local.
 

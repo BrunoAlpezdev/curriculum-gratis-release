@@ -44,8 +44,7 @@ export function PanelFormulario() {
               Privacidad garantizada
             </Text>
             <Text variant="small" className="leading-relaxed">
-              Tus datos nunca salen de tu dispositivo. No guardamos ninguna
-              información en bases de datos ni servidores externos.
+              El editor, las copias locales, el analisis ATS, el checklist y la descarga PDF funcionan en tu navegador. Solo las funciones opcionales de correo e IA envian datos al servidor para completar esa accion.
             </Text>
             <Text variant="small" className="font-semibold text-action-strong">
               Dedicado a Camila Valenzuela &lt;3

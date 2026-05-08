@@ -68,7 +68,7 @@ export function FormPerfil() {
           {generando ? "Mejorando..." : "Mejorar redaccion con IA"}
         </Button>
         <Text variant="caption">
-          La IA solo reescribe tu texto. No debe inventar experiencia ni datos nuevos.
+          Opcional: envia este perfil a Gemini para reescribirlo. La sugerencia no debe inventar experiencia ni datos nuevos.
         </Text>
       </div>
       {error && (

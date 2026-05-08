@@ -50,7 +50,7 @@ const FAQ_JSON_LD = {
       name: "¿Necesito crear una cuenta?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "No. Tus datos se guardan automaticamente en tu navegador. No necesitas cuenta, email ni contrasena.",
+        text: "No. Tus datos se guardan automaticamente en tu navegador para editar y descargar. Solo se envian al servidor si usas funciones opcionales como correo o IA.",
       },
     },
     {
@@ -145,8 +145,8 @@ const KEYWORD_GROUPS = [
 const TRUST_ITEMS = [
   "Gratis",
   "Sin registro",
-  "Sin pedir correo",
-  "Sus datos quedan en su navegador",
+  "Correo opcional",
+  "Edicion local en su navegador",
 ]
 
 const STEPS = [

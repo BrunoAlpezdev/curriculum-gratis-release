@@ -32,7 +32,7 @@ const content: SeoPageContent = {
     },
     {
       title: "Crear y descargar sin cuenta",
-      body: "Puedes completar tu curriculum desde el navegador, guardar tus datos localmente y descargar el PDF sin registrarte. Esto mantiene el proceso rapido y privado.",
+      body: "Puedes completar tu curriculum desde el navegador, guardar tus datos localmente y descargar el PDF sin registrarte. Las funciones opcionales de correo e IA usan backend solo cuando las activas.",
     },
   ],
   faq: [
