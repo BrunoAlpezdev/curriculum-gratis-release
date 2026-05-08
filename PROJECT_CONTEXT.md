@@ -16,6 +16,7 @@ Promesa actual del producto:
 - Importar/exportar datos como JSON.
 - Guardar y restaurar copias locales del CV/carta en el mismo navegador.
 - Enviar el CV por correo usando backend Next/Vercel cuando `RESEND_API_KEY` esta configurada.
+- Mejorar redaccion del perfil profesional con Gemini cuando `GEMINI_API_KEY` esta configurada.
 - Analizar match ATS localmente contra una oferta laboral.
 - Revisar calidad basica del CV con checklist local.
 - Mantener privacidad: los datos no salen del dispositivo.
@@ -66,7 +67,7 @@ Estado persistido actual:
 - `src/editor/FormPersonalizacion.tsx`: idioma, plantilla, color, fuente y orden de secciones. Ya existe drag and drop basico + flechas para reordenar secciones.
 - `src/editor/FormCalidadCv.tsx`: checklist local de calidad del CV con puntaje, urgentes y recomendaciones.
 - `src/editor/FormDatosPersonales.tsx`: datos personales y enlaces.
-- `src/editor/FormPerfil.tsx`: perfil profesional.
+- `src/editor/FormPerfil.tsx`: perfil profesional y mejora acotada con IA.
 - `src/editor/FormExperiencia.tsx`: experiencia laboral repetible.
 - `src/editor/FormEducacion.tsx`: educacion repetible.
 - `src/editor/FormCursos.tsx`: cursos/certificaciones repetibles.
@@ -155,9 +156,9 @@ Regla visual:
 Estado actual:
 
 - `src/app/api/send-cv/route.ts`: envia CV por correo via Resend. Requiere `RESEND_API_KEY`; `RESEND_FROM_EMAIL` es opcional.
+- `src/app/api/ai/improve-profile/route.ts`: reescribe el perfil profesional con Gemini. Requiere `GEMINI_API_KEY`; `GEMINI_MODEL` es opcional.
 - No hay base de datos.
 - No hay auth.
-- No hay llamadas server-side a IA.
 
 Si se agregan features con backend, preferir:
 
