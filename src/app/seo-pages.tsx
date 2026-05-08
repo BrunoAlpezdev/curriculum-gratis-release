@@ -11,6 +11,14 @@ export interface SeoPageContent {
   eyebrow: string
   title: string
   description: string
+  primaryCta?: {
+    label: string
+    href: string
+  }
+  secondaryCta?: {
+    label: string
+    href: string
+  }
   primaryKeyword: string
   relatedKeywords: string[]
   sections: Array<{
@@ -63,16 +71,16 @@ export function SeoPage({ content }: SeoPageProps) {
           </Text>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link
-              href="/#editor"
+              href={content.primaryCta?.href ?? "/#editor"}
               className={cn(buttonVariants({ variant: "primary", size: "lg" }), "min-h-14 text-base")}
             >
-              Empezar mi curriculum
+              {content.primaryCta?.label ?? "Empezar mi curriculum"}
             </Link>
             <Link
-              href="/"
+              href={content.secondaryCta?.href ?? "/"}
               className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "min-h-14 border-2 text-base")}
             >
-              Volver al inicio
+              {content.secondaryCta?.label ?? "Volver al inicio"}
             </Link>
           </div>
         </div>

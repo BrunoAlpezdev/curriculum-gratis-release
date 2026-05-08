@@ -12,7 +12,9 @@ const content: SeoPageContent = {
   eyebrow: "CV Chile 2026",
   title: "CV Chile 2026: crea tu curriculum vitae gratis",
   description:
-    "Haz un curriculum vitae claro, actualizado y pensado para postulaciones laborales en Chile, con descarga PDF y plantillas profesionales.",
+    "Guia practica para armar un curriculum pensado para procesos laborales en Chile, con secciones relevantes, claridad y descarga PDF.",
+  primaryCta: { label: "Crear CV para Chile", href: "/#editor" },
+  secondaryCta: { label: "Ver plantillas recomendadas", href: "/plantillas-cv-gratis" },
   primaryKeyword: "cv chile",
   relatedKeywords: [
     "cv 2026",
@@ -32,7 +34,7 @@ const content: SeoPageContent = {
     },
     {
       title: "Crear y descargar sin cuenta",
-      body: "Puedes completar tu curriculum desde el navegador, guardar tus datos localmente y descargar el PDF sin registrarte. Las funciones opcionales de correo e IA usan backend solo cuando las activas.",
+      body: "Puedes completar tu curriculum desde el navegador, guardar tus datos localmente y descargar el PDF sin registrarte. Esta pagina orienta el contenido para Chile; el editor es el mismo y mantiene las funciones opcionales de correo e IA solo cuando las activas.",
     },
   ],
   faq: [

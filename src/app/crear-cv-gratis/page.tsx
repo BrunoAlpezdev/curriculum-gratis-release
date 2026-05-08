@@ -12,7 +12,9 @@ const content: SeoPageContent = {
   eyebrow: "Crear CV gratis",
   title: "Crear CV gratis online y descargarlo en PDF",
   description:
-    "Una herramienta simple para hacer tu CV gratis desde el navegador, sin cuenta, sin pagos y sin marcas de agua.",
+    "Entrada directa para completar datos, revisar el CV y descargarlo en PDF. Ideal si ya quieres empezar, sin comparar formatos primero.",
+  primaryCta: { label: "Crear mi CV ahora", href: "/#editor" },
+  secondaryCta: { label: "Ver plantillas primero", href: "/plantillas-cv-gratis" },
   primaryKeyword: "crear cv gratis",
   relatedKeywords: [
     "crear cv",
@@ -24,7 +26,7 @@ const content: SeoPageContent = {
   sections: [
     {
       title: "Como crear un CV gratis en minutos",
-      body: "Completa tus datos personales, perfil profesional, experiencia, educacion, habilidades e idiomas. Mientras escribes, puedes ver una vista previa del curriculum para ajustar contenido antes de descargarlo.",
+      body: "Esta pagina es la entrada rapida al editor. Completa datos personales, perfil profesional, experiencia, educacion, habilidades e idiomas; mientras escribes, la vista previa muestra el resultado antes de descargar.",
     },
     {
       title: "Sin registro y con datos privados",
@@ -32,7 +34,7 @@ const content: SeoPageContent = {
     },
     {
       title: "Descarga tu curriculum en PDF",
-      body: "Cuando el CV este listo, puedes descargarlo como PDF para enviarlo a empresas, subirlo a portales de empleo o adjuntarlo en postulaciones laborales.",
+      body: "Cuando el CV este listo, descargalo como PDF para enviarlo a empresas, subirlo a portales de empleo o adjuntarlo en postulaciones laborales. Si quieres elegir diseño antes, usa la pagina de plantillas.",
     },
   ],
   faq: [

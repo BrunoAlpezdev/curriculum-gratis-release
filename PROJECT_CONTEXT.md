@@ -156,6 +156,13 @@ Regla visual:
 - `src/app/opengraph-image.tsx`: OG image generada.
 - `src/app/icon.tsx`: icono generado.
 
+Roles SEO actuales:
+
+- `/crear-cv-gratis`: entrada directa al editor.
+- `/plantillas-cv-gratis`: comparador/selector de plantillas con CTAs preseleccionados.
+- `/formato-cv-harvard`: pagina educativa con CTA a plantilla `clasico` y comparacion ATS.
+- `/cv-chile`: guia local para postulaciones en Chile con CTA general al editor.
+
 ## Backend Actual y Futuro
 
 Estado actual:
