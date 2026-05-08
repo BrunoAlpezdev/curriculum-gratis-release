@@ -33,7 +33,7 @@ function extraerTextoGemini(valor: unknown): string {
 
 export async function POST(request: Request) {
   const apiKey = process.env.GEMINI_API_KEY
-  const model = process.env.GEMINI_MODEL ?? "gemini-1.5-flash"
+  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash"
 
   if (!apiKey) {
     return Response.json({ error: "IA no configurada." }, { status: 503 })
@@ -100,6 +100,11 @@ export async function POST(request: Request) {
   })
 
   if (!respuesta.ok) {
+    const detalle = await respuesta.text().catch(() => "")
+    console.error("Gemini generate-cover-letter failed", respuesta.status, detalle)
+    if (respuesta.status === 429) {
+      return Response.json({ error: "Gemini no tiene cuota disponible para este proyecto/API key." }, { status: 429 })
+    }
     return Response.json({ error: "No se pudo generar la carta." }, { status: 502 })
   }
 
