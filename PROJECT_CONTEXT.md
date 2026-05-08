@@ -157,7 +157,7 @@ Regla visual:
 Estado actual:
 
 - `src/app/api/send-cv/route.ts`: envia CV por correo via Resend. Requiere `RESEND_API_KEY`; `RESEND_FROM_EMAIL` es opcional.
-- `src/app/api/ai/improve-profile/route.ts`: reescribe el perfil profesional con Gemini. Requiere `GEMINI_API_KEY`; `GEMINI_MODEL` es opcional.
+- `src/app/api/ai/improve-profile/route.ts`: reescribe el perfil profesional con Gemini. Requiere `GEMINI_API_KEY`; `GEMINI_MODEL` es opcional y por defecto usa `gemini-2.5-flash`.
 - `src/app/api/ai/generate-cover-letter/route.ts`: genera cuerpo de carta con Gemini desde resumen del CV y oferta opcional.
 - No hay base de datos.
 - No hay auth.

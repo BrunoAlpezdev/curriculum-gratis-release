@@ -33,7 +33,7 @@ function extraerTextoGemini(valor: unknown): string {
 
 export async function POST(request: Request) {
   const apiKey = process.env.GEMINI_API_KEY
-  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash"
+  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash"
 
   if (!apiKey) {
     return Response.json({ error: "IA no configurada." }, { status: 503 })
