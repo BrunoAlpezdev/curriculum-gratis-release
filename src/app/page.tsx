@@ -16,6 +16,7 @@ import { MarketingValueCard } from "@/components/molecules/MarketingValueCard"
 import { SiteFooter } from "@/components/molecules/SiteFooter"
 import { SiteHeader } from "@/components/molecules/SiteHeader"
 import { cn } from "@/components/ui/cn"
+import { AplicarPlantillaUrl } from "@/editor/AplicarPlantillaUrl"
 import { Editor } from "@/editor/Editor"
 
 const JSON_LD = {
@@ -359,6 +360,7 @@ export default function Home() {
           </Surface>
 
           <section id="editor" className="scroll-mt-0" aria-label="Editor de curriculum vitae gratis">
+            <AplicarPlantillaUrl />
             <Editor />
           </section>
         </Surface>

@@ -50,6 +50,8 @@ Promesa actual del producto:
 - `src/editor/Editor.tsx`: shell client-side del editor. Controla modo `cv`/`carta`, tab mobile `editar`/`preview`, barra superior, panel de formulario y panel de vista previa.
 - `src/components/molecules/SiteHeader.tsx` y `src/components/molecules/SiteFooter.tsx`: navegacion y cierre global para home/paginas SEO, con CTA al editor y copy de privacidad.
 - `src/components/molecules/MarketingValueCard.tsx`: card reusable para bloques de valor en paginas de marketing/SEO.
+- `src/components/molecules/TemplateOptionCard.tsx`: card reusable para mostrar plantillas y CTA con plantilla preseleccionada.
+- `src/editor/AplicarPlantillaUrl.tsx`: aplica `?plantilla=<id>` al store cuando la home carga el editor.
 
 ## Estado y Datos
 
