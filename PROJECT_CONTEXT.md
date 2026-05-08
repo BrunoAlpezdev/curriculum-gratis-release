@@ -14,6 +14,7 @@ Promesa actual del producto:
 - Ver preview en tiempo real.
 - Descargar PDF.
 - Importar/exportar datos como JSON.
+- Guardar y restaurar copias locales del CV/carta en el mismo navegador.
 - Analizar match ATS localmente contra una oferta laboral.
 - Revisar calidad basica del CV con checklist local.
 - Mantener privacidad: los datos no salen del dispositivo.
@@ -102,10 +103,12 @@ Regla actual:
 ## Acciones Globales
 
 - `src/editor/BarraAcciones.tsx`: descargar PDF, reiniciar datos, cambiar tema, abrir ejemplo, exportar JSON e importar JSON.
+- `src/editor/DialogCopiasLocales.tsx`: lista, restaura y elimina copias locales.
 - `src/editor/DialogEjemploCv.tsx`: muestra/gestiona ejemplo de CV.
 - `src/editor/datos-ejemplo.ts`: datos mock; tambien se cargan con tap secreto en el titulo.
 - `src/lib/useTema.ts`: tema claro/oscuro/sistema persistido en `localStorage` con clave `tema`.
 - `src/lib/useHidratado.ts`: evita render sensible a `localStorage` antes de hidratacion.
+- `src/lib/copias-locales.ts`: snapshots locales de CV/carta con clave `curriculum-gratis:copias-locales`.
 
 ## ATS Local
 

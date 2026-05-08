@@ -12,6 +12,8 @@ import {
   DotsThreeVerticalIcon,
   FileArrowDownIcon,
   FileArrowUpIcon,
+  CopyIcon,
+  ClockCounterClockwiseIcon,
 } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
@@ -19,6 +21,8 @@ import { Text } from "@/components/atoms/Text"
 import { useCurriculumStore } from "@/lib/store"
 import { useTema, type Tema } from "@/lib/useTema"
 import { exportarJson, importarJson } from "@/lib/importar-exportar"
+import { guardarCopiaLocal, type CopiaLocalCv } from "@/lib/copias-locales"
+import { DialogCopiasLocales } from "@/editor/DialogCopiasLocales"
 import { DialogEjemploCv } from "@/editor/DialogEjemploCv"
 import { generarDatosMock } from "@/editor/datos-ejemplo"
 import type { Modo } from "@/editor/Editor"
@@ -52,6 +56,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   const [descargando, setDescargando] = useState(false)
   const [menuAbierto, setMenuAbierto] = useState(false)
   const [ejemploAbierto, setEjemploAbierto] = useState(false)
+  const [copiasAbierto, setCopiasAbierto] = useState(false)
   const menuId = useId()
   const datos = useCurriculumStore((s) => s.datos)
   const carta = useCurriculumStore((s) => s.carta)
@@ -59,6 +64,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   const reiniciarStore = useCurriculumStore((s) => s.reiniciar)
   const setDatos = useCurriculumStore((s) => s.setDatos)
   const setPersonalizacion = useCurriculumStore((s) => s.setPersonalizacion)
+  const setCarta = useCurriculumStore((s) => s.setCarta)
   const tapsRef = useRef<number[]>([])
   const menuRef = useRef<HTMLDivElement>(null)
   const botonMenuRef = useRef<HTMLButtonElement>(null)
@@ -123,6 +129,28 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
     setMenuAbierto(false)
   }
 
+  function guardarCopia(nombreSugerido?: string) {
+    const nombreBase = datos.datosPersonales.nombreCompleto.trim() || "Curriculum"
+    const nombre = window.prompt("Nombre de la copia local", nombreSugerido ?? `${nombreBase} - copia`)
+    if (nombre === null) return
+    guardarCopiaLocal(nombre, datos, personalizacion, carta)
+    setMenuAbierto(false)
+  }
+
+  function abrirCopias() {
+    setCopiasAbierto(true)
+    setMenuAbierto(false)
+  }
+
+  function restaurarCopia(copia: CopiaLocalCv) {
+    if (!window.confirm("Esto reemplazará el CV y la carta actuales. ¿Continuar?")) return
+    guardarCopiaLocal("Respaldo antes de restaurar", datos, personalizacion, carta)
+    setDatos(copia.datos)
+    setPersonalizacion(copia.personalizacion)
+    setCarta(copia.carta)
+    setCopiasAbierto(false)
+  }
+
   async function handleArchivo(e: React.ChangeEvent<HTMLInputElement>) {
     const archivo = e.target.files?.[0]
     e.target.value = ""
@@ -133,6 +161,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
       return
     }
     if (!window.confirm("Esto reemplazará los datos actuales. ¿Continuar?")) return
+    guardarCopiaLocal("Respaldo antes de importar", datos, personalizacion, carta)
     setDatos(resultado.datos)
     setPersonalizacion(resultado.personalizacion)
   }
@@ -149,6 +178,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
 
   function reiniciar() {
     if (window.confirm("¿Seguro que quieres reiniciar? Se borrarán todos los datos del curriculum.")) {
+      guardarCopiaLocal("Respaldo antes de reiniciar", datos, personalizacion, carta)
       reiniciarStore()
     }
   }
@@ -258,6 +288,34 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
                 <FileArrowUpIcon size={16} />
                 Importar JSON
               </Button>
+              <Button
+                ref={(el) => {
+                  opcionesMenuRef.current[2] = el
+                }}
+                type="button"
+                role="menuitem"
+                onClick={() => guardarCopia()}
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
+              >
+                <CopyIcon size={16} />
+                Guardar copia local
+              </Button>
+              <Button
+                ref={(el) => {
+                  opcionesMenuRef.current[3] = el
+                }}
+                type="button"
+                role="menuitem"
+                onClick={abrirCopias}
+                variant="menu"
+                size="none"
+                className="px-3 py-2 text-sm"
+              >
+                <ClockCounterClockwiseIcon size={16} />
+                Ver copias locales
+              </Button>
             </Surface>
           )}
           <input
@@ -279,6 +337,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
         </Button>
       </div>
       <DialogEjemploCv abierto={ejemploAbierto} onCerrar={() => setEjemploAbierto(false)} />
+      <DialogCopiasLocales abierto={copiasAbierto} onCerrar={() => setCopiasAbierto(false)} onRestaurar={restaurarCopia} />
     </Surface>
   )
 }
