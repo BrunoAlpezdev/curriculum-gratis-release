@@ -48,7 +48,7 @@ export function SiteHeader() {
           <Badge variant="neutral" className="hidden md:inline-flex">
             Sin registro
           </Badge>
-          <div className="hidden md:block">
+          <div className="block">
             <AuthActions compact />
           </div>
           <Link href="/editor" className={cn(buttonVariants({ variant: "primary", size: "sm" }), "min-h-10") }>

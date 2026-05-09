@@ -14,7 +14,8 @@ export function AuthActions({ compact = false }: AuthActionsProps) {
       <Show when="signed-out">
         <SignInButton mode="modal">
           <Button type="button" variant="secondary" size="sm" className="min-h-10 whitespace-nowrap">
-            Iniciar sesion
+            <span className="hidden sm:inline">Iniciar sesion</span>
+            <span className="sm:hidden">Entrar</span>
           </Button>
         </SignInButton>
         {!compact && (
