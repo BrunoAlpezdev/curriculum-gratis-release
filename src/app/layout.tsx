@@ -18,6 +18,14 @@ export const metadata: Metadata = {
   authors: [{ name: "Curriculum Gratis" }],
   creator: "Curriculum Gratis",
   metadataBase: new URL(SITE_URL),
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-48x48.png", type: "image/png", sizes: "48x48" },
+    ],
+    apple: [{ url: "/logo-180.png", type: "image/png", sizes: "180x180" }],
+    other: [{ rel: "icon", url: "/logo-512.png", type: "image/png", sizes: "512x512" }],
+  },
   alternates: {
     canonical: "/",
   },
