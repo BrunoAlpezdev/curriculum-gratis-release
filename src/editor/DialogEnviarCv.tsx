@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useEffectEvent, useState } from "react"
 import { EnvelopeIcon, SpinnerIcon, XIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
 import { Input } from "@/components/atoms/Input"
@@ -32,11 +32,12 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
   const [error, setError] = useState("")
   const [enviado, setEnviado] = useState(false)
   const { usage, refresh: refreshUsage } = useUsageLimits()
+  const cerrarDialogo = useEffectEvent(onCerrar)
 
   useEffect(() => {
     if (!abierto) return
     function handleEscape(e: KeyboardEvent) {
-      if (e.key === "Escape") onCerrar()
+      if (e.key === "Escape") cerrarDialogo()
     }
     document.addEventListener("keydown", handleEscape)
     const overflowPrev = document.body.style.overflow
@@ -45,7 +46,7 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
       document.removeEventListener("keydown", handleEscape)
       document.body.style.overflow = overflowPrev
     }
-  }, [abierto, onCerrar])
+  }, [abierto])
 
   if (!abierto) return null
 

@@ -51,7 +51,7 @@ export function FormDatosPersonales() {
       ]}
     >
       <div className="flex items-center gap-3">
-        <Surface variant="panelMuted" className="relative shrink-0 h-16 w-16 overflow-hidden flex items-center justify-center">
+        <Surface variant="panelMuted" className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden">
           {datos.foto ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={datos.foto} alt="Foto" className="h-full w-full object-cover" />

@@ -47,7 +47,7 @@ function TemplatePreview({ variant }: { variant: "classic" | "minimal" | "modern
     return (
       <div className="flex h-44 overflow-hidden border-2 border-border-strong bg-white">
         <div className="w-1/3 bg-action-primary p-3">
-          <div className="h-9 w-9 rounded-full bg-white/90" />
+          <div className="size-9 rounded-full bg-white/90" />
           <div className="mt-5 space-y-1.5">
             <div className="h-1.5 w-16 bg-white/80" />
             <div className="h-1.5 w-12 bg-white/60" />
@@ -71,7 +71,7 @@ function TemplatePreview({ variant }: { variant: "classic" | "minimal" | "modern
     return (
       <div className="h-44 overflow-hidden border-2 border-border-strong bg-white p-4">
         <div className="-mx-4 -mt-4 h-16 bg-action-primary" />
-        <div className="relative -mt-7 h-12 w-12 rounded-full border-4 border-white bg-action-soft" />
+        <div className="relative -mt-7 size-12 rounded-full border-4 border-white bg-action-soft" />
         <div className="mt-3 h-3 w-32 bg-zinc-800" />
         <div className="mt-2 h-1.5 w-24 bg-zinc-300" />
         <div className="mt-5 grid grid-cols-2 gap-2">

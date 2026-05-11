@@ -83,7 +83,7 @@ export function SeccionFormulario({
         onClick={toggle}
         variant="plain"
         size="none"
-        className="flex w-full items-center justify-between px-4 py-4"
+        className="flex w-full items-center justify-between p-4"
       >
         <div className="flex items-center gap-2">
           <span className="text-action-strong">{icono}</span>
@@ -105,7 +105,7 @@ export function SeccionFormulario({
         }}
       >
         <div className={cn("min-h-0", overflowVisible ? "overflow-visible" : "overflow-hidden")}>
-          <div className="border-t border-border-subtle px-4 py-4 flex flex-col gap-4">
+          <div className="flex flex-col gap-4 border-t border-border-subtle p-4">
             {tip && (
               <div className="flex flex-col gap-0">
                 <Button
@@ -124,8 +124,8 @@ export function SeccionFormulario({
                   <Text as="span" variant="caption" className="font-medium text-action-strong">Consejos</Text>
                   <CaretDownIcon
                     size={12}
-                     className={cn(
-                       "transition-transform duration-200 text-action-primary",
+                      className={cn(
+                        "text-action-primary transition-transform duration-200",
                       tipAbierto && "rotate-180",
                     )}
                   />
@@ -138,8 +138,8 @@ export function SeccionFormulario({
                 >
                   <div className="overflow-hidden">
                     <Surface as="ul" variant="notice" className="mt-2 flex flex-col gap-1.5 px-3 py-2.5 shadow-none">
-                      {tip.map((t, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs text-text-main leading-relaxed">
+                      {tip.map((t) => (
+                        <li key={t} className="flex items-start gap-2 text-xs leading-relaxed text-text-main">
                           <span className="mt-0.5 shrink-0 text-action-primary">•</span>
                           {t}
                         </li>

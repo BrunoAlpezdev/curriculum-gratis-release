@@ -147,10 +147,6 @@ function VistaAnios({
   const inicio = anioVisible - (anioVisible % ANIOS_POR_PAGINA)
   const [paginaInicio, setPaginaInicio] = useState(inicio)
 
-  useEffect(() => {
-    setPaginaInicio(anioVisible - (anioVisible % ANIOS_POR_PAGINA))
-  }, [anioVisible])
-
   const aniosPagina = Array.from({ length: ANIOS_POR_PAGINA }, (_, i) => paginaInicio + i)
 
   return (

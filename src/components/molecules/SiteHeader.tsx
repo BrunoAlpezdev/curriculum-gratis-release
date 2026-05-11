@@ -19,7 +19,7 @@ export function SiteHeader() {
     <Surface as="header" variant="toolbar" className="sticky top-0 z-40 border-b-2 border-border-strong">
       <div className="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-3 px-4 md:px-6">
         <Link href="/" className="group flex min-w-0 items-center gap-2" aria-label="Curriculum Gratis, inicio">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center border-2 border-border-strong bg-action-primary text-action-primary-fg shadow-[3px_3px_0_var(--color-border-strong)] transition-transform group-hover:-translate-y-0.5">
+          <span className="flex size-9 shrink-0 items-center justify-center border-2 border-border-strong bg-action-primary text-action-primary-fg shadow-[3px_3px_0_var(--color-border-strong)] transition-transform group-hover:-translate-y-0.5">
             <SparkleIcon size={18} weight="fill" />
           </span>
           <span className="min-w-0">

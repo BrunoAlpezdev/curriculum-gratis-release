@@ -77,9 +77,7 @@ export function FormAnalisisAts() {
               Keywords faltantes
             </Text>
             <div className="flex flex-wrap gap-1.5">
-              {resultado.palabras
-                .filter((p) => !p.enCv)
-                .map((p) => (
+              {resultado.palabras.flatMap((p) => !p.enCv ? [
                   <Badge
                     key={p.palabra}
                     variant="danger"
@@ -87,24 +85,22 @@ export function FormAnalisisAts() {
                   >
                     <XCircleIcon size={12} weight="fill" />
                     {p.palabra}
-                  </Badge>
-                ))}
+                  </Badge>,
+                ] : [])}
             </div>
             <Text as="p" variant="label" className="mt-1">
               Keywords presentes
             </Text>
             <div className="flex flex-wrap gap-1.5">
-              {resultado.palabras
-                .filter((p) => p.enCv)
-                .map((p) => (
+              {resultado.palabras.flatMap((p) => p.enCv ? [
                   <Badge
                     key={p.palabra}
                     variant="success"
                   >
                     <CheckCircleIcon size={12} weight="fill" />
                     {p.palabra}
-                  </Badge>
-                ))}
+                  </Badge>,
+                ] : [])}
             </div>
           </div>
 

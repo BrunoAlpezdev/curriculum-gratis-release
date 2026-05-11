@@ -4,6 +4,10 @@ import { normalizarDatosCurriculum, normalizarPersonalizacion } from "@/lib/impo
 
 const STORAGE_KEY = "curriculum-gratis:copias-locales"
 const MAX_COPIAS = 20
+const FORMATO_FECHA_COPIA = new Intl.DateTimeFormat("es-CL", {
+  dateStyle: "medium",
+  timeStyle: "short",
+})
 
 export interface CopiaLocalCv {
   id: string
@@ -49,7 +53,10 @@ export function obtenerCopiasLocales(): CopiaLocalCv[] {
     if (!raw) return []
     const parsed = JSON.parse(raw) as unknown
     if (!Array.isArray(parsed)) return []
-    return parsed.map(normalizarCopia).filter((copia): copia is CopiaLocalCv => !!copia)
+    return parsed.flatMap((valor) => {
+      const copia = normalizarCopia(valor)
+      return copia ? [copia] : []
+    })
   } catch {
     return []
   }
@@ -84,8 +91,5 @@ export function eliminarCopiaLocal(id: string) {
 export function formatearFechaCopia(fecha: string): string {
   const date = new Date(fecha)
   if (Number.isNaN(date.getTime())) return "Fecha desconocida"
-  return new Intl.DateTimeFormat("es-CL", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(date)
+  return FORMATO_FECHA_COPIA.format(date)
 }

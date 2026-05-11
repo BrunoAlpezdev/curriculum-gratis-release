@@ -12,7 +12,10 @@ const NIVEL_IDIOMA_LABEL: Record<string, string> = {
 }
 
 function limpiar(partes: Array<string | null | undefined>): string[] {
-  return partes.map((parte) => parte?.trim() ?? "").filter(Boolean)
+  return partes.flatMap((parte) => {
+    const limpia = parte?.trim()
+    return limpia ? [limpia] : []
+  })
 }
 
 function rangoFecha(inicio: string, fin: string | null): string {

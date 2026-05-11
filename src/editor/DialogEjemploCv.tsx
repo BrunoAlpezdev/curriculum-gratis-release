@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useEffectEvent, useState } from "react"
 import {
   XIcon,
   ArrowSquareOutIcon,
@@ -25,11 +25,12 @@ interface Props {
 
 export function DialogEjemploCv({ abierto, onCerrar }: Props) {
   const [zoom, setZoom] = useState(100)
+  const cerrarDialogo = useEffectEvent(onCerrar)
 
   useEffect(() => {
     if (!abierto) return
     function handleEscape(e: KeyboardEvent) {
-      if (e.key === "Escape") onCerrar()
+      if (e.key === "Escape") cerrarDialogo()
     }
     document.addEventListener("keydown", handleEscape)
     /* Bloquear scroll del body mientras el dialog esta abierto.
@@ -41,7 +42,7 @@ export function DialogEjemploCv({ abierto, onCerrar }: Props) {
       document.removeEventListener("keydown", handleEscape)
       document.body.style.overflow = overflowPrev
     }
-  }, [abierto, onCerrar])
+  }, [abierto])
 
   if (!abierto) return null
 
@@ -144,7 +145,7 @@ export function DialogEjemploCv({ abierto, onCerrar }: Props) {
               disabled={zoom <= ZOOM_MIN}
               variant="iconSubtle"
               size="icon"
-              className="h-10 w-10 disabled:hover:bg-transparent disabled:hover:text-text-muted"
+              className="size-10 disabled:hover:bg-transparent disabled:hover:text-text-muted"
               aria-label="Reducir zoom"
             >
               <MinusIcon size={15} />
@@ -158,7 +159,7 @@ export function DialogEjemploCv({ abierto, onCerrar }: Props) {
               disabled={zoom >= ZOOM_MAX}
               variant="iconSubtle"
               size="icon"
-              className="h-10 w-10 disabled:hover:bg-transparent disabled:hover:text-text-muted"
+              className="size-10 disabled:hover:bg-transparent disabled:hover:text-text-muted"
               aria-label="Aumentar zoom"
             >
               <PlusIcon size={15} />

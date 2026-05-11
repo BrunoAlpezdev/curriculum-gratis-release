@@ -14,6 +14,9 @@ export function PlantillaClasico({ datos, personalizacion }: Props) {
   const { datosPersonales: dp } = datos
   const e = etiquetasCv(personalizacion.idiomaCv)
   const orden = personalizacion.ordenSecciones ?? ORDEN_SECCIONES_INICIAL
+  const contactos = [dp.email, dp.telefono, dp.ubicacion, dp.linkedin, dp.github, dp.sitioWeb].flatMap((valor) => (
+    valor ? [valor] : []
+  ))
 
   const tituloClasses = "text-[12px] font-bold uppercase tracking-wider mb-1.5 pb-0.5 border-b"
 
@@ -209,14 +212,12 @@ export function PlantillaClasico({ datos, personalizacion }: Props) {
           <p className="text-[13px] text-zinc-600 mt-0.5">{dp.titulo}</p>
         )}
         <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5 mt-2 text-zinc-500 text-[11px]">
-          {[dp.email, dp.telefono, dp.ubicacion, dp.linkedin, dp.github, dp.sitioWeb]
-            .filter(Boolean)
-            .map((valor, i, arr) => (
-              <span key={i} className="flex items-center gap-3">
-                <span>{valor}</span>
-                {i < arr.length - 1 && <span>|</span>}
-              </span>
-            ))}
+          {contactos.map((valor, i) => (
+            <span key={valor} className="flex items-center gap-3">
+              <span>{valor}</span>
+              {i < contactos.length - 1 && <span>|</span>}
+            </span>
+          ))}
         </div>
       </div>
 
