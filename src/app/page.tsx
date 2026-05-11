@@ -235,18 +235,18 @@ export default function Home() {
                   Arma un curriculum claro, revisa compatibilidad ATS, genera carta de presentacion y descarga el PDF sin registro. IA y correo estan disponibles solo si quieres usarlos.
                 </Text>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <a
+                  <Link
                     href="/editor"
                     className={cn(buttonVariants({ variant: "primary", size: "lg" }), "min-h-14 text-base")}
                   >
                     Crear mi CV gratis
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     href="/plantillas-cv-gratis"
                     className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "min-h-14 border-2 text-base")}
                   >
                     Ver plantillas
-                  </a>
+                  </Link>
                 </div>
                 <div className="mt-7 grid gap-3 sm:grid-cols-3">
                   {HERO_VALUES.map((item) => (

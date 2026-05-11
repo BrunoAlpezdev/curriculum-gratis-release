@@ -254,22 +254,22 @@ export function PlantillaColorido({ datos, personalizacion }: Props) {
   return (
     <div className="flex-1 flex flex-col text-[12px] leading-snug relative overflow-hidden">
       {/* Formas decorativas de fondo */}
-      <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10" style={{ backgroundColor: color, transform: "translate(30%, -30%)" }} />
-      <div className="absolute bottom-0 left-0 w-24 h-24 rounded-full opacity-10" style={{ backgroundColor: color, transform: "translate(-30%, 30%)" }} />
+      <div className="absolute top-0 right-0 size-32 rounded-full opacity-10" style={{ backgroundColor: color, transform: "translate(30%, -30%)" }} />
+      <div className="absolute bottom-0 left-0 size-24 rounded-full opacity-10" style={{ backgroundColor: color, transform: "translate(-30%, 30%)" }} />
 
       {/* Header */}
       <div
         className="px-7 py-5 text-white relative overflow-hidden"
         style={{ backgroundColor: color }}
       >
-        <div className="absolute top-0 right-0 w-40 h-40 rounded-full opacity-10 bg-white" style={{ transform: "translate(20%, -50%)" }} />
+        <div className="absolute top-0 right-0 size-40 rounded-full bg-white opacity-10" style={{ transform: "translate(20%, -50%)" }} />
         <div className="relative flex items-center gap-4">
           {dp.foto && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={dp.foto}
               alt=""
-              className="h-20 w-20 rounded-full object-cover border-2 border-white/60 shrink-0"
+              className="size-20 shrink-0 rounded-full border-2 border-white/60 object-cover"
             />
           )}
           <div className="flex-1 min-w-0">

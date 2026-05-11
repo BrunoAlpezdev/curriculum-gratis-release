@@ -14,7 +14,7 @@ const badgeVariants = cva("inline-flex items-center gap-1 font-bold leading-none
     size: {
       sm: "px-2 py-0.5 text-[11px]",
       md: "px-3 py-1 text-sm",
-      square: "h-10 w-10 justify-center text-lg",
+      square: "size-10 justify-center text-lg",
     },
   },
   defaultVariants: {
@@ -30,5 +30,3 @@ interface BadgeProps
 export function Badge({ variant, size, className, ...props }: BadgeProps) {
   return <span className={cn(badgeVariants({ variant, size }), className)} {...props} />
 }
-
-export { badgeVariants }

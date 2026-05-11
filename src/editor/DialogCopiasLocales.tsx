@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useEffectEvent, useState } from "react"
 import { ClockCounterClockwiseIcon, TrashIcon, XIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
@@ -21,11 +21,12 @@ interface Props {
 export function DialogCopiasLocales({ abierto, onCerrar, onRestaurar }: Props) {
   const [, refrescar] = useState(0)
   const copias = abierto ? obtenerCopiasLocales() : []
+  const cerrarDialogo = useEffectEvent(onCerrar)
 
   useEffect(() => {
     if (!abierto) return
     function handleEscape(e: KeyboardEvent) {
-      if (e.key === "Escape") onCerrar()
+      if (e.key === "Escape") cerrarDialogo()
     }
     document.addEventListener("keydown", handleEscape)
     const overflowPrev = document.body.style.overflow
@@ -34,7 +35,7 @@ export function DialogCopiasLocales({ abierto, onCerrar, onRestaurar }: Props) {
       document.removeEventListener("keydown", handleEscape)
       document.body.style.overflow = overflowPrev
     }
-  }, [abierto, onCerrar])
+  }, [abierto])
 
   if (!abierto) return null
 

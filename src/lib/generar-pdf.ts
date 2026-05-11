@@ -82,16 +82,11 @@ async function crearPdfVisual(
     onclone: (_doc: Document, elClonado: HTMLElement) => {
       /* No forzamos height — dejamos que el clon crezca con su contenido.
          Forzar height + position absolute colapsaba el rendering a 1 pagina. */
-      elClonado.style.width = `${A4_WIDTH_PX}px`
-      elClonado.style.minWidth = `${A4_WIDTH_PX}px`
-      elClonado.style.maxWidth = `${A4_WIDTH_PX}px`
-      elClonado.style.minHeight = `${A4_HEIGHT_PX}px`
-      elClonado.style.transform = "none"
+      elClonado.style.cssText += `width:${A4_WIDTH_PX}px;min-width:${A4_WIDTH_PX}px;max-width:${A4_WIDTH_PX}px;min-height:${A4_HEIGHT_PX}px;transform:none;`
 
       let ancestro: HTMLElement | null = elClonado.parentElement
       while (ancestro) {
-        ancestro.style.transform = "none"
-        ancestro.style.overflow = "visible"
+        ancestro.style.cssText += "transform:none;overflow:visible;"
         ancestro.classList.remove("hidden")
         ancestro = ancestro.parentElement
       }
@@ -142,9 +137,10 @@ async function crearPdfVisual(
        el canvas tiene height = alturaContenido * scale, asi que el factor
        de conversion es canvas.height / alturaContenido. */
     const cssACanvas = canvas.height / alturaContenido
-    const posicionesH2Canvas = posicionesH2Css
-      .map((p) => p * cssACanvas)
-      .filter((p) => p > 0) // ignorar el primer h2 si esta al tope
+    const posicionesH2Canvas = posicionesH2Css.flatMap((p) => {
+      const posicion = p * cssACanvas
+      return posicion > 0 ? [posicion] : []
+    })
 
     const ctxOrig = canvas.getContext("2d", { willReadFrequently: true })
     const scoresBlanco = ctxOrig ? calcularBlancosPorFila(ctxOrig, canvas) : null

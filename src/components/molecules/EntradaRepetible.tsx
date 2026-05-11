@@ -19,7 +19,7 @@ export function EntradaRepetible({
           size="icon"
           onClick={onEliminar}
           aria-label="Eliminar entrada"
-          className="h-7 w-7 text-text-muted hover:text-danger"
+          className="size-7 text-text-muted hover:text-danger"
         >
           <TrashIcon size={16} />
         </Button>

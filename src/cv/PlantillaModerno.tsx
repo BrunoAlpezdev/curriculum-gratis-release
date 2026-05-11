@@ -225,7 +225,7 @@ export function PlantillaModerno({ datos, personalizacion }: Props) {
             <img
               src={dp.foto}
               alt=""
-              className="h-24 w-24 rounded-full object-cover border-2 border-white/40"
+              className="size-24 rounded-full border-2 border-white/40 object-cover"
             />
           </div>
         )}

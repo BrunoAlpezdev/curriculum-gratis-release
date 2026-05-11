@@ -118,7 +118,7 @@ export function FormPersonalizacion() {
 
       <fieldset className="flex flex-col gap-2">
         <Text as="legend" variant="label">Color</Text>
-        <div className="flex gap-2.5 flex-wrap px-1 py-1">
+        <div className="flex flex-wrap gap-2.5 p-1">
           {COLORES_TEMA.map((c) => (
             <Button
               key={c.valor}
@@ -129,7 +129,7 @@ export function FormPersonalizacion() {
               variant="plain"
               size="none"
               className={cn(
-                "h-8 w-8 rounded-full transition-transform cursor-pointer",
+                "size-8 cursor-pointer rounded-full transition-transform",
                 personalizacion.color === c.valor
                   ? "ring-2 ring-offset-2 ring-border-strong ring-offset-app-bg"
                   : "hover:scale-105",

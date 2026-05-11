@@ -16,7 +16,7 @@ export function VistaCarta({ datos, carta, personalizacion }: Props) {
   return (
     <div
       id="carta-pdf"
-      className="bg-white flex flex-col px-14 py-14 text-[12px] leading-relaxed"
+      className="flex flex-col bg-white p-14 text-[12px] leading-relaxed"
       style={{
         width: A4_WIDTH_PX,
         minHeight: A4_HEIGHT_PX,

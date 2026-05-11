@@ -37,7 +37,7 @@ export function Editor() {
       <Surface
         variant="stripMuted"
         data-no-print
-        className="flex items-center justify-center gap-1 px-2 py-2"
+        className="flex items-center justify-center gap-1 p-2"
         aria-label="Tipo de documento"
       >
         <Button

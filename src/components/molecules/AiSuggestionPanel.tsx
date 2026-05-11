@@ -25,7 +25,7 @@ export function AiSuggestionPanel({
   multiline = false,
 }: AiSuggestionPanelProps) {
   return (
-    <Surface variant="notice" className="flex flex-col gap-3 px-3 py-3">
+    <Surface variant="notice" className="flex flex-col gap-3 p-3">
       <div>
         <div className="flex items-center gap-2">
           <ShieldCheckIcon size={16} weight="fill" className="text-action-primary" />
