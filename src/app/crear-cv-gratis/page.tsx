@@ -2,15 +2,15 @@ import type { Metadata } from "next"
 import { SeoPage, type SeoPageContent } from "@/app/seo-pages"
 
 export const metadata: Metadata = {
-  title: "Crear CV Gratis Online | Descargar en PDF sin Registro",
+  title: "Crear CV Gratis Online en Chile | PDF sin Registro",
   description:
-    "Crea tu CV gratis online en minutos. Completa tus datos, elige una plantilla profesional y descarga tu curriculum vitae en PDF sin registro.",
+    "Crea tu CV gratis online en Chile. Completa tus datos, elige una plantilla profesional y descarga tu curriculum vitae en PDF sin registro.",
   alternates: { canonical: "/crear-cv-gratis" },
 }
 
 const content: SeoPageContent = {
   eyebrow: "Crear CV gratis",
-  title: "Crear CV gratis online y descargarlo en PDF",
+  title: "Crear CV gratis online en Chile y descargarlo en PDF",
   description:
     "Entrada directa para completar datos, revisar el CV y descargarlo en PDF. Ideal si ya quieres empezar, sin comparar formatos primero.",
   primaryCta: { label: "Crear mi CV ahora", href: "/editor" },

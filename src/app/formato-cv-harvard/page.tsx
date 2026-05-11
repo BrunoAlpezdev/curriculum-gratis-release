@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import { SeoPage, type SeoPageContent } from "@/app/seo-pages"
 
 export const metadata: Metadata = {
-  title: "Formato CV Harvard Gratis | Curriculum Sobrio en PDF",
+  title: "Formato CV Harvard Gratis | Plantilla Sobria PDF",
   description:
-    "Crea un CV con formato Harvard gratis. Usa una estructura clasica, sobria y facil de leer, ideal para postulaciones profesionales y ATS.",
+    "Crea un CV con formato Harvard gratis. Usa una plantilla clasica, sobria y facil de leer, ideal para postulaciones profesionales y ATS.",
   alternates: { canonical: "/formato-cv-harvard" },
 }
 

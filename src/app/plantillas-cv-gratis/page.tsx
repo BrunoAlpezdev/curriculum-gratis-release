@@ -12,9 +12,9 @@ import { cn } from "@/components/ui/cn"
 import { PLANTILLAS } from "@/lib/constantes"
 
 export const metadata: Metadata = {
-  title: "Plantillas CV Gratis | Formatos Profesionales en PDF",
+  title: "Plantillas CV Gratis para Chile | PDF y ATS",
   description:
-    "Elige plantillas CV gratis: clasica, moderna, colorida o minimalista. Personaliza colores, fuente y descarga tu curriculum en PDF.",
+    "Elige plantillas CV gratis para Chile: clasica, moderna, colorida o minimalista. Personaliza colores, fuente y descarga tu curriculum en PDF.",
   alternates: { canonical: "/plantillas-cv-gratis" },
 }
 
@@ -77,7 +77,7 @@ export default function PlantillasCvGratisPage() {
                   Elige una plantilla segun tu postulacion.
                 </Text>
                 <Text variant="bodyLarge" className="mt-5 max-w-3xl">
-                  No todos los CV necesitan verse iguales. Usa una plantilla ATS para portales laborales o una visual cuando quieras destacar estilo, competencias y presencia.
+                  No todos los CV necesitan verse iguales. Usa una plantilla CV ATS para portales laborales o una visual cuando quieras destacar estilo, competencias y presencia.
                 </Text>
               </div>
               <Surface variant="heroCard" className="p-5">
@@ -92,6 +92,32 @@ export default function PlantillasCvGratisPage() {
                 </Text>
               </Surface>
             </div>
+          </div>
+        </Surface>
+
+        <Surface as="section" variant="page" className="border-b border-border-subtle px-4 py-10 md:px-6">
+          <div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-3">
+            <Surface as="article" variant="cardOnPage" className="p-5">
+              <Text as="h2" variant="cardTitle">Plantilla CV Harvard</Text>
+              <Text className="mt-2">Para postulaciones formales donde conviene priorizar lectura, orden y compatibilidad ATS.</Text>
+              <Link href="/formato-cv-harvard" className="mt-4 inline-flex font-extrabold text-action-primary underline decoration-2 underline-offset-4">
+                Ver formato CV Harvard
+              </Link>
+            </Surface>
+            <Surface as="article" variant="cardOnPage" className="p-5">
+              <Text as="h2" variant="cardTitle">CV para Chile</Text>
+              <Text className="mt-2">Guia para ordenar secciones, logros y datos utiles para procesos laborales chilenos.</Text>
+              <Link href="/cv-chile" className="mt-4 inline-flex font-extrabold text-action-primary underline decoration-2 underline-offset-4">
+                Leer guia CV Chile 2026
+              </Link>
+            </Surface>
+            <Surface as="article" variant="cardOnPage" className="p-5">
+              <Text as="h2" variant="cardTitle">Crear CV gratis</Text>
+              <Text className="mt-2">Si ya sabes que plantilla usar, entra directo al editor y descarga tu PDF sin registro.</Text>
+              <Link href="/crear-cv-gratis" className="mt-4 inline-flex font-extrabold text-action-primary underline decoration-2 underline-offset-4">
+                Crear CV gratis online
+              </Link>
+            </Surface>
           </div>
         </Surface>
 

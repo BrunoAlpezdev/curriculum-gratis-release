@@ -132,24 +132,24 @@ const HOW_TO_JSON_LD = {
 
 const KEYWORD_GROUPS = [
   {
-    title: "Crear un curriculum gratis",
+    title: "Crear curriculum vitae gratis",
     href: "/crear-cv-gratis",
-    text: "Para completar sus datos y descargar un PDF sin registrarse.",
+    text: "Completa tus datos y descarga un curriculum vitae en PDF sin registro.",
   },
   {
-    title: "Ver plantillas de CV",
+    title: "Plantillas CV gratis",
     href: "/plantillas-cv-gratis",
-    text: "Para elegir un diseño simple, moderno o más tradicional.",
+    text: "Elige una plantilla simple, moderna, Harvard o compatible con ATS.",
   },
   {
-    title: "Usar formato simple",
+    title: "Formato CV Harvard",
     href: "/formato-cv-harvard",
-    text: "Para postulaciones donde importa que el curriculum sea claro y fácil de leer.",
+    text: "Usa un curriculum sobrio, claro y facil de leer para procesos exigentes.",
   },
   {
-    title: "Hacer un CV para Chile",
+    title: "CV Chile 2026",
     href: "/cv-chile",
-    text: "Para armar un curriculum pensado para trabajos y postulaciones en Chile.",
+    text: "Arma un curriculum pensado para trabajos y postulaciones en Chile.",
   },
 ]
 

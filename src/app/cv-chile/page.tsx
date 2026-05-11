@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import { SeoPage, type SeoPageContent } from "@/app/seo-pages"
 
 export const metadata: Metadata = {
-  title: "CV Chile 2026 | Crear Curriculum Vitae Gratis en PDF",
+  title: "CV Chile 2026 | Curriculum Vitae Gratis en PDF",
   description:
-    "Crea un CV para Chile en 2026. Formato profesional, plantillas gratis, opciones ATS y descarga en PDF sin registro.",
+    "Crea un CV para Chile en 2026. Curriculum vitae profesional, plantillas gratis, opciones ATS y descarga en PDF sin registro.",
   alternates: { canonical: "/cv-chile" },
 }
 
@@ -12,7 +12,7 @@ const content: SeoPageContent = {
   eyebrow: "CV Chile 2026",
   title: "CV Chile 2026: crea tu curriculum vitae gratis",
   description:
-    "Guia practica para armar un curriculum pensado para procesos laborales en Chile, con secciones relevantes, claridad y descarga PDF.",
+    "Guia practica para armar un curriculum vitae pensado para procesos laborales en Chile, con secciones relevantes, claridad y descarga PDF.",
   primaryCta: { label: "Crear CV para Chile", href: "/editor" },
   secondaryCta: { label: "Ver plantillas recomendadas", href: "/plantillas-cv-gratis" },
   primaryKeyword: "cv chile",

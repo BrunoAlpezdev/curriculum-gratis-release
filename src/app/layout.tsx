@@ -8,6 +8,40 @@ const SITE_URL = "https://curriculum-gratis.cl"
 const TITLE = "Curriculum Vitae Gratis Chile 2026 | Crear CV en PDF"
 const DESCRIPTION =
   "Crea tu curriculum vitae gratis en Chile. Usa plantillas CV profesionales, formato Harvard o ATS, personaliza tu CV y descargalo en PDF sin registro."
+const LOGO_URL = `${SITE_URL}/logo-512.png`
+
+const ORGANIZATION = {
+  "@type": "Organization",
+  name: "Curriculum Gratis",
+  url: SITE_URL,
+  logo: LOGO_URL,
+}
+
+const ORGANIZATION_JSON_LD = {
+  "@context": "https://schema.org",
+  ...ORGANIZATION,
+}
+
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Curriculum Gratis",
+  url: SITE_URL,
+  inLanguage: "es-CL",
+  publisher: ORGANIZATION,
+}
+
+const SOFTWARE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Curriculum Gratis",
+  url: SITE_URL,
+  image: LOGO_URL,
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "CLP" },
+  description: DESCRIPTION,
+}
 
 export const metadata: Metadata = {
   title: {
@@ -18,6 +52,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Curriculum Gratis" }],
   creator: "Curriculum Gratis",
   metadataBase: new URL(SITE_URL),
+  manifest: "/site.webmanifest",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -69,18 +104,15 @@ export default function RootLayout({
           </Script>
           <script
             type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "SoftwareApplication",
-                name: "Curriculum Gratis",
-                url: SITE_URL,
-                applicationCategory: "BusinessApplication",
-                operatingSystem: "Web",
-                offers: { "@type": "Offer", price: "0", priceCurrency: "CLP" },
-                description: DESCRIPTION,
-              }),
-            }}
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSON_LD) }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSON_LD) }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(SOFTWARE_JSON_LD) }}
           />
           {children}
           <Analytics />

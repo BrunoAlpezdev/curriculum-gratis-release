@@ -1,0 +1,24 @@
+{
+  "name": "Curriculum Gratis",
+  "short_name": "CV Gratis",
+  "description": "Crea tu curriculum vitae gratis en Chile y descargalo en PDF sin registro.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#8A4B2A",
+  "theme_color": "#8A4B2A",
+  "lang": "es-CL",
+  "icons": [
+    {
+      "src": "/logo-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
