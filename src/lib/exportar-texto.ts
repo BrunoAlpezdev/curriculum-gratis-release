@@ -1,15 +1,9 @@
 import type { Carta, DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types"
 import { ETIQUETAS_SECCION_ORDENABLE } from "@/lib/constantes"
+import { etiquetaNivelIdioma } from "@/lib/etiquetas-cv"
 
 type FormatoTexto = "txt" | "md"
 type DocumentoTexto = "cv" | "carta"
-
-const NIVEL_IDIOMA_LABEL: Record<string, string> = {
-  basico: "Basico",
-  intermedio: "Intermedio",
-  avanzado: "Avanzado",
-  nativo: "Nativo",
-}
 
 function limpiar(partes: Array<string | null | undefined>): string[] {
   return partes.flatMap((parte) => {
@@ -51,7 +45,7 @@ function bloqueMd(titulo: string, lineas: string[]): string[] {
   return [`## ${titulo}`, ...lineas, ""]
 }
 
-function seccionTxt(seccion: SeccionOrdenable, datos: DatosCurriculum): string[] {
+function seccionTxt(seccion: SeccionOrdenable, datos: DatosCurriculum, personalizacion: Personalizacion): string[] {
   switch (seccion) {
     case "experiencia":
       return bloqueTxt(ETIQUETAS_SECCION_ORDENABLE.experiencia, datos.experiencia.flatMap((exp) => limpiar([
@@ -86,7 +80,7 @@ function seccionTxt(seccion: SeccionOrdenable, datos: DatosCurriculum): string[]
     case "habilidades":
       return bloqueTxt(ETIQUETAS_SECCION_ORDENABLE.habilidades, datos.habilidades)
     case "idiomas":
-      return bloqueTxt(ETIQUETAS_SECCION_ORDENABLE.idiomas, datos.idiomas.map((idioma) => `${idioma.nombre} - ${NIVEL_IDIOMA_LABEL[idioma.nivel] ?? idioma.nivel}`))
+      return bloqueTxt(ETIQUETAS_SECCION_ORDENABLE.idiomas, datos.idiomas.map((idioma) => `${idioma.nombre} - ${etiquetaNivelIdioma(idioma.nivel, personalizacion.idiomaCv)}`))
     case "referencias":
       return bloqueTxt(ETIQUETAS_SECCION_ORDENABLE.referencias, datos.referencias.map((ref) => limpiar([
         ref.nombre,
@@ -99,7 +93,7 @@ function seccionTxt(seccion: SeccionOrdenable, datos: DatosCurriculum): string[]
   }
 }
 
-function seccionMd(seccion: SeccionOrdenable, datos: DatosCurriculum): string[] {
+function seccionMd(seccion: SeccionOrdenable, datos: DatosCurriculum, personalizacion: Personalizacion): string[] {
   switch (seccion) {
     case "experiencia":
       return bloqueMd(ETIQUETAS_SECCION_ORDENABLE.experiencia, datos.experiencia.flatMap((exp) => limpiar([
@@ -134,7 +128,7 @@ function seccionMd(seccion: SeccionOrdenable, datos: DatosCurriculum): string[] 
     case "habilidades":
       return bloqueMd(ETIQUETAS_SECCION_ORDENABLE.habilidades, datos.habilidades.map((habilidad) => `- ${habilidad}`))
     case "idiomas":
-      return bloqueMd(ETIQUETAS_SECCION_ORDENABLE.idiomas, datos.idiomas.map((idioma) => `- ${idioma.nombre}: ${NIVEL_IDIOMA_LABEL[idioma.nivel] ?? idioma.nivel}`))
+      return bloqueMd(ETIQUETAS_SECCION_ORDENABLE.idiomas, datos.idiomas.map((idioma) => `- ${idioma.nombre}: ${etiquetaNivelIdioma(idioma.nivel, personalizacion.idiomaCv)}`))
     case "referencias":
       return bloqueMd(ETIQUETAS_SECCION_ORDENABLE.referencias, datos.referencias.map((ref) => `- ${limpiar([
         ref.nombre,
@@ -158,7 +152,7 @@ function cvTxt(datos: DatosCurriculum, personalizacion: Personalizacion): string
     dp.sitioWeb,
     "",
     ...bloqueTxt("Perfil profesional", limpiar([datos.perfil])),
-    ...personalizacion.ordenSecciones.flatMap((seccion) => seccionTxt(seccion, datos)),
+    ...personalizacion.ordenSecciones.flatMap((seccion) => seccionTxt(seccion, datos, personalizacion)),
     ...bloqueTxt("Informacion adicional", limpiar([datos.disponibilidad, datos.pretensionesRenta])),
   ]
   return limpiar(lineas).join("\n") + "\n"
@@ -175,7 +169,7 @@ function cvMd(datos: DatosCurriculum, personalizacion: Personalizacion): string 
     dp.sitioWeb,
     "",
     ...bloqueMd("Perfil profesional", limpiar([datos.perfil])),
-    ...personalizacion.ordenSecciones.flatMap((seccion) => seccionMd(seccion, datos)),
+    ...personalizacion.ordenSecciones.flatMap((seccion) => seccionMd(seccion, datos, personalizacion)),
     ...bloqueMd("Informacion adicional", limpiar([datos.disponibilidad, datos.pretensionesRenta])),
   ]
   return limpiar(lineas).join("\n") + "\n"

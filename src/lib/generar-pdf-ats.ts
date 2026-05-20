@@ -3,7 +3,7 @@ import type { DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types
 import { getColorHex } from "@/lib/colores"
 import { formatearRangoFechas, formatearFechaEducacion, formatearFecha } from "@/lib/formato"
 import { FUENTES, ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
-import { etiquetasCv } from "@/lib/etiquetas-cv"
+import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import {
   CONTENT_WIDTH,
   MARGIN,
@@ -313,7 +313,7 @@ export function crearPdfAts(
       pdf.setFontSize(10)
       setColor(63, 63, 70)
       const texto = datos.idiomas
-        .map((i) => `${i.nombre || e.idioma} (${i.nivel})`)
+        .map((i) => `${i.nombre || e.idioma} (${etiquetaNivelIdioma(i.nivel, personalizacion.idiomaCv)})`)
         .join("     ")
       const lines = pdf.splitTextToSize(texto, CONTENT_WIDTH)
       escribirLineas(lines, 4)

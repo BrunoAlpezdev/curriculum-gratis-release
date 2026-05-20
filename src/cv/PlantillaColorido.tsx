@@ -17,7 +17,7 @@ import {
 import type { DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types"
 import { getColorHex, getColorClaro } from "@/lib/colores"
 import { formatearRangoFechas, formatearFechaEducacion, formatearFecha } from "@/lib/formato"
-import { etiquetasCv } from "@/lib/etiquetas-cv"
+import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 
 interface Props {
@@ -206,7 +206,7 @@ export function PlantillaColorido({ datos, personalizacion }: Props) {
           {datos.idiomas.map((i) => (
             <span key={i.id} className="text-zinc-700">
               {i.nombre || e.idioma}{" "}
-              <span className="capitalize text-zinc-400">({i.nivel})</span>
+              <span className="text-zinc-400">({etiquetaNivelIdioma(i.nivel, personalizacion.idiomaCv)})</span>
             </span>
           ))}
         </div>

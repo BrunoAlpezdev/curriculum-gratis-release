@@ -1,4 +1,4 @@
-import type { IdiomaCv } from "@/types"
+import type { IdiomaCv, NivelIdioma } from "@/types"
 
 export interface EtiquetasCv {
   // Secciones
@@ -26,6 +26,7 @@ export interface EtiquetasCv {
   proyecto: string
   nombre: string
   idioma: string
+  nivelesIdioma: Record<NivelIdioma, string>
 }
 
 const ES: EtiquetasCv = {
@@ -49,6 +50,12 @@ const ES: EtiquetasCv = {
   proyecto: "Proyecto",
   nombre: "Nombre",
   idioma: "Idioma",
+  nivelesIdioma: {
+    basico: "Basico",
+    intermedio: "Intermedio",
+    avanzado: "Avanzado",
+    nativo: "Nativo",
+  },
 }
 
 const EN: EtiquetasCv = {
@@ -72,8 +79,18 @@ const EN: EtiquetasCv = {
   proyecto: "Project",
   nombre: "Name",
   idioma: "Language",
+  nivelesIdioma: {
+    basico: "Basic",
+    intermedio: "Intermediate",
+    avanzado: "Advanced",
+    nativo: "Native",
+  },
 }
 
 export function etiquetasCv(idioma: IdiomaCv | undefined): EtiquetasCv {
   return idioma === "en" ? EN : ES
+}
+
+export function etiquetaNivelIdioma(nivel: NivelIdioma, idioma: IdiomaCv | undefined): string {
+  return etiquetasCv(idioma).nivelesIdioma[nivel]
 }

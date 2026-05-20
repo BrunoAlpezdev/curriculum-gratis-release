@@ -1,7 +1,7 @@
 import type { DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types"
 import { getColorHex } from "@/lib/colores"
 import { formatearRangoFechas, formatearFechaEducacion, formatearFecha } from "@/lib/formato"
-import { etiquetasCv } from "@/lib/etiquetas-cv"
+import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 
 interface Props {
@@ -152,7 +152,7 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
         <div className="flex flex-wrap gap-x-5 gap-y-1 text-[11px]">
           {datos.idiomas.map((i) => (
             <span key={i.id} className="text-zinc-600">
-              {i.nombre || e.idioma} ({i.nivel})
+              {i.nombre || e.idioma} ({etiquetaNivelIdioma(i.nivel, personalizacion.idiomaCv)})
             </span>
           ))}
         </div>
