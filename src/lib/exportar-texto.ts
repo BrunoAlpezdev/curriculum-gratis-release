@@ -1,6 +1,7 @@
 import type { Carta, DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types"
 import { ETIQUETAS_SECCION_ORDENABLE } from "@/lib/constantes"
 import { etiquetaNivelIdioma } from "@/lib/etiquetas-cv"
+import { formatearFecha, formatearRangoFechas } from "@/lib/formato"
 
 type FormatoTexto = "txt" | "md"
 type DocumentoTexto = "cv" | "carta"
@@ -10,11 +11,6 @@ function limpiar(partes: Array<string | null | undefined>): string[] {
     const limpia = parte?.trim()
     return limpia ? [limpia] : []
   })
-}
-
-function rangoFecha(inicio: string, fin: string | null): string {
-  const partes = limpiar([inicio, fin ?? "Actualidad"])
-  return partes.join(" - ")
 }
 
 function nombreArchivoBase(datos: DatosCurriculum, documento: DocumentoTexto): string {
@@ -50,7 +46,7 @@ function seccionTxt(seccion: SeccionOrdenable, datos: DatosCurriculum, personali
     case "experiencia":
       return bloqueTxt(ETIQUETAS_SECCION_ORDENABLE.experiencia, datos.experiencia.flatMap((exp) => limpiar([
         `${exp.cargo}${exp.empresa ? ` - ${exp.empresa}` : ""}`,
-        limpiar([exp.ubicacion, rangoFecha(exp.fechaInicio, exp.fechaFin)]).join(" | "),
+        limpiar([exp.ubicacion, formatearRangoFechas(exp.fechaInicio, exp.fechaFin, personalizacion.idiomaCv)]).join(" | "),
         exp.descripcion,
         exp.logros,
         "",
@@ -58,7 +54,7 @@ function seccionTxt(seccion: SeccionOrdenable, datos: DatosCurriculum, personali
     case "educacion":
       return bloqueTxt(ETIQUETAS_SECCION_ORDENABLE.educacion, datos.educacion.flatMap((edu) => limpiar([
         `${edu.titulo}${edu.institucion ? ` - ${edu.institucion}` : ""}`,
-        rangoFecha(edu.fechaInicio, edu.fechaFin),
+        formatearRangoFechas(edu.fechaInicio, edu.fechaFin, personalizacion.idiomaCv),
         edu.descripcion,
         "",
       ])))
@@ -66,7 +62,7 @@ function seccionTxt(seccion: SeccionOrdenable, datos: DatosCurriculum, personali
       return bloqueTxt(ETIQUETAS_SECCION_ORDENABLE.cursos, datos.cursos.map((curso) => limpiar([
         curso.nombre,
         curso.institucion,
-        curso.fecha,
+        curso.fecha ? formatearFecha(curso.fecha, personalizacion.idiomaCv) : "",
         curso.url,
       ]).join(" | ")))
     case "proyectos":
@@ -98,7 +94,7 @@ function seccionMd(seccion: SeccionOrdenable, datos: DatosCurriculum, personaliz
     case "experiencia":
       return bloqueMd(ETIQUETAS_SECCION_ORDENABLE.experiencia, datos.experiencia.flatMap((exp) => limpiar([
         `### ${exp.cargo || exp.empresa}`,
-        limpiar([exp.empresa, exp.ubicacion, rangoFecha(exp.fechaInicio, exp.fechaFin)]).join(" | "),
+        limpiar([exp.empresa, exp.ubicacion, formatearRangoFechas(exp.fechaInicio, exp.fechaFin, personalizacion.idiomaCv)]).join(" | "),
         exp.descripcion,
         exp.logros,
         "",
@@ -106,7 +102,7 @@ function seccionMd(seccion: SeccionOrdenable, datos: DatosCurriculum, personaliz
     case "educacion":
       return bloqueMd(ETIQUETAS_SECCION_ORDENABLE.educacion, datos.educacion.flatMap((edu) => limpiar([
         `### ${edu.titulo || edu.institucion}`,
-        limpiar([edu.institucion, rangoFecha(edu.fechaInicio, edu.fechaFin)]).join(" | "),
+        limpiar([edu.institucion, formatearRangoFechas(edu.fechaInicio, edu.fechaFin, personalizacion.idiomaCv)]).join(" | "),
         edu.descripcion,
         "",
       ])))
@@ -114,7 +110,7 @@ function seccionMd(seccion: SeccionOrdenable, datos: DatosCurriculum, personaliz
       return bloqueMd(ETIQUETAS_SECCION_ORDENABLE.cursos, datos.cursos.map((curso) => `- ${limpiar([
         curso.nombre,
         curso.institucion,
-        curso.fecha,
+        curso.fecha ? formatearFecha(curso.fecha, personalizacion.idiomaCv) : "",
         curso.url,
       ]).join(" | ")}`))
     case "proyectos":

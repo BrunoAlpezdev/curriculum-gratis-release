@@ -49,7 +49,7 @@ export function PlantillaColorido({ datos, personalizacion }: Props) {
                   {exp.cargo || e.cargo}
                 </h3>
                 <span className="text-[11px] text-zinc-500 shrink-0 ml-2">
-                  {formatearRangoFechas(exp.fechaInicio, exp.fechaFin)}
+                  {formatearRangoFechas(exp.fechaInicio, exp.fechaFin, personalizacion.idiomaCv)}
                 </span>
               </div>
               <p className="text-zinc-500 italic text-[11px]">
@@ -87,7 +87,7 @@ export function PlantillaColorido({ datos, personalizacion }: Props) {
                   {edu.titulo || e.titulo}
                 </h3>
                 <span className="text-[11px] text-zinc-500 shrink-0 ml-2">
-                  {formatearFechaEducacion(edu.fechaInicio, edu.fechaFin)}
+                  {formatearFechaEducacion(edu.fechaInicio, edu.fechaFin, personalizacion.idiomaCv)}
                 </span>
               </div>
               <p className="text-zinc-500 italic text-[11px]">
@@ -118,7 +118,7 @@ export function PlantillaColorido({ datos, personalizacion }: Props) {
                 </h3>
                 {curso.fecha && (
                   <span className="text-[11px] text-zinc-500 shrink-0 ml-2">
-                    {formatearFecha(curso.fecha)}
+                    {formatearFecha(curso.fecha, personalizacion.idiomaCv)}
                   </span>
                 )}
               </div>

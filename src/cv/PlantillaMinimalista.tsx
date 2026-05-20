@@ -31,7 +31,7 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
                   <span className="text-zinc-500">{exp.empresa || e.empresa}</span>
                 </div>
                 <span className="text-[11px] text-zinc-400 shrink-0 ml-2">
-                  {formatearRangoFechas(exp.fechaInicio, exp.fechaFin)}
+                  {formatearRangoFechas(exp.fechaInicio, exp.fechaFin, personalizacion.idiomaCv)}
                 </span>
               </div>
               {exp.descripcion && (
@@ -58,7 +58,7 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
                   <span className="text-zinc-500">{edu.institucion || e.institucion}</span>
                 </div>
                 <span className="text-[11px] text-zinc-400 shrink-0 ml-2">
-                  {formatearFechaEducacion(edu.fechaInicio, edu.fechaFin)}
+                  {formatearFechaEducacion(edu.fechaInicio, edu.fechaFin, personalizacion.idiomaCv)}
                 </span>
               </div>
             </div>
@@ -86,7 +86,7 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
                 </div>
                 {curso.fecha && (
                   <span className="text-[11px] text-zinc-400 shrink-0 ml-2">
-                    {formatearFecha(curso.fecha)}
+                    {formatearFecha(curso.fecha, personalizacion.idiomaCv)}
                   </span>
                 )}
               </div>

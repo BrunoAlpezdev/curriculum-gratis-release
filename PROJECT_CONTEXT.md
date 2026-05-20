@@ -142,7 +142,7 @@ Regla actual:
 - `src/components/atoms/Text.tsx`: estilos tipograficos.
 - `src/components/atoms/Surface.tsx`: superficies/paneles/tarjetas/popovers.
 - `src/components/atoms/Badge.tsx`: etiquetas y estados.
-- `src/components/atoms/Input.tsx`, `Textarea.tsx`, `Select.tsx`, `SelectorFecha.tsx`: controles de formulario.
+- `src/components/atoms/Input.tsx`, `Textarea.tsx`, `Select.tsx`, `SelectorFecha.tsx`: controles de formulario. `SelectorFecha` usa meses ordenados de enero a diciembre y localizados segun `idiomaCv`.
 - `src/components/atoms/Chip.tsx`: chips.
 - `src/components/molecules/SeccionFormulario.tsx`: contenedor reutilizable de secciones con tips; por defecto las secciones parten colapsadas salvo que pasen `defaultAbierta`.
 - `src/components/molecules/EntradaRepetible.tsx`: wrapper para items repetibles.

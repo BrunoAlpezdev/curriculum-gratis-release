@@ -14,6 +14,7 @@ export function FormEducacion() {
   const agregar = useCurriculumStore((s) => s.agregarEducacion)
   const actualizar = useCurriculumStore((s) => s.actualizarEducacion)
   const eliminar = useCurriculumStore((s) => s.eliminarEducacion)
+  const idiomaCv = useCurriculumStore((s) => s.personalizacion.idiomaCv)
 
   return (
     <SeccionFormulario
@@ -49,13 +50,14 @@ export function FormEducacion() {
               label="Fecha"
               valor={edu.fechaInicio || null}
               onChange={(v) => actualizar(edu.id, { fechaInicio: v ?? "" })}
+              idiomaCv={idiomaCv}
             />
             <SelectorFecha
               label="Fecha fin (opcional)"
               valor={edu.fechaFin}
               onChange={(v) => actualizar(edu.id, { fechaFin: v })}
               permitirPresente
-              placeholder="Presente"
+              idiomaCv={idiomaCv}
             />
           </div>
           <Textarea

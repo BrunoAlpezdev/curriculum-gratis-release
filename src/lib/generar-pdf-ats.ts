@@ -126,7 +126,7 @@ export function crearPdfAts(
         const tituloLinea = exp.empresa ? `${cargo}, ${exp.empresa}` : cargo
         pdf.text(tituloLinea, MARGIN, y)
 
-        const fecha = formatearRangoFechas(exp.fechaInicio, exp.fechaFin)
+        const fecha = formatearRangoFechas(exp.fechaInicio, exp.fechaFin, personalizacion.idiomaCv)
         if (fecha) {
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
@@ -177,7 +177,7 @@ export function crearPdfAts(
         const tituloLinea = edu.institucion ? `${titulo}, ${edu.institucion}` : titulo
         pdf.text(tituloLinea, MARGIN, y)
 
-        const fecha = formatearFechaEducacion(edu.fechaInicio, edu.fechaFin)
+        const fecha = formatearFechaEducacion(edu.fechaInicio, edu.fechaFin, personalizacion.idiomaCv)
         if (fecha) {
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
@@ -221,7 +221,7 @@ export function crearPdfAts(
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
           setMuted()
-          pdf.text(formatearFecha(curso.fecha), PAGE_WIDTH - MARGIN, y, { align: "right" })
+          pdf.text(formatearFecha(curso.fecha, personalizacion.idiomaCv), PAGE_WIDTH - MARGIN, y, { align: "right" })
         }
         y += 4
 

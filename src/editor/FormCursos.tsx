@@ -13,6 +13,7 @@ export function FormCursos() {
   const agregar = useCurriculumStore((s) => s.agregarCurso)
   const actualizar = useCurriculumStore((s) => s.actualizarCurso)
   const eliminar = useCurriculumStore((s) => s.eliminarCurso)
+  const idiomaCv = useCurriculumStore((s) => s.personalizacion.idiomaCv)
 
   return (
     <SeccionFormulario
@@ -50,6 +51,7 @@ export function FormCursos() {
               label="Fecha de obtencion"
               valor={curso.fecha || null}
               onChange={(v) => actualizar(curso.id, { fecha: v ?? "" })}
+              idiomaCv={idiomaCv}
             />
           </div>
           <Input

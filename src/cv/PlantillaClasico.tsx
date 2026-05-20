@@ -34,7 +34,7 @@ export function PlantillaClasico({ datos, personalizacion }: Props) {
                   {exp.cargo || e.cargo}{exp.empresa ? `, ${exp.empresa}` : ""}
                 </h3>
                 <span className="text-[11px] text-zinc-500 shrink-0 ml-2">
-                  {formatearRangoFechas(exp.fechaInicio, exp.fechaFin)}
+                  {formatearRangoFechas(exp.fechaInicio, exp.fechaFin, personalizacion.idiomaCv)}
                 </span>
               </div>
               {exp.ubicacion && (
@@ -64,7 +64,7 @@ export function PlantillaClasico({ datos, personalizacion }: Props) {
                   {edu.titulo || e.titulo}{edu.institucion ? `, ${edu.institucion}` : ""}
                 </h3>
                 <span className="text-[11px] text-zinc-500 shrink-0 ml-2">
-                  {formatearFechaEducacion(edu.fechaInicio, edu.fechaFin)}
+                  {formatearFechaEducacion(edu.fechaInicio, edu.fechaFin, personalizacion.idiomaCv)}
                 </span>
               </div>
               {edu.descripcion && (
@@ -94,7 +94,7 @@ export function PlantillaClasico({ datos, personalizacion }: Props) {
                 </h3>
                 {curso.fecha && (
                   <span className="text-[11px] text-zinc-500 shrink-0 ml-2">
-                    {formatearFecha(curso.fecha)}
+                    {formatearFecha(curso.fecha, personalizacion.idiomaCv)}
                   </span>
                 )}
               </div>

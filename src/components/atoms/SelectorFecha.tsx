@@ -6,18 +6,15 @@ import { Button } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
 import { cn } from "@/components/ui/cn"
-import { MESES } from "@/lib/formato"
-
-const MESES_LISTA = Object.entries(MESES).map(([valor, etiqueta]) => ({
-  valor,
-  etiqueta,
-}))
+import { etiquetaPresente, etiquetaSoloAnio, formatearFecha, mesesFecha } from "@/lib/formato"
+import type { IdiomaCv } from "@/types"
 
 interface SelectorFechaProps {
   label: string
   valor: string | null
   onChange: (valor: string | null) => void
   permitirPresente?: boolean
+  idiomaCv?: IdiomaCv
   placeholder?: string
 }
 
@@ -41,13 +38,9 @@ function parsearMes(valor: string | null): string | null {
   return valor.split("-")[1] ?? null
 }
 
-function formatearTexto(valor: string | null, placeholder: string): string {
+function formatearTexto(valor: string | null, placeholder: string, idioma: IdiomaCv): string {
   if (valor === null || valor === "") return placeholder
-  const mes = parsearMes(valor)
-  const anio = valor.split("-")[0]
-  if (!anio) return placeholder
-  if (!mes) return anio
-  return `${MESES[mes] ?? mes} ${anio}`
+  return formatearFecha(valor, idioma) || placeholder
 }
 
 const ANIOS_POR_PAGINA = 12
@@ -61,6 +54,8 @@ function VistaMeses({
   onClickAnio,
   onSeleccionarMes,
   onSoloAnio,
+  meses,
+  soloAnioLabel,
 }: {
   anioVisible: number
   anioSeleccionado: number | null
@@ -70,6 +65,8 @@ function VistaMeses({
   onClickAnio: () => void
   onSeleccionarMes: (mes: string) => void
   onSoloAnio: () => void
+  meses: { valor: string; etiqueta: string }[]
+  soloAnioLabel: string
 }) {
   const anioEsSeleccionado = anioSeleccionado === anioVisible && !mesSeleccionado
 
@@ -105,7 +102,7 @@ function VistaMeses({
         </Button>
       </div>
       <div className="grid grid-cols-3 gap-1">
-        {MESES_LISTA.map((m) => {
+        {meses.map((m) => {
           const seleccionado =
             mesSeleccionado === m.valor && anioSeleccionado === anioVisible
           return (
@@ -129,7 +126,7 @@ function VistaMeses({
         size="none"
         className="w-full border py-1.5 text-xs"
       >
-        Solo {anioVisible}
+        {soloAnioLabel} {anioVisible}
       </Button>
     </>
   )
@@ -197,8 +194,11 @@ export function SelectorFecha({
   valor,
   onChange,
   permitirPresente = false,
-  placeholder = "Seleccionar",
+  idiomaCv = "es",
+  placeholder,
 }: SelectorFechaProps) {
+  const textoPresente = etiquetaPresente(idiomaCv)
+  const placeholderFinal = placeholder ?? (idiomaCv === "en" ? "Select" : "Seleccionar")
   const autoId = useId()
   const [abierto, setAbierto] = useState(false)
   const [anioVisible, setAnioVisible] = useState(() => parsearAnio(valor))
@@ -254,8 +254,9 @@ export function SelectorFecha({
     setAbierto(false)
   }
 
-  const textoMostrado = esPresente ? "Presente" : formatearTexto(valor, placeholder)
+  const textoMostrado = esPresente ? textoPresente : formatearTexto(valor, placeholderFinal, idiomaCv)
   const tieneValor = valor !== null && valor !== ""
+  const meses = mesesFecha(idiomaCv)
 
   return (
     <div ref={contenedorRef} className="relative flex flex-col gap-1.5">
@@ -295,10 +296,11 @@ export function SelectorFecha({
               onClickAnio={() => setVistaAnios(true)}
               onSeleccionarMes={seleccionarMes}
               onSoloAnio={soloAnio}
+              meses={meses}
+              soloAnioLabel={etiquetaSoloAnio(idiomaCv)}
             />
           )}
 
-          {/* Boton Presente */}
           {permitirPresente && (
             <Button
               type="button"
@@ -307,7 +309,7 @@ export function SelectorFecha({
               size="none"
               className="w-full border py-2 text-sm"
             >
-              Presente
+              {textoPresente}
             </Button>
           )}
         </Surface>

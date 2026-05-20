@@ -14,6 +14,7 @@ export function FormExperiencia() {
   const agregar = useCurriculumStore((s) => s.agregarExperiencia)
   const actualizar = useCurriculumStore((s) => s.actualizarExperiencia)
   const eliminar = useCurriculumStore((s) => s.eliminarExperiencia)
+  const idiomaCv = useCurriculumStore((s) => s.personalizacion.idiomaCv)
 
   return (
     <SeccionFormulario
@@ -59,13 +60,14 @@ export function FormExperiencia() {
               label="Fecha inicio"
               valor={exp.fechaInicio || null}
               onChange={(v) => actualizar(exp.id, { fechaInicio: v ?? "" })}
+              idiomaCv={idiomaCv}
             />
             <SelectorFecha
               label="Fecha fin"
               valor={exp.fechaFin}
               onChange={(v) => actualizar(exp.id, { fechaFin: v })}
               permitirPresente
-              placeholder="Presente"
+              idiomaCv={idiomaCv}
             />
           </div>
           <Textarea
