@@ -15,6 +15,7 @@ import { Text } from "@/components/atoms/Text"
 import { MarketingValueCard } from "@/components/molecules/MarketingValueCard"
 import { SiteFooter } from "@/components/molecules/SiteFooter"
 import { SiteHeader } from "@/components/molecules/SiteHeader"
+import { JsonLd } from "@/components/seo/JsonLd"
 import { cn } from "@/components/ui/cn"
 
 const JSON_LD = {
@@ -147,6 +148,11 @@ const KEYWORD_GROUPS = [
     text: "Usa un curriculum sobrio, claro y facil de leer para procesos exigentes.",
   },
   {
+    title: "CV ATS gratis",
+    href: "/cv-ats-gratis",
+    text: "Revise palabras clave y use una plantilla compatible con portales laborales.",
+  },
+  {
     title: "CV Chile 2026",
     href: "/cv-chile",
     text: "Arma un curriculum pensado para trabajos y postulaciones en Chile.",
@@ -206,18 +212,9 @@ const STEPS = [
 export default function Home() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(HOW_TO_JSON_LD) }}
-      />
+      <JsonLd data={JSON_LD} />
+      <JsonLd data={FAQ_JSON_LD} />
+      <JsonLd data={HOW_TO_JSON_LD} />
 
       <Surface variant="page">
         <SiteHeader />

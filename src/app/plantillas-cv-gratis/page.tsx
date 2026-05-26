@@ -1,4 +1,3 @@
-import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr"
 import { Badge } from "@/components/atoms/Badge"
@@ -8,15 +7,17 @@ import { Text } from "@/components/atoms/Text"
 import { SiteFooter } from "@/components/molecules/SiteFooter"
 import { SiteHeader } from "@/components/molecules/SiteHeader"
 import { TemplateOptionCard } from "@/components/molecules/TemplateOptionCard"
+import { JsonLd } from "@/components/seo/JsonLd"
 import { cn } from "@/components/ui/cn"
 import { PLANTILLAS } from "@/lib/constantes"
+import { createPageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
+  path: "/plantillas-cv-gratis",
   title: "Plantillas CV Gratis para Chile | PDF y ATS",
   description:
     "Elige plantillas CV gratis para Chile: clasica, moderna, colorida o minimalista. Personaliza colores, fuente y descarga tu curriculum en PDF.",
-  alternates: { canonical: "/plantillas-cv-gratis" },
-}
+})
 
 const FAQ_JSON_LD = {
   "@context": "https://schema.org",
@@ -60,10 +61,7 @@ const FAQ_JSON_LD = {
 export default function PlantillasCvGratisPage() {
   return (
     <Surface variant="page" className="min-h-screen">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }}
-      />
+      <JsonLd data={FAQ_JSON_LD} />
       <SiteHeader />
       <Surface as="main" variant="page">
         <Surface as="section" variant="hero" className="px-4 py-10 md:px-6 md:py-14">
@@ -96,7 +94,7 @@ export default function PlantillasCvGratisPage() {
         </Surface>
 
         <Surface as="section" variant="page" className="border-b border-border-subtle px-4 py-10 md:px-6">
-          <div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-3">
+          <div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Surface as="article" variant="cardOnPage" className="p-5">
               <Text as="h2" variant="cardTitle">Plantilla CV Harvard</Text>
               <Text className="mt-2">Para postulaciones formales donde conviene priorizar lectura, orden y compatibilidad ATS.</Text>
@@ -109,6 +107,13 @@ export default function PlantillasCvGratisPage() {
               <Text className="mt-2">Guia para ordenar secciones, logros y datos utiles para procesos laborales chilenos.</Text>
               <Link href="/cv-chile" className="mt-4 inline-flex font-extrabold text-action-primary underline decoration-2 underline-offset-4">
                 Leer guia CV Chile 2026
+              </Link>
+            </Surface>
+            <Surface as="article" variant="cardOnPage" className="p-5">
+              <Text as="h2" variant="cardTitle">CV ATS gratis</Text>
+              <Text className="mt-2">Use una plantilla sobria y revise palabras clave contra una oferta laboral desde el editor.</Text>
+              <Link href="/cv-ats-gratis" className="mt-4 inline-flex font-extrabold text-action-primary underline decoration-2 underline-offset-4">
+                Ver guia CV ATS
               </Link>
             </Surface>
             <Surface as="article" variant="cardOnPage" className="p-5">

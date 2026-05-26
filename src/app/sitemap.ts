@@ -11,6 +11,7 @@ const ROUTES: Array<{
   { path: "/crear-cv-gratis", priority: 0.9, changeFrequency: "monthly" },
   { path: "/plantillas-cv-gratis", priority: 0.85, changeFrequency: "monthly" },
   { path: "/cv-chile", priority: 0.85, changeFrequency: "monthly" },
+  { path: "/cv-ats-gratis", priority: 0.85, changeFrequency: "monthly" },
   { path: "/formato-cv-harvard", priority: 0.8, changeFrequency: "monthly" },
 ]
 

@@ -3,20 +3,13 @@ import Script from "next/script"
 import { ClerkProvider } from "@clerk/nextjs"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { JsonLd } from "@/components/seo/JsonLd"
+import { LOGO_URL, ORGANIZATION, SITE_NAME, SITE_URL } from "@/lib/seo"
 import "./globals.css"
 
-const SITE_URL = "https://curriculum-gratis.cl"
 const TITLE = "Curriculum Vitae Gratis Chile 2026 | Crear CV en PDF"
 const DESCRIPTION =
   "Crea tu curriculum vitae gratis en Chile. Usa plantillas CV profesionales, formato Harvard o ATS, personaliza tu CV y descargalo en PDF sin registro."
-const LOGO_URL = `${SITE_URL}/logo-512.png`
-
-const ORGANIZATION = {
-  "@type": "Organization",
-  name: "Curriculum Gratis",
-  url: SITE_URL,
-  logo: LOGO_URL,
-}
 
 const ORGANIZATION_JSON_LD = {
   "@context": "https://schema.org",
@@ -26,7 +19,7 @@ const ORGANIZATION_JSON_LD = {
 const WEBSITE_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Curriculum Gratis",
+  name: SITE_NAME,
   url: SITE_URL,
   inLanguage: "es-CL",
   publisher: ORGANIZATION,
@@ -71,7 +64,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     title: TITLE,
     description: DESCRIPTION,
-    siteName: "Curriculum Gratis",
+    siteName: SITE_NAME,
   },
   twitter: {
     card: "summary_large_image",
@@ -103,18 +96,9 @@ export default function RootLayout({
           <Script id="tema-inicial" strategy="beforeInteractive">
             {`(function(){try{var t=localStorage.getItem("tema");var d=t==="oscuro"||(t!=="claro"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}})()`}
           </Script>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSON_LD) }}
-          />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSON_LD) }}
-          />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(SOFTWARE_JSON_LD) }}
-          />
+          <JsonLd data={ORGANIZATION_JSON_LD} />
+          <JsonLd data={WEBSITE_JSON_LD} />
+          <JsonLd data={SOFTWARE_JSON_LD} />
           {children}
           <Analytics />
           <SpeedInsights />

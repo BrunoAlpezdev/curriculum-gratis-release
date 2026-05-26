@@ -1,18 +1,23 @@
-import type { Metadata } from "next"
 import { SeoPage, type SeoPageContent } from "@/app/seo-pages"
+import { createPageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
+  path: "/formato-cv-harvard",
   title: "Formato CV Harvard Gratis | Plantilla Sobria PDF",
   description:
     "Crea un CV con formato Harvard gratis. Usa una plantilla clasica, sobria y facil de leer, ideal para postulaciones profesionales y ATS.",
-  alternates: { canonical: "/formato-cv-harvard" },
-}
+})
 
 const content: SeoPageContent = {
+  path: "/formato-cv-harvard",
   eyebrow: "Formato Harvard CV",
   title: "Formato CV Harvard gratis para un curriculum claro y profesional",
   description:
     "Pagina enfocada en CV sobrio tipo Harvard: estructura limpia, lectura rapida y plantillas compatibles con ATS.",
+  shortAnswer: {
+    title: "¿Que es un CV formato Harvard?",
+    body: "Es un curriculum sobrio, ordenado y centrado en lectura rapida. Prioriza experiencia, logros, educacion y habilidades con poca decoracion visual, por lo que funciona bien para postulaciones formales y procesos donde importa la compatibilidad ATS.",
+  },
   primaryCta: { label: "Usar plantilla Clasico", href: "/editor?plantilla=clasico" },
   secondaryCta: { label: "Comparar plantillas ATS", href: "/plantillas-cv-gratis" },
   primaryKeyword: "formato harvard cv",

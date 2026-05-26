@@ -5,12 +5,19 @@ import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
 import { SiteFooter } from "@/components/molecules/SiteFooter"
 import { SiteHeader } from "@/components/molecules/SiteHeader"
+import { JsonLd } from "@/components/seo/JsonLd"
 import { cn } from "@/components/ui/cn"
+import { ORGANIZATION, absoluteUrl, createBreadcrumbJsonLd } from "@/lib/seo"
 
 export interface SeoPageContent {
+  path: string
   eyebrow: string
   title: string
   description: string
+  shortAnswer: {
+    title: string
+    body: string
+  }
   primaryCta?: {
     label: string
     href: string
@@ -49,12 +56,43 @@ export function SeoPage({ content }: SeoPageProps) {
     })),
   }
 
+  const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: content.title,
+    description: content.description,
+    url: absoluteUrl(content.path),
+    inLanguage: "es-CL",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Curriculum Gratis",
+      url: absoluteUrl(),
+    },
+    publisher: ORGANIZATION,
+    about: [content.primaryKeyword, ...content.relatedKeywords].map((keyword) => ({
+      "@type": "Thing",
+      name: keyword,
+    })),
+    mainEntity: {
+      "@type": "Question",
+      name: content.shortAnswer.title,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: content.shortAnswer.body,
+      },
+    },
+  }
+
+  const breadcrumbJsonLd = createBreadcrumbJsonLd([
+    { name: "Inicio", path: "/" },
+    { name: content.eyebrow, path: content.path },
+  ])
+
   return (
     <Surface variant="page" className="min-h-screen">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
+      <JsonLd data={webPageJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
+      <JsonLd data={faqJsonLd} />
       <SiteHeader />
 
       <Surface as="main" variant="page">
@@ -89,6 +127,10 @@ export function SeoPage({ content }: SeoPageProps) {
       <section className="px-4 py-10 md:px-6">
         <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-[0.72fr_0.28fr]">
           <div className="space-y-5">
+            <Surface as="article" variant="notice" className="border-2 p-6">
+              <Text as="h2" variant="panelTitle">{content.shortAnswer.title}</Text>
+              <Text className="mt-3 leading-8">{content.shortAnswer.body}</Text>
+            </Surface>
             {content.sections.map((section) => (
               <Surface as="article" key={section.title} variant="cardStrong" className="p-6">
                 <Text as="h2" variant="panelTitle">{section.title}</Text>

@@ -1,18 +1,23 @@
-import type { Metadata } from "next"
 import { SeoPage, type SeoPageContent } from "@/app/seo-pages"
+import { createPageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
+  path: "/crear-cv-gratis",
   title: "Crear CV Gratis Online en Chile | PDF sin Registro",
   description:
     "Crea tu CV gratis online en Chile. Completa tus datos, elige una plantilla profesional y descarga tu curriculum vitae en PDF sin registro.",
-  alternates: { canonical: "/crear-cv-gratis" },
-}
+})
 
 const content: SeoPageContent = {
+  path: "/crear-cv-gratis",
   eyebrow: "Crear CV gratis",
   title: "Crear CV gratis online en Chile y descargarlo en PDF",
   description:
     "Entrada directa para completar datos, revisar el CV y descargarlo en PDF. Ideal si ya quieres empezar, sin comparar formatos primero.",
+  shortAnswer: {
+    title: "¿Como crear un CV gratis online?",
+    body: "Entra al editor, completa tus datos, elige una plantilla profesional, revisa la vista previa y descarga el curriculum en PDF. No necesitas cuenta; la informacion queda guardada en tu navegador salvo que actives funciones opcionales como IA o correo.",
+  },
   primaryCta: { label: "Crear mi CV ahora", href: "/editor" },
   secondaryCta: { label: "Ver plantillas primero", href: "/plantillas-cv-gratis" },
   primaryKeyword: "crear cv gratis",

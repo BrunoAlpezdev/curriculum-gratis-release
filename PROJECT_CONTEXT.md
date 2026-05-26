@@ -160,6 +160,7 @@ Regla visual:
 - `src/app/crear-cv-gratis/page.tsx`: pagina SEO keyword crear CV gratis.
 - `src/app/plantillas-cv-gratis/page.tsx`: pagina SEO plantillas.
 - `src/app/cv-chile/page.tsx`: pagina SEO CV Chile.
+- `src/app/cv-ats-gratis/page.tsx`: pagina SEO para intencion conversacional sobre CV ATS, palabras clave, plantillas sobrias y revision local contra ofertas.
 - `src/app/formato-cv-harvard/page.tsx`: pagina SEO formato Harvard.
 - `src/app/sitemap.ts`: sitemap.
 - `src/app/robots.ts`: robots.
@@ -171,7 +172,14 @@ Roles SEO actuales:
 - `/crear-cv-gratis`: entrada directa al editor.
 - `/plantillas-cv-gratis`: comparador/selector de plantillas con CTAs preseleccionados.
 - `/formato-cv-harvard`: pagina educativa con CTA a plantilla `clasico` y comparacion ATS.
+- `/cv-ats-gratis`: guia educativa y transaccional para crear CV compatible con ATS; enlaza al editor con plantilla `clasico`.
 - `/cv-chile`: guia local para postulaciones en Chile con CTA general al editor.
+
+Soporte SEO/GEO:
+
+- `src/lib/seo.ts`: constantes del sitio, URLs canonicas, metadata Open Graph/Twitter por pagina y serializacion JSON-LD sanitizada.
+- `src/components/seo/JsonLd.tsx`: componente reutilizable para structured data con escape de `<`.
+- `src/app/seo-pages.tsx`: plantilla de paginas SEO con FAQPage, WebPage, BreadcrumbList y bloque visible de respuesta corta para consultas conversacionales/AI Overviews.
 
 ## Backend Actual y Futuro
 

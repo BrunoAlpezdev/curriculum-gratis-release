@@ -1,18 +1,23 @@
-import type { Metadata } from "next"
 import { SeoPage, type SeoPageContent } from "@/app/seo-pages"
+import { createPageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
+  path: "/cv-chile",
   title: "CV Chile 2026 | Curriculum Vitae Gratis en PDF",
   description:
     "Crea un CV para Chile en 2026. Curriculum vitae profesional, plantillas gratis, opciones ATS y descarga en PDF sin registro.",
-  alternates: { canonical: "/cv-chile" },
-}
+})
 
 const content: SeoPageContent = {
+  path: "/cv-chile",
   eyebrow: "CV Chile 2026",
   title: "CV Chile 2026: crea tu curriculum vitae gratis",
   description:
     "Guia practica para armar un curriculum vitae pensado para procesos laborales en Chile, con secciones relevantes, claridad y descarga PDF.",
+  shortAnswer: {
+    title: "¿Que debe tener un CV para Chile en 2026?",
+    body: "Debe incluir datos de contacto, perfil profesional, experiencia con logros, educacion, habilidades relevantes, cursos, idiomas y enlaces profesionales cuando aporten. Para postular en Chile conviene usar lenguaje claro, palabras clave del aviso y un formato facil de leer en PDF.",
+  },
   primaryCta: { label: "Crear CV para Chile", href: "/editor" },
   secondaryCta: { label: "Ver plantillas recomendadas", href: "/plantillas-cv-gratis" },
   primaryKeyword: "cv chile",
