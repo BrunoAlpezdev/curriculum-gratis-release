@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next"
 
-const SITE_URL = "https://curriculum-gratis.cl"
+const SITE_URL = "https://www.curriculum-gratis.cl"
 
 export default function robots(): MetadataRoute.Robots {
   return {

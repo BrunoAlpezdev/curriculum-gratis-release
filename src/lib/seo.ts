@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-export const SITE_URL = "https://curriculum-gratis.cl"
+export const SITE_URL = "https://www.curriculum-gratis.cl"
 export const SITE_NAME = "Curriculum Gratis"
 export const LOGO_URL = `${SITE_URL}/logo-512.png`
 export const OG_IMAGE_URL = `${SITE_URL}/opengraph-image`

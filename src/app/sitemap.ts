@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next"
 
-const BASE_URL = "https://curriculum-gratis.cl"
+const BASE_URL = "https://www.curriculum-gratis.cl"
 
 const ROUTES: Array<{
   path: string

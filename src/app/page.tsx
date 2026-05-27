@@ -17,12 +17,13 @@ import { SiteFooter } from "@/components/molecules/SiteFooter"
 import { SiteHeader } from "@/components/molecules/SiteHeader"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { cn } from "@/components/ui/cn"
+import { SITE_URL } from "@/lib/seo"
 
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   name: "Curriculum Gratis",
-  url: "https://curriculum-gratis.cl",
+  url: SITE_URL,
   description:
     "Creador de curriculum vitae gratis para Chile. Crea tu CV 2026 con plantillas profesionales, formato Harvard, opciones ATS y descarga en PDF sin registro.",
   applicationCategory: "BusinessApplication",
