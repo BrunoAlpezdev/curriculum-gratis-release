@@ -15,26 +15,47 @@ export default function OgImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
+          background: "#f3eddf",
           fontFamily: "sans-serif",
-          padding: "60px",
+          padding: "72px",
         }}
       >
         <div
           style={{
-            fontSize: 72,
-            marginBottom: 24,
+            display: "flex",
+            alignItems: "center",
+            gap: 28,
+            marginBottom: 36,
           }}
         >
-          📄
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 132,
+              height: 132,
+              background: "#8a4b2a",
+              color: "#fbf7ec",
+              fontSize: 68,
+              fontWeight: 800,
+              letterSpacing: "-2px",
+              borderRadius: 20,
+              border: "6px solid #24211c",
+              boxShadow: "10px 10px 0 #24211c",
+            }}
+          >
+            CV
+          </div>
         </div>
         <div
           style={{
-            fontSize: 56,
-            fontWeight: 700,
-            color: "#f8fafc",
-            letterSpacing: "-1px",
-            marginBottom: 16,
+            display: "flex",
+            fontSize: 60,
+            fontWeight: 800,
+            color: "#24211c",
+            letterSpacing: "-1.5px",
+            marginBottom: 18,
             textAlign: "center",
           }}
         >
@@ -42,16 +63,16 @@ export default function OgImage() {
         </div>
         <div
           style={{
-            fontSize: 26,
-            color: "#94a3b8",
+            display: "flex",
+            fontSize: 28,
+            color: "#635a4a",
             textAlign: "center",
-            maxWidth: 800,
+            maxWidth: 820,
             lineHeight: 1.4,
-            marginBottom: 40,
+            marginBottom: 44,
           }}
         >
-          Crea tu CV profesional y descárgalo en PDF al instante.
-          Sin registro. Sin pagos. Sin trucos.
+          Crea tu CV profesional y descárgalo en PDF al instante. Sin registro. Sin pagos. Sin trucos.
         </div>
         <div
           style={{
@@ -59,16 +80,19 @@ export default function OgImage() {
             gap: 16,
           }}
         >
-          {["4 plantillas", "Colores personalizados", "PDF instantáneo"].map((label) => (
+          {["4 plantillas", "Formato Harvard y ATS", "PDF instantáneo"].map((label) => (
             <div
               key={label}
               style={{
-                background: "#1d4ed8",
-                color: "#fff",
-                borderRadius: 8,
-                padding: "10px 20px",
-                fontSize: 18,
-                fontWeight: 600,
+                display: "flex",
+                background: "#fbf7ec",
+                color: "#24211c",
+                borderRadius: 10,
+                padding: "12px 22px",
+                fontSize: 20,
+                fontWeight: 700,
+                border: "3px solid #24211c",
+                boxShadow: "4px 4px 0 #8a4b2a",
               }}
             >
               {label}

@@ -21,7 +21,8 @@ import { SITE_URL } from "@/lib/seo"
 
 const JSON_LD = {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
+  "@id": `${SITE_URL}/#app`,
+  "@type": ["SoftwareApplication", "WebApplication"],
   name: "Curriculum Gratis",
   url: SITE_URL,
   description:
@@ -43,7 +44,7 @@ const JSON_LD = {
     "Sin registro ni cuenta",
     "Datos guardados en tu navegador",
   ],
-  inLanguage: "es",
+  inLanguage: "es-CL",
 }
 
 const FAQ_JSON_LD = {

@@ -13,20 +13,23 @@ const DESCRIPTION =
 
 const ORGANIZATION_JSON_LD = {
   "@context": "https://schema.org",
+  "@id": `${SITE_URL}/#organization`,
   ...ORGANIZATION,
 }
 
 const WEBSITE_JSON_LD = {
   "@context": "https://schema.org",
+  "@id": `${SITE_URL}/#website`,
   "@type": "WebSite",
   name: SITE_NAME,
   url: SITE_URL,
   inLanguage: "es-CL",
-  publisher: ORGANIZATION,
+  publisher: { "@id": `${SITE_URL}/#organization` },
 }
 
 const SOFTWARE_JSON_LD = {
   "@context": "https://schema.org",
+  "@id": `${SITE_URL}/#app`,
   "@type": "SoftwareApplication",
   name: "Curriculum Gratis",
   url: SITE_URL,
@@ -34,6 +37,7 @@ const SOFTWARE_JSON_LD = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   offers: { "@type": "Offer", price: "0", priceCurrency: "CLP" },
+  inLanguage: "es-CL",
   description: DESCRIPTION,
 }
 
@@ -90,7 +94,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="es-CL" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <ClerkProvider>
           <Script id="tema-inicial" strategy="beforeInteractive">

@@ -164,8 +164,8 @@ Regla visual:
 - `src/app/formato-cv-harvard/page.tsx`: pagina SEO formato Harvard.
 - `src/app/sitemap.ts`: sitemap.
 - `src/app/robots.ts`: robots.
-- `src/app/opengraph-image.tsx`: OG image generada.
-- `src/app/icon.tsx`: favicon generado con monograma `CV`, fondo acento, borde y sombra solida del estilo de paneles del sitio.
+- `src/app/opengraph-image.tsx`: OG image generada con paleta de marca (terracota), monograma `CV` y estilo de paneles (borde + sombra solida) del sitio.
+- Favicons estaticos en `public/` (`favicon.ico`, `favicon-48x48.png`, `logo-180.png`, `logo-512.png`) declarados en `layout.tsx`. No hay `src/app/icon.tsx` generado.
 
 Roles SEO actuales:
 
