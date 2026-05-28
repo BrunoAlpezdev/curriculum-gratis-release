@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import Script from "next/script"
-import { ClerkProvider } from "@clerk/nextjs"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { JsonLd } from "@/components/seo/JsonLd"
@@ -96,17 +95,15 @@ export default function RootLayout({
   return (
     <html lang="es-CL" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <ClerkProvider>
-          <Script id="tema-inicial" strategy="beforeInteractive">
-            {`(function(){try{var t=localStorage.getItem("tema");var d=t==="oscuro"||(t!=="claro"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}})()`}
-          </Script>
-          <JsonLd data={ORGANIZATION_JSON_LD} />
-          <JsonLd data={WEBSITE_JSON_LD} />
-          <JsonLd data={SOFTWARE_JSON_LD} />
-          {children}
-          <Analytics />
-          <SpeedInsights />
-        </ClerkProvider>
+        <Script id="tema-inicial" strategy="beforeInteractive">
+          {`(function(){try{var t=localStorage.getItem("tema");var d=t==="oscuro"||(t!=="claro"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}})()`}
+        </Script>
+        <JsonLd data={ORGANIZATION_JSON_LD} />
+        <JsonLd data={WEBSITE_JSON_LD} />
+        <JsonLd data={SOFTWARE_JSON_LD} />
+        {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

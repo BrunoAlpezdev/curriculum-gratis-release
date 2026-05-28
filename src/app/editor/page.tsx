@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { ClerkProvider } from "@clerk/nextjs"
 import { AplicarPlantillaUrl } from "@/editor/AplicarPlantillaUrl"
 import { Editor } from "@/editor/Editor"
 
@@ -14,9 +15,11 @@ export const metadata: Metadata = {
 
 export default function EditorPage() {
   return (
-    <main aria-label="Editor de curriculum vitae gratis">
-      <AplicarPlantillaUrl />
-      <Editor />
-    </main>
+    <ClerkProvider>
+      <main aria-label="Editor de curriculum vitae gratis">
+        <AplicarPlantillaUrl />
+        <Editor />
+      </main>
+    </ClerkProvider>
   )
 }
