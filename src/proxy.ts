@@ -9,6 +9,7 @@ export const config = {
   matcher: [
     "/editor/:path*",
     "/editor",
+    "/legacy/:path*",
     "/(api|trpc)(.*)",
     "/__clerk/(.*)",
   ],

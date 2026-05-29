@@ -5,6 +5,7 @@ export interface DatosPersonales {
   titulo: string
   email: string
   telefono: string
+  rut: string
   ubicacion: string
   linkedin: string
   github: string

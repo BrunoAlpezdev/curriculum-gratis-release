@@ -132,6 +132,7 @@ export function normalizarDatosCurriculum(valor: unknown): DatosCurriculum {
       titulo: texto(datosPersonales.titulo),
       email: texto(datosPersonales.email),
       telefono: texto(datosPersonales.telefono),
+      rut: texto(datosPersonales.rut),
       ubicacion: texto(datosPersonales.ubicacion),
       linkedin: texto(datosPersonales.linkedin),
       github: texto(datosPersonales.github),

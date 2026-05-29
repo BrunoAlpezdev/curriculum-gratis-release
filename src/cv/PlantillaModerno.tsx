@@ -2,6 +2,7 @@ import {
   EnvelopeSimpleIcon,
   PhoneIcon,
   MapPinIcon,
+  IdentificationCardIcon,
   BriefcaseIcon,
   GraduationCapIcon,
   LightningIcon,
@@ -249,6 +250,12 @@ export function PlantillaModerno({ datos, personalizacion }: Props) {
             <div className="flex items-center gap-1.5">
               <PhoneIcon size={12} />
               <span>{dp.telefono}</span>
+            </div>
+          )}
+          {dp.rut && (
+            <div className="flex items-center gap-1.5">
+              <IdentificationCardIcon size={12} />
+              <span>RUT {dp.rut}</span>
             </div>
           )}
           {dp.ubicacion && (

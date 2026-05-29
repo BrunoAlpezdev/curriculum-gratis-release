@@ -142,7 +142,7 @@ function cvTxt(datos: DatosCurriculum, personalizacion: Personalizacion): string
   const lineas = [
     dp.nombreCompleto || "Curriculum Vitae",
     dp.titulo,
-    limpiar([dp.email, dp.telefono, dp.ubicacion]).join(" | "),
+    limpiar([dp.email, dp.telefono, dp.rut ? `RUT ${dp.rut}` : "", dp.ubicacion]).join(" | "),
     dp.linkedin,
     dp.github,
     dp.sitioWeb,
@@ -159,7 +159,7 @@ function cvMd(datos: DatosCurriculum, personalizacion: Personalizacion): string 
   const lineas = [
     `# ${dp.nombreCompleto || "Curriculum Vitae"}`,
     dp.titulo,
-    limpiar([dp.email, dp.telefono, dp.ubicacion]).join(" | "),
+    limpiar([dp.email, dp.telefono, dp.rut ? `RUT ${dp.rut}` : "", dp.ubicacion]).join(" | "),
     dp.linkedin,
     dp.github,
     dp.sitioWeb,

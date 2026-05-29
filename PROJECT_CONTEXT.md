@@ -48,7 +48,8 @@ Promesa actual del producto:
 ## Entrada Principal
 
 - `src/app/page.tsx`: landing principal. Incluye JSON-LD de WebApplication, FAQ y HowTo, bloques SEO/trust, links a paginas SEO y CTA hacia `/editor`.
-- `src/app/editor/page.tsx`: ruta dedicada del editor. No usa header ni footer global; renderiza `AplicarPlantillaUrl` + `Editor` y tiene metadata noindex.
+- `src/app/editor/page.tsx`: ruta principal del editor (default). Renderiza `AplicarPlantillaUrl` + `EditorWizard` (wizard guiado paso a paso). No usa header ni footer global; metadata noindex.
+- `src/app/legacy/editor/page.tsx`: editor clasico (`Editor`, todas las secciones en una vista) conservado en `/legacy/editor` para fallback/comparacion. noindex/nofollow. Cubierto por el middleware Clerk via matcher `/legacy/:path*` en `src/proxy.ts`.
 - `src/app/layout.tsx`: metadata global, tema inicial antes de hidratacion, JSON-LD SoftwareApplication y Vercel Analytics.
 - `src/proxy.ts`: integra `clerkMiddleware()` siguiendo la convencion Next.js 16 `proxy.ts`; no protege rutas todavia.
 - `src/editor/Editor.tsx`: shell client-side del editor dedicado. Controla modo `cv`/`carta`, tab mobile `editar`/`preview`, barra superior, panel de formulario y panel de vista previa.
@@ -89,6 +90,19 @@ Estado persistido actual:
 - `src/editor/FormInfoAdicional.tsx`: disponibilidad y pretensiones de renta.
 - `src/editor/FormAnalisisAts.tsx`: pega una oferta laboral y calcula coincidencia local de keywords contra el CV.
 - `src/editor/PanelFormularioCarta.tsx` y `src/editor/FormCarta.tsx`: formulario de carta de presentacion y generacion IA del cuerpo.
+- `src/editor/campos/Campos*.tsx`: cuerpo de campos de cada seccion, sin chrome de contenedor. Cada `Form*` ahora es un wrapper delgado que envuelve su `Campos*` en `SeccionFormulario` (editor clasico) y exporta tambien sus consejos (`CONSEJOS_*`). El wizard reusa los `Campos*` y los consejos directamente. Fuente unica: no duplicar JSX de campos.
+
+## Editor Wizard (default paso a paso)
+
+Recorrido guiado en `src/editor/wizard/`, montado en `/editor` (default). Mobile-first con layouts dedicados (no solo responsive): un solo preview montado segun viewport.
+
+- `src/editor/wizard/EditorWizard.tsx`: orquestador. Estado `modo` (cv/carta) + `pasoActual`, toggle CV/Carta, reusa `BarraAcciones` arriba y elige shell mobile/desktop via `useEsEscritorio`. Gated por `useHidratado`.
+- `src/editor/wizard/useEditorPasos.tsx`: fuente de verdad de los pasos por modo. CV = Tus datos / Sobre ti / Experiencia / Formacion / Aptitudes / Extras (opcional) / Revisar y descargar. Carta = Tus datos / Tu carta / Revisar. `completo` se deriva del store de forma reactiva para los checks del indice.
+- `src/editor/wizard/WizardMobile.tsx`: una pantalla por paso, barra de progreso, "Ir a un paso" (sheet) y "Ver CV/carta" (overlay full-screen), navegacion fija inferior.
+- `src/editor/wizard/WizardDesktop.tsx`: tres columnas (indice lateral / formulario + navegacion / preview en vivo reusando `PanelVistaPrevia`/`PanelVistaCarta`).
+- `src/editor/wizard/PasoLayout.tsx`, `Consejos.tsx`, `BarraProgreso.tsx`, `BarraNavegacionPasos.tsx`, `StepperIndice.tsx`, `SheetIndice.tsx`, `PreviewOverlay.tsx`, `PasosContenido.tsx` (pasos compuestos), `PasoRevision.tsx` (diseno + calidad + ATS + descarga), `BotonDescargar.tsx`, `useEsEscritorio.ts`.
+
+Nota dev: el socket `.codegraph/daemon.sock` dentro del repo hace panic a Turbopack al procesar `globals.css` (afecta a todo el editor). El build de produccion y `next start` funcionan; para `pnpm dev` hay que detener el daemon de codegraph o mover `.codegraph/` fuera del arbol del proyecto.
 
 ## Preview y Render de Documentos
 

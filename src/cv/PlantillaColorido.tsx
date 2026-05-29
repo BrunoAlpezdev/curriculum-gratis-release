@@ -2,6 +2,7 @@ import {
   EnvelopeSimpleIcon,
   PhoneIcon,
   MapPinIcon,
+  IdentificationCardIcon,
   BriefcaseIcon,
   GraduationCapIcon,
   LightningIcon,
@@ -290,6 +291,12 @@ export function PlantillaColorido({ datos, personalizacion }: Props) {
               <span className="flex items-center gap-1">
                 <PhoneIcon size={12} />
                 {dp.telefono}
+              </span>
+            )}
+            {dp.rut && (
+              <span className="flex items-center gap-1">
+                <IdentificationCardIcon size={12} />
+                RUT {dp.rut}
               </span>
             )}
             {dp.ubicacion && (
