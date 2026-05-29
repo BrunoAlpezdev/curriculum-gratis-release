@@ -127,6 +127,7 @@ export function generarDatosMock(): DatosCurriculum {
       titulo: perfil.titulo,
       email: perfil.email,
       telefono: TELEFONO_MOCK,
+      rut: "12.345.678-9",
       ubicacion: aleatorio(UBICACIONES),
       linkedin: LINKEDIN_MOCK,
       github: "",

@@ -78,7 +78,7 @@ export function crearPdfAts(
     y += 5
   }
 
-  const contacto = [dp.email, dp.telefono, dp.ubicacion].filter(Boolean).join("  |  ")
+  const contacto = [dp.email, dp.telefono, dp.rut ? `RUT ${dp.rut}` : "", dp.ubicacion].filter(Boolean).join("  |  ")
   if (contacto) {
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(9)

@@ -201,6 +201,7 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
         <div className="flex flex-wrap gap-x-4 gap-y-0.5 mt-2 text-[11px] text-zinc-400">
           {dp.email && <span>{dp.email}</span>}
           {dp.telefono && <span>{dp.telefono}</span>}
+          {dp.rut && <span>RUT {dp.rut}</span>}
           {dp.ubicacion && <span>{dp.ubicacion}</span>}
           {dp.linkedin && <span>{dp.linkedin}</span>}
           {dp.github && <span>{dp.github}</span>}

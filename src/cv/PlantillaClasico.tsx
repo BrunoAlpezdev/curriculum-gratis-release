@@ -14,7 +14,7 @@ export function PlantillaClasico({ datos, personalizacion }: Props) {
   const { datosPersonales: dp } = datos
   const e = etiquetasCv(personalizacion.idiomaCv)
   const orden = personalizacion.ordenSecciones ?? ORDEN_SECCIONES_INICIAL
-  const contactos = [dp.email, dp.telefono, dp.ubicacion, dp.linkedin, dp.github, dp.sitioWeb].flatMap((valor) => (
+  const contactos = [dp.email, dp.telefono, dp.rut ? `RUT ${dp.rut}` : "", dp.ubicacion, dp.linkedin, dp.github, dp.sitioWeb].flatMap((valor) => (
     valor ? [valor] : []
   ))
 

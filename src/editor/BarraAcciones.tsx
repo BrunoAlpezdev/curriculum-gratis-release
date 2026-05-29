@@ -263,9 +263,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
           <ArrowCounterClockwiseIcon size={16} />
           Reiniciar
         </Button>
-        <div className="hidden lg:block">
-          <AuthActions compact />
-        </div>
+        <AuthActions compact />
 
         <div ref={menuRef} className="relative">
           <Button

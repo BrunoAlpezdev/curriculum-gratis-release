@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
 import { ClerkProvider } from "@clerk/nextjs"
 import { AplicarPlantillaUrl } from "@/editor/AplicarPlantillaUrl"
-import { Editor } from "@/editor/Editor"
+import { EditorWizard } from "@/editor/wizard/EditorWizard"
 
 export const metadata: Metadata = {
   title: "Editor de CV Gratis",
-  description: "Editor dedicado para crear, revisar y descargar tu curriculum vitae gratis.",
+  description: "Editor guiado paso a paso para crear, revisar y descargar tu curriculum vitae gratis.",
   alternates: { canonical: "/editor" },
   robots: {
     index: false,
@@ -18,7 +18,7 @@ export default function EditorPage() {
     <ClerkProvider>
       <main aria-label="Editor de curriculum vitae gratis">
         <AplicarPlantillaUrl />
-        <Editor />
+        <EditorWizard />
       </main>
     </ClerkProvider>
   )

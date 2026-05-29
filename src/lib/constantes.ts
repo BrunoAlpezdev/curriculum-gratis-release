@@ -96,6 +96,7 @@ export const DATOS_INICIALES: DatosCurriculum = {
     titulo: "",
     email: "",
     telefono: "",
+    rut: "",
     ubicacion: "",
     linkedin: "",
     github: "",
