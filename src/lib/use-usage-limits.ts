@@ -15,35 +15,30 @@ export interface UsageResponse {
   limits: Record<UsageFeature, UsageCounter>
 }
 
+// Los contadores de uso son informativos: si fallan nunca deben bloquear el editor.
+async function fetchUsage(): Promise<UsageResponse | null> {
+  try {
+    const response = await fetch("/api/usage", { cache: "no-store" })
+    if (!response.ok) return null
+    return await response.json() as UsageResponse
+  } catch {
+    return null
+  }
+}
+
 export function useUsageLimits() {
   const [usage, setUsage] = useState<UsageResponse | null>(null)
 
   const refresh = useCallback(async () => {
-    try {
-      const response = await fetch("/api/usage", { cache: "no-store" })
-      if (!response.ok) return
-      const body = await response.json() as UsageResponse
-      setUsage(body)
-    } catch {
-      // Usage counters are informative; never block the editor if they fail.
-    }
+    const body = await fetchUsage()
+    if (body) setUsage(body)
   }, [])
 
   useEffect(() => {
     let cancelado = false
-
-    async function cargar() {
-      try {
-        const response = await fetch("/api/usage", { cache: "no-store" })
-        if (!response.ok || cancelado) return
-        const body = await response.json() as UsageResponse
-        if (!cancelado) setUsage(body)
-      } catch {
-        // Usage counters are informative; never block the editor if they fail.
-      }
-    }
-
-    void cargar()
+    void fetchUsage().then((body) => {
+      if (body && !cancelado) setUsage(body)
+    })
     return () => {
       cancelado = true
     }

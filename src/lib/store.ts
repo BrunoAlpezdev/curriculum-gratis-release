@@ -348,14 +348,16 @@ export const useCurriculumStore = create<CurriculumStore>()(
       name: "curriculum-gratis",
       merge: (persisted, current) => {
         const estado = persisted as Record<string, unknown> | undefined
+        /* Tomamos solo las claves de estado conocidas (datos/personalizacion/carta),
+           sin hacer spread de `estado` completo: un localStorage manipulado no debe
+           poder inyectar claves arbitrarias al store. */
         return {
           ...current,
-          ...estado,
           datos: normalizarDatosCurriculum(estado?.datos),
           personalizacion: normalizarPersonalizacion(estado?.personalizacion),
           carta: {
             ...CARTA_INICIAL,
-            ...(estado?.carta as object),
+            ...(estado?.carta && typeof estado.carta === "object" ? estado.carta : {}),
           },
         } as CurriculumStore
       },

@@ -9,6 +9,18 @@ function emailValido(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
+/* Confirma que el base64 decodifica a un PDF real (cabecera "%PDF-").
+   Sin esto, el endpoint seria un relay capaz de adjuntar contenido arbitrario
+   a correos enviados desde nuestro dominio verificado. */
+function esPdfValido(base64: string): boolean {
+  try {
+    const cabecera = Buffer.from(base64.slice(0, 16), "base64").toString("latin1")
+    return cabecera.startsWith("%PDF-")
+  } catch {
+    return false
+  }
+}
+
 export async function POST(request: Request) {
   const apiKey = process.env.RESEND_API_KEY
   const from = process.env.RESEND_FROM_EMAIL ?? "Curriculum Gratis <no-reply@curriculum-gratis.cl>"
@@ -51,6 +63,9 @@ export async function POST(request: Request) {
   }
   if (!pdfBase64) {
     return Response.json({ error: "Falta el PDF adjunto." }, { status: 400 })
+  }
+  if (!esPdfValido(pdfBase64)) {
+    return Response.json({ error: "El adjunto no es un PDF valido." }, { status: 400 })
   }
 
   const sizeBytes = Math.ceil((pdfBase64.length * 3) / 4)

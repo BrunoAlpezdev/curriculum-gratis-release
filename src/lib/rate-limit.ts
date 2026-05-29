@@ -24,6 +24,22 @@ interface RedisResponse<T> {
 }
 
 const memoria = new Map<string, { count: number; resetAt: number }>()
+/* Cuando el Map crece mucho purgamos las entradas vencidas para no acumular
+   memoria indefinidamente en runtimes de larga vida (en serverless el proceso
+   es efimero, pero no debemos asumir el entorno de ejecucion). */
+const LIMITE_PURGA_MEMORIA = 5000
+
+let avisoRedisEmitido = false
+
+function avisarRedisFaltante() {
+  if (avisoRedisEmitido || process.env.NODE_ENV !== "production") return
+  avisoRedisEmitido = true
+  console.warn(
+    "[rate-limit] Redis no configurado en produccion (UPSTASH_REDIS_REST_URL/KV_REST_API_URL): " +
+      "los limites caen a memoria por-instancia y son evadibles entre instancias serverless. " +
+      "Configura Redis para proteger las API keys de Gemini/Resend.",
+  )
+}
 
 function obtenerRedisConfig() {
   const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL
@@ -33,10 +49,14 @@ function obtenerRedisConfig() {
 }
 
 function obtenerIp(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for")
-  const realIp = request.headers.get("x-real-ip")
+  /* Preferimos cabeceras que fija la infraestructura (cf-connecting-ip, x-real-ip),
+     que el cliente no puede falsificar. x-forwarded-for queda de ultimo recurso
+     porque su primer valor es manipulable por quien hace la peticion: confiar en
+     el primer token permitia rotar la IP y evadir el limite anonimo. */
   const cloudflareIp = request.headers.get("cf-connecting-ip")
-  return forwarded?.split(",")[0]?.trim() || realIp || cloudflareIp || "unknown"
+  const realIp = request.headers.get("x-real-ip")
+  const forwarded = request.headers.get("x-forwarded-for")
+  return cloudflareIp || realIp || forwarded?.split(",")[0]?.trim() || "unknown"
 }
 
 function crearClave(namespace: string, request: Request, identity?: RateLimitConfig["identity"]): string {
@@ -69,8 +89,16 @@ function crearStatus(limit: number, used: number, resetSeconds: number): RateLim
   }
 }
 
+function purgarMemoriaVencida(ahora: number) {
+  if (memoria.size <= LIMITE_PURGA_MEMORIA) return
+  for (const [clave, valor] of memoria) {
+    if (valor.resetAt <= ahora) memoria.delete(clave)
+  }
+}
+
 function limitarEnMemoria(key: string, config: RateLimitConfig): Response | null {
   const ahora = Date.now()
+  purgarMemoriaVencida(ahora)
   const resetAt = ahora + config.windowSeconds * 1000
   const actual = memoria.get(key)
 
@@ -104,6 +132,7 @@ export async function obtenerRateLimitStatus(request: Request, config: RateLimit
   const key = crearClave(config.namespace, request, config.identity)
   const redis = obtenerRedisConfig()
   if (!redis) {
+    avisarRedisFaltante()
     const actual = memoria.get(key)
     if (!actual || actual.resetAt <= Date.now()) return crearStatus(config.limit, 0, config.windowSeconds)
     return crearStatus(config.limit, actual.count, Math.max(1, Math.ceil((actual.resetAt - Date.now()) / 1000)))
@@ -124,13 +153,28 @@ export async function obtenerRateLimitStatus(request: Request, config: RateLimit
 export async function verificarRateLimit(request: Request, config: RateLimitConfig): Promise<Response | null> {
   const key = crearClave(config.namespace, request, config.identity)
   const redis = obtenerRedisConfig()
-  if (!redis) return limitarEnMemoria(key, config)
+  if (!redis) {
+    avisarRedisFaltante()
+    return limitarEnMemoria(key, config)
+  }
 
   const encodedKey = encodeURIComponent(key)
-  const count = await comandoRedis<number>(`${redis.url}/incr/${encodedKey}`, redis.token)
 
+  /* SET key 1 EX <win> NX: crea la clave con TTL de forma atomica, solo si no
+     existe. Garantiza que toda ventana arranque con expiracion — antes el
+     EXPIRE iba en una operacion aparte y, si fallaba, la clave quedaba sin TTL
+     y bloqueaba al usuario de forma permanente. */
+  const creada = await comandoRedis<string>(
+    `${redis.url}/set/${encodedKey}/1/EX/${config.windowSeconds}/NX`,
+    redis.token,
+  )
+  if (creada === "OK") return null
+
+  const count = await comandoRedis<number>(`${redis.url}/incr/${encodedKey}`, redis.token)
   if (typeof count !== "number") return limitarEnMemoria(key, config)
 
+  /* Carrera improbable: la clave expiro entre el SET NX y el INCR, asi que el
+     INCR la recreo sin TTL. Le ponemos expiracion para no dejarla huerfana. */
   if (count === 1) {
     await comandoRedis<number>(`${redis.url}/expire/${encodedKey}/${config.windowSeconds}`, redis.token)
   }

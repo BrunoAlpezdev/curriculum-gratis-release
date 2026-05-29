@@ -31,10 +31,14 @@ function normalizar(texto: string): string {
     .trim()
 }
 
-function tokenizar(texto: string): string[] {
-  return normalizar(texto)
+function filtrarTokens(textoNormalizado: string): string[] {
+  return textoNormalizado
     .split(/\s+/)
     .filter((t) => t.length >= 3 && !STOPWORDS.has(t) && !/^\d+$/.test(t))
+}
+
+function tokenizar(texto: string): string[] {
+  return filtrarTokens(normalizar(texto))
 }
 
 export interface PalabraClave {
@@ -98,8 +102,10 @@ export function analizar(jobDescription: string, datos: DatosCurriculum): Result
     frecuencias.set(t, (frecuencias.get(t) ?? 0) + 1)
   }
 
+  /* Construimos y normalizamos el texto del CV una sola vez: esto corre en cada
+     tecla del textarea de la oferta (useMemo), asi que evitamos el doble trabajo. */
   const cvNormalizado = normalizar(textoCv(datos))
-  const cvTokens = new Set(tokenizar(textoCv(datos)))
+  const cvTokens = new Set(filtrarTokens(cvNormalizado))
 
   const palabras: PalabraClave[] = Array.from(frecuencias.entries())
     .map(([palabra, frecuencia]) => ({

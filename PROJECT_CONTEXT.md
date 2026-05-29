@@ -248,6 +248,10 @@ Features que pueden seguir frontend-only:
 - `pnpm lint`: ESLint.
 - `pnpm build`: build de produccion.
 - `pnpm start`: servir build.
+- `pnpm test`: tests unitarios (Vitest, ejecucion unica).
+- `pnpm test:watch`: Vitest en modo watch.
+
+Tests en `src/lib/*.test.ts` (config en `vitest.config.ts`, entorno Node, alias `@`). Cubren funciones puras de riesgo: `analisis-ats`, `importar-exportar` (validacion de entrada no confiable) y `rate-limit` (fallback en memoria).
 
 ## Criterio de Priorizacion Actual
 
