@@ -26,6 +26,9 @@ export function CamposProyectos() {
         <EntradaRepetible
           key={proyecto.id}
           onEliminar={() => eliminar(proyecto.id)}
+          confirmarEliminar={
+            !!(proyecto.nombre || proyecto.descripcion || proyecto.url || proyecto.tecnologias)
+          }
         >
           <Input
             label="Nombre del proyecto"

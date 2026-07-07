@@ -25,7 +25,13 @@ export function CamposEducacion() {
   return (
     <>
       {educacion.map((edu) => (
-        <EntradaRepetible key={edu.id} onEliminar={() => eliminar(edu.id)}>
+        <EntradaRepetible
+          key={edu.id}
+          onEliminar={() => eliminar(edu.id)}
+          confirmarEliminar={
+            !!(edu.institucion || edu.titulo || edu.fechaInicio || edu.descripcion)
+          }
+        >
           <Input
             label="Institución"
             placeholder="Universidad de Chile"

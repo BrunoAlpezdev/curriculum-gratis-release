@@ -27,6 +27,7 @@ export function CamposCursos() {
         <EntradaRepetible
           key={curso.id}
           onEliminar={() => eliminar(curso.id)}
+          confirmarEliminar={!!(curso.nombre || curso.institucion || curso.fecha || curso.url)}
         >
           <Input
             label="Nombre del curso"

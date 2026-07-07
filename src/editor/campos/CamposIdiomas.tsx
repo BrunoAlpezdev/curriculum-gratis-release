@@ -28,6 +28,7 @@ export function CamposIdiomas() {
         <EntradaRepetible
           key={idioma.id}
           onEliminar={() => eliminar(idioma.id)}
+          confirmarEliminar={!!idioma.nombre.trim()}
         >
           <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3">
             <Input

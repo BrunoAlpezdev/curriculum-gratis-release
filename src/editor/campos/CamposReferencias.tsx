@@ -25,6 +25,9 @@ export function CamposReferencias() {
         <EntradaRepetible
           key={ref.id}
           onEliminar={() => eliminar(ref.id)}
+          confirmarEliminar={
+            !!(ref.nombre || ref.cargo || ref.empresa || ref.email || ref.telefono || ref.relacion)
+          }
         >
           <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3">
             <Input

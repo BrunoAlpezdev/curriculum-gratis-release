@@ -25,7 +25,13 @@ export function CamposExperiencia() {
   return (
     <>
       {experiencia.map((exp) => (
-        <EntradaRepetible key={exp.id} onEliminar={() => eliminar(exp.id)}>
+        <EntradaRepetible
+          key={exp.id}
+          onEliminar={() => eliminar(exp.id)}
+          confirmarEliminar={
+            !!(exp.empresa || exp.cargo || exp.ubicacion || exp.fechaInicio || exp.descripcion || exp.logros)
+          }
+        >
           <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3">
             <Input
               label="Empresa"
