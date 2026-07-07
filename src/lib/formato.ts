@@ -45,6 +45,16 @@ export function nombreMes(mes: string, idioma: IdiomaCv | undefined): string {
   return encontrado?.etiquetas[idioma ?? "es"] ?? mes
 }
 
+/** Normaliza un valor a URL absoluta usable en href / textWithLink.
+ *  Deja pasar http(s)/mailto/tel; agrega mailto: a emails; si no, https://. */
+export function urlAbsoluta(valor: string): string {
+  const v = valor.trim()
+  if (!v) return v
+  if (/^(https?:|mailto:|tel:)/i.test(v)) return v
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return `mailto:${v}`
+  return `https://${v.replace(/^\/+/, "")}`
+}
+
 export function formatearFecha(fecha: string | null, idioma?: IdiomaCv): string {
   if (!fecha) return etiquetaPresente(idioma)
 

@@ -44,6 +44,7 @@ export function escribirTituloConFecha(
   fecha: string,
   y: number,
   fuenteBase: string,
+  urlFecha?: string,
 ): number {
   pdf.setFont(fuenteBase, "normal")
   pdf.setFontSize(9)
@@ -62,7 +63,12 @@ export function escribirTituloConFecha(
       pdf.setFont(fuenteBase, "normal")
       pdf.setFontSize(9)
       pdf.setTextColor(113, 113, 122)
-      pdf.text(fecha, PAGE_WIDTH - MARGIN, y, { align: "right" })
+      if (urlFecha) {
+        const xFecha = PAGE_WIDTH - MARGIN - pdf.getTextWidth(fecha)
+        pdf.textWithLink(fecha, xFecha, y, { url: urlFecha })
+      } else {
+        pdf.text(fecha, PAGE_WIDTH - MARGIN, y, { align: "right" })
+      }
     }
     pdf.setFont(fuenteBase, "bold")
     pdf.setFontSize(10)
@@ -72,6 +78,36 @@ export function escribirTituloConFecha(
   })
 
   return y
+}
+
+/* Dibuja una linea de segmentos centrada horizontalmente, donde los segmentos
+   con `url` se renderizan como enlaces clickeables (textWithLink) y el resto
+   como texto plano. Usa la fuente/tamano/color ya activos en el pdf. */
+export function escribirLineaEnlacesCentrada(
+  pdf: jsPDF,
+  segmentos: { texto: string; url?: string }[],
+  y: number,
+): void {
+  const visibles = segmentos.filter((s) => s.texto)
+  if (visibles.length === 0) return
+  const SEP = "  |  "
+  const anchoSep = pdf.getTextWidth(SEP)
+  const anchos = visibles.map((s) => pdf.getTextWidth(s.texto))
+  const total =
+    anchos.reduce((a, b) => a + b, 0) + anchoSep * (visibles.length - 1)
+  let x = PAGE_WIDTH / 2 - total / 2
+  visibles.forEach((seg, i) => {
+    if (seg.url) {
+      pdf.textWithLink(seg.texto, x, y, { url: seg.url })
+    } else {
+      pdf.text(seg.texto, x, y)
+    }
+    x += anchos[i]!
+    if (i < visibles.length - 1) {
+      pdf.text(SEP, x, y)
+      x += anchoSep
+    }
+  })
 }
 
 export function hexToRgb(hex: string): PdfColor {

@@ -1,6 +1,6 @@
 import type { DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types"
 import { getColorHex } from "@/lib/colores"
-import { formatearRangoFechas, formatearFechaEducacion, formatearFecha } from "@/lib/formato"
+import { formatearRangoFechas, formatearFechaEducacion, formatearFecha, urlAbsoluta } from "@/lib/formato"
 import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 
@@ -14,9 +14,15 @@ export function PlantillaClasico({ datos, personalizacion }: Props) {
   const { datosPersonales: dp } = datos
   const e = etiquetasCv(personalizacion.idiomaCv)
   const orden = personalizacion.ordenSecciones ?? ORDEN_SECCIONES_INICIAL
-  const contactos = [dp.email, dp.telefono, dp.rut ? `RUT ${dp.rut}` : "", dp.ubicacion, dp.linkedin, dp.github, dp.sitioWeb].flatMap((valor) => (
-    valor ? [valor] : []
-  ))
+  const contactos: { texto: string; url?: string }[] = [
+    { texto: dp.email, url: dp.email ? urlAbsoluta(dp.email) : undefined },
+    { texto: dp.telefono },
+    { texto: dp.rut ? `RUT ${dp.rut}` : "" },
+    { texto: dp.ubicacion },
+    { texto: dp.linkedin, url: dp.linkedin ? urlAbsoluta(dp.linkedin) : undefined },
+    { texto: dp.github, url: dp.github ? urlAbsoluta(dp.github) : undefined },
+    { texto: dp.sitioWeb, url: dp.sitioWeb ? urlAbsoluta(dp.sitioWeb) : undefined },
+  ].filter((c) => c.texto)
 
   const tituloClasses = "text-[12px] font-bold uppercase tracking-wider mb-1.5 pb-0.5 border-b"
 
@@ -99,7 +105,9 @@ export function PlantillaClasico({ datos, personalizacion }: Props) {
                 )}
               </div>
               {curso.url && (
-                <p className="text-[11px] text-zinc-500 italic">{curso.url}</p>
+                <p className="text-[11px] text-zinc-500 italic">
+                  <a href={urlAbsoluta(curso.url)} target="_blank" rel="noopener noreferrer">{curso.url}</a>
+                </p>
               )}
             </div>
           ))}
@@ -120,7 +128,7 @@ export function PlantillaClasico({ datos, personalizacion }: Props) {
                 </h3>
                 {p.url && (
                   <span className="text-[11px] text-zinc-500 italic shrink-0 ml-2">
-                    {p.url}
+                    <a href={urlAbsoluta(p.url)} target="_blank" rel="noopener noreferrer">{p.url}</a>
                   </span>
                 )}
               </div>
@@ -212,9 +220,13 @@ export function PlantillaClasico({ datos, personalizacion }: Props) {
           <p className="text-[13px] text-zinc-600 mt-0.5">{dp.titulo}</p>
         )}
         <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5 mt-2 text-zinc-500 text-[11px]">
-          {contactos.map((valor, i) => (
-            <span key={valor} className="flex items-center gap-3">
-              <span>{valor}</span>
+          {contactos.map((c, i) => (
+            <span key={c.texto} className="flex items-center gap-3">
+              {c.url ? (
+                <a href={c.url} target="_blank" rel="noopener noreferrer">{c.texto}</a>
+              ) : (
+                <span>{c.texto}</span>
+              )}
               {i < contactos.length - 1 && <span>|</span>}
             </span>
           ))}

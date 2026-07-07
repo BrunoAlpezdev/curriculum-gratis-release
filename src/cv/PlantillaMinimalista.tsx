@@ -1,6 +1,6 @@
 import type { DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types"
 import { getColorHex } from "@/lib/colores"
-import { formatearRangoFechas, formatearFechaEducacion, formatearFecha } from "@/lib/formato"
+import { formatearRangoFechas, formatearFechaEducacion, formatearFecha, urlAbsoluta } from "@/lib/formato"
 import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 
@@ -91,7 +91,9 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
                 )}
               </div>
               {curso.url && (
-                <p className="text-[11px] text-zinc-400">{curso.url}</p>
+                <p className="text-[11px] text-zinc-400">
+                  <a href={urlAbsoluta(curso.url)} target="_blank" rel="noopener noreferrer">{curso.url}</a>
+                </p>
               )}
             </div>
           ))}
@@ -110,7 +112,7 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
                 </span>
                 {p.url && (
                   <span className="text-[11px] text-zinc-400 shrink-0 ml-2">
-                    {p.url}
+                    <a href={urlAbsoluta(p.url)} target="_blank" rel="noopener noreferrer">{p.url}</a>
                   </span>
                 )}
               </div>
@@ -199,13 +201,13 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
           </p>
         )}
         <div className="flex flex-wrap gap-x-4 gap-y-0.5 mt-2 text-[11px] text-zinc-400">
-          {dp.email && <span>{dp.email}</span>}
+          {dp.email && <a href={urlAbsoluta(dp.email)} target="_blank" rel="noopener noreferrer">{dp.email}</a>}
           {dp.telefono && <span>{dp.telefono}</span>}
           {dp.rut && <span>RUT {dp.rut}</span>}
           {dp.ubicacion && <span>{dp.ubicacion}</span>}
-          {dp.linkedin && <span>{dp.linkedin}</span>}
-          {dp.github && <span>{dp.github}</span>}
-          {dp.sitioWeb && <span>{dp.sitioWeb}</span>}
+          {dp.linkedin && <a href={urlAbsoluta(dp.linkedin)} target="_blank" rel="noopener noreferrer">{dp.linkedin}</a>}
+          {dp.github && <a href={urlAbsoluta(dp.github)} target="_blank" rel="noopener noreferrer">{dp.github}</a>}
+          {dp.sitioWeb && <a href={urlAbsoluta(dp.sitioWeb)} target="_blank" rel="noopener noreferrer">{dp.sitioWeb}</a>}
         </div>
         <div className="mt-3 h-px bg-zinc-200" />
       </div>

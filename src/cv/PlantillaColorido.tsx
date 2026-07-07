@@ -17,7 +17,7 @@ import {
 } from "@phosphor-icons/react"
 import type { DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types"
 import { getColorHex, getColorClaro } from "@/lib/colores"
-import { formatearRangoFechas, formatearFechaEducacion, formatearFecha } from "@/lib/formato"
+import { formatearRangoFechas, formatearFechaEducacion, formatearFecha, urlAbsoluta } from "@/lib/formato"
 import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 
@@ -130,7 +130,7 @@ export function PlantillaColorido({ datos, personalizacion }: Props) {
               )}
               {curso.url && (
                 <p className="text-[11px] font-medium" style={{ color }}>
-                  {curso.url}
+                  <a href={urlAbsoluta(curso.url)} target="_blank" rel="noopener noreferrer">{curso.url}</a>
                 </p>
               )}
             </div>
@@ -155,7 +155,7 @@ export function PlantillaColorido({ datos, personalizacion }: Props) {
                 </h3>
                 {p.url && (
                   <span className="text-[11px] font-medium shrink-0 ml-2" style={{ color }}>
-                    {p.url}
+                    <a href={urlAbsoluta(p.url)} target="_blank" rel="noopener noreferrer">{p.url}</a>
                   </span>
                 )}
               </div>
@@ -284,7 +284,7 @@ export function PlantillaColorido({ datos, personalizacion }: Props) {
             {dp.email && (
               <span className="flex items-center gap-1">
                 <EnvelopeSimpleIcon size={12} />
-                {dp.email}
+                <a href={urlAbsoluta(dp.email)} target="_blank" rel="noopener noreferrer">{dp.email}</a>
               </span>
             )}
             {dp.telefono && (
@@ -308,19 +308,19 @@ export function PlantillaColorido({ datos, personalizacion }: Props) {
             {dp.linkedin && (
               <span className="flex items-center gap-1">
                 <LinkedinLogoIcon size={12} />
-                {dp.linkedin}
+                <a href={urlAbsoluta(dp.linkedin)} target="_blank" rel="noopener noreferrer">{dp.linkedin}</a>
               </span>
             )}
             {dp.github && (
               <span className="flex items-center gap-1">
                 <GithubLogoIcon size={12} />
-                {dp.github}
+                <a href={urlAbsoluta(dp.github)} target="_blank" rel="noopener noreferrer">{dp.github}</a>
               </span>
             )}
             {dp.sitioWeb && (
               <span className="flex items-center gap-1">
                 <GlobeIcon size={12} />
-                {dp.sitioWeb}
+                <a href={urlAbsoluta(dp.sitioWeb)} target="_blank" rel="noopener noreferrer">{dp.sitioWeb}</a>
               </span>
             )}
           </div>

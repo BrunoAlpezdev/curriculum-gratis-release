@@ -1,7 +1,8 @@
 import { jsPDF } from "jspdf"
 import type { Carta, DatosCurriculum, Personalizacion } from "@/types"
 import { getColorHex } from "@/lib/colores"
-import { FUENTES } from "@/lib/constantes"
+import { urlAbsoluta } from "@/lib/formato"
+import { registrarFuentePdf } from "@/lib/fuentes-pdf"
 import { hexToRgb } from "@/lib/generar-pdf-ats-helpers"
 
 const MARGIN = 25
@@ -9,15 +10,14 @@ const PAGE_WIDTH = 210
 const PAGE_HEIGHT = 297
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN * 2
 
-export function generarPdfCarta(
+export async function generarPdfCarta(
   datos: DatosCurriculum,
   carta: Carta,
   personalizacion: Personalizacion,
 ) {
   const color = hexToRgb(getColorHex(personalizacion.color))
-  const fuenteBase =
-    FUENTES.find((f) => f.valor === personalizacion.fuente)?.jsPdf ?? "helvetica"
   const pdf = new jsPDF("p", "mm", "a4")
+  const fuenteBase = await registrarFuentePdf(pdf, personalizacion.fuente)
   let y = MARGIN
 
   const dp = datos.datosPersonales
@@ -48,16 +48,34 @@ export function generarPdfCarta(
     y += 4
   }
 
-  const contacto = [dp.email, dp.telefono, dp.ubicacion, dp.linkedin]
-    .filter(Boolean)
-    .join("  ·  ")
-  if (contacto) {
+  const segmentos = [
+    { texto: dp.email, url: dp.email ? urlAbsoluta(dp.email) : undefined },
+    { texto: dp.telefono },
+    { texto: dp.ubicacion },
+    { texto: dp.linkedin, url: dp.linkedin ? urlAbsoluta(dp.linkedin) : undefined },
+  ].filter((s) => s.texto)
+  if (segmentos.length > 0) {
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(9)
     setColor(113, 113, 122)
-    const lineas = pdf.splitTextToSize(contacto, CONTENT_WIDTH)
-    pdf.text(lineas, MARGIN, y)
-    y += lineas.length * 4
+    const SEP = "  ·  "
+    const anchoSep = pdf.getTextWidth(SEP)
+    let x = MARGIN
+    segmentos.forEach((seg, i) => {
+      const ancho = pdf.getTextWidth(seg.texto)
+      if (x + ancho > PAGE_WIDTH - MARGIN && x > MARGIN) {
+        x = MARGIN
+        y += 4
+      }
+      if (seg.url) pdf.textWithLink(seg.texto, x, y, { url: seg.url })
+      else pdf.text(seg.texto, x, y)
+      x += ancho
+      if (i < segmentos.length - 1) {
+        pdf.text(SEP, x, y)
+        x += anchoSep
+      }
+    })
+    y += 4
   }
 
   y += 3
@@ -132,6 +150,15 @@ export function generarPdfCarta(
   pdf.setFontSize(11)
   setColor(24, 24, 27)
   pdf.text(dp.nombreCompleto || "Tu Nombre", MARGIN, y)
+
+  const nombreDoc = dp.nombreCompleto || "Tu Nombre"
+  pdf.setProperties({
+    title: `${nombreDoc} - Carta de presentación`,
+    author: nombreDoc,
+    subject: carta.cargoPostulado ?? "",
+    creator: "curriculum-gratis",
+  })
+  pdf.setLanguage(personalizacion.idiomaCv ?? "es")
 
   const nombre = dp.nombreCompleto.trim().replace(/\s+/g, "_") || "carta"
   pdf.save(`${nombre}_carta.pdf`)

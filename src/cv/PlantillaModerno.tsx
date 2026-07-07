@@ -16,7 +16,7 @@ import {
 } from "@phosphor-icons/react"
 import type { DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types"
 import { getColorHex } from "@/lib/colores"
-import { formatearRangoFechas, formatearFechaEducacion, formatearFecha } from "@/lib/formato"
+import { formatearRangoFechas, formatearFechaEducacion, formatearFecha, urlAbsoluta } from "@/lib/formato"
 import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 
@@ -134,7 +134,7 @@ export function PlantillaModerno({ datos, personalizacion }: Props) {
               )}
               {curso.url && (
                 <p className="text-[11px]" style={{ color }}>
-                  {curso.url}
+                  <a href={urlAbsoluta(curso.url)} target="_blank" rel="noopener noreferrer">{curso.url}</a>
                 </p>
               )}
             </div>
@@ -159,7 +159,7 @@ export function PlantillaModerno({ datos, personalizacion }: Props) {
                 </h3>
                 {p.url && (
                   <span className="text-[11px] shrink-0 ml-2" style={{ color }}>
-                    {p.url}
+                    <a href={urlAbsoluta(p.url)} target="_blank" rel="noopener noreferrer">{p.url}</a>
                   </span>
                 )}
               </div>
@@ -243,7 +243,7 @@ export function PlantillaModerno({ datos, personalizacion }: Props) {
           {dp.email && (
             <div className="flex items-center gap-1.5">
               <EnvelopeSimpleIcon size={12} />
-              <span className="break-all">{dp.email}</span>
+              <a className="break-all" href={urlAbsoluta(dp.email)} target="_blank" rel="noopener noreferrer">{dp.email}</a>
             </div>
           )}
           {dp.telefono && (
@@ -267,19 +267,19 @@ export function PlantillaModerno({ datos, personalizacion }: Props) {
           {dp.linkedin && (
             <div className="flex items-center gap-1.5">
               <LinkedinLogoIcon size={12} />
-              <span className="break-all">{dp.linkedin}</span>
+              <a className="break-all" href={urlAbsoluta(dp.linkedin)} target="_blank" rel="noopener noreferrer">{dp.linkedin}</a>
             </div>
           )}
           {dp.github && (
             <div className="flex items-center gap-1.5">
               <GithubLogoIcon size={12} />
-              <span className="break-all">{dp.github}</span>
+              <a className="break-all" href={urlAbsoluta(dp.github)} target="_blank" rel="noopener noreferrer">{dp.github}</a>
             </div>
           )}
           {dp.sitioWeb && (
             <div className="flex items-center gap-1.5">
               <GlobeIcon size={12} />
-              <span className="break-all">{dp.sitioWeb}</span>
+              <a className="break-all" href={urlAbsoluta(dp.sitioWeb)} target="_blank" rel="noopener noreferrer">{dp.sitioWeb}</a>
             </div>
           )}
         </div>

@@ -32,7 +32,7 @@ export function BotonDescargar({ modo, className, size = "lg" }: BotonDescargarP
     try {
       if (modo === "carta") {
         const { generarPdfCarta } = await import("@/lib/generar-pdf-carta")
-        generarPdfCarta(datos, carta, personalizacion)
+        await generarPdfCarta(datos, carta, personalizacion)
       } else {
         const { generarPdf } = await import("@/lib/generar-pdf")
         await generarPdf(datos, personalizacion)

@@ -1,9 +1,10 @@
 import { jsPDF } from "jspdf"
 import type { DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types"
 import { getColorHex } from "@/lib/colores"
-import { formatearRangoFechas, formatearFechaEducacion, formatearFecha } from "@/lib/formato"
-import { FUENTES, ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
+import { formatearRangoFechas, formatearFechaEducacion, formatearFecha, urlAbsoluta } from "@/lib/formato"
+import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
+import { registrarFuentePdf } from "@/lib/fuentes-pdf"
 import {
   CONTENT_WIDTH,
   MARGIN,
@@ -12,24 +13,25 @@ import {
   hexToRgb,
   renderSeccion,
   escribirTituloConFecha,
+  escribirLineaEnlacesCentrada,
 } from "@/lib/generar-pdf-ats-helpers"
 
-export function generarPdfAts(
+export async function generarPdfAts(
   datos: DatosCurriculum,
   personalizacion: Personalizacion,
 ) {
-  const { pdf, nombreArchivo } = crearPdfAts(datos, personalizacion)
+  const { pdf, nombreArchivo } = await crearPdfAts(datos, personalizacion)
   pdf.save(nombreArchivo)
 }
 
-export function crearPdfAts(
+export async function crearPdfAts(
   datos: DatosCurriculum,
   personalizacion: Personalizacion,
 ) {
   const color = hexToRgb(getColorHex(personalizacion.color))
-  const fuenteBase = FUENTES.find((f) => f.valor === personalizacion.fuente)?.jsPdf ?? "helvetica"
   const e = etiquetasCv(personalizacion.idiomaCv)
   const pdf = new jsPDF("p", "mm", "a4")
+  const fuenteBase = await registrarFuentePdf(pdf, personalizacion.fuente)
   let y = MARGIN
 
   function checkPage(needed: number) {
@@ -79,21 +81,28 @@ export function crearPdfAts(
     y += 5
   }
 
-  const contacto = [dp.email, dp.telefono, dp.rut ? `RUT ${dp.rut}` : "", dp.ubicacion].filter(Boolean).join("  |  ")
-  if (contacto) {
+  const contacto = [
+    { texto: dp.email, url: dp.email ? urlAbsoluta(dp.email) : undefined },
+    { texto: dp.telefono },
+    { texto: dp.rut ? `RUT ${dp.rut}` : "" },
+    { texto: dp.ubicacion },
+  ].filter((s) => s.texto)
+  if (contacto.length > 0) {
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(9)
     setMuted()
-    pdf.text(contacto, PAGE_WIDTH / 2, y, { align: "center" })
+    escribirLineaEnlacesCentrada(pdf, contacto, y)
     y += 4
   }
 
-  const enlaces = [dp.linkedin, dp.github, dp.sitioWeb].filter(Boolean).join("  |  ")
-  if (enlaces) {
+  const enlaces = [dp.linkedin, dp.github, dp.sitioWeb]
+    .filter(Boolean)
+    .map((v) => ({ texto: v, url: urlAbsoluta(v) }))
+  if (enlaces.length > 0) {
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(9)
     setMuted()
-    pdf.text(enlaces, PAGE_WIDTH / 2, y, { align: "center" })
+    escribirLineaEnlacesCentrada(pdf, enlaces, y)
     y += 4
   }
 
@@ -192,7 +201,7 @@ export function crearPdfAts(
           pdf.setFont(fuenteBase, "italic")
           pdf.setFontSize(9)
           setMuted()
-          pdf.text(curso.url, MARGIN, y)
+          pdf.textWithLink(curso.url, MARGIN, y, { url: urlAbsoluta(curso.url) })
           y += 4
         }
 
@@ -206,7 +215,14 @@ export function crearPdfAts(
       for (const p of datos.proyectos) {
         checkPage(14)
 
-        y = escribirTituloConFecha(pdf, p.nombre || e.proyecto, p.url ?? "", y, fuenteBase)
+        y = escribirTituloConFecha(
+          pdf,
+          p.nombre || e.proyecto,
+          p.url ?? "",
+          y,
+          fuenteBase,
+          p.url ? urlAbsoluta(p.url) : undefined,
+        )
 
         if (p.tecnologias) {
           pdf.setFont(fuenteBase, "italic")
@@ -351,6 +367,14 @@ export function crearPdfAts(
       y += 4
     }
   }
+
+  pdf.setProperties({
+    title: `${dp.nombreCompleto || e.tuNombre} - CV`,
+    author: dp.nombreCompleto || e.tuNombre,
+    subject: dp.titulo ?? "",
+    creator: "curriculum-gratis",
+  })
+  pdf.setLanguage(personalizacion.idiomaCv ?? "es")
 
   const nombre = dp.nombreCompleto.trim().replace(/\s+/g, "_") || "curriculum"
   return { pdf, nombreArchivo: `${nombre}_CV.pdf` }
