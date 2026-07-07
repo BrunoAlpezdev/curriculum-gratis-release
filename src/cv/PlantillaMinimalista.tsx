@@ -3,6 +3,7 @@ import { getColorHex } from "@/lib/colores"
 import { formatearRangoFechas, formatearFechaEducacion, formatearFecha, urlAbsoluta } from "@/lib/formato"
 import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
+import { TextoRico } from "@/cv/TextoRico"
 
 interface Props {
   datos: DatosCurriculum
@@ -35,10 +36,10 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
                 </span>
               </div>
               {exp.descripcion && (
-                <p className="text-zinc-500 mt-0.5 whitespace-pre-line">{exp.descripcion}</p>
+                <TextoRico texto={exp.descripcion} className="text-zinc-500 mt-0.5" />
               )}
               {exp.logros && (
-                <p className="text-zinc-600 mt-0.5 text-[11px]">{exp.logros}</p>
+                <TextoRico texto={exp.logros} className="text-zinc-600 mt-0.5 text-[11px]" />
               )}
             </div>
           ))}
@@ -120,9 +121,7 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
                 <p className="text-[11px] text-zinc-400">{p.tecnologias}</p>
               )}
               {p.descripcion && (
-                <p className="text-zinc-500 mt-0.5 whitespace-pre-line">
-                  {p.descripcion}
-                </p>
+                <TextoRico texto={p.descripcion} className="text-zinc-500 mt-0.5" />
               )}
             </div>
           ))}
@@ -214,7 +213,7 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
 
       {datos.perfil && (
         <div className="mb-4">
-          <p className="text-zinc-500 whitespace-pre-line">{datos.perfil}</p>
+          <TextoRico texto={datos.perfil} className="text-zinc-500" />
         </div>
       )}
 

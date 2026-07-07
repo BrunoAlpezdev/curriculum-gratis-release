@@ -1,4 +1,5 @@
 import type { jsPDF } from "jspdf"
+import { parsearTextoRico } from "@/lib/texto-rico"
 
 export const MARGIN = 20
 export const PAGE_WIDTH = 210
@@ -138,6 +139,46 @@ export function escribirLineaEnlacesCentrada(
       }
     })
     y += altoLinea
+  }
+  return y
+}
+
+/* Sangria colgante (mm) de las viñetas en el PDF: el glifo va en MARGIN y el
+   texto (incluidos los wraps) en MARGIN + SANGRIA_VINETA. */
+const SANGRIA_VINETA = 4
+
+/* Escribe texto multilinea con viñetas respetando los saltos del usuario, usando
+   el MISMO parseo que el preview. Recibe y, devuelve la nueva y, y aplica
+   checkPage por cada linea dibujada (checkPage devuelve la y posiblemente
+   reiniciada tras un salto de pagina). */
+export function escribirTextoRico(
+  pdf: jsPDF,
+  texto: string,
+  y: number,
+  altoLinea: number,
+  checkPage: (y: number, needed: number) => number,
+): number {
+  for (const linea of parsearTextoRico(texto)) {
+    if (linea.tipo === "parrafo") {
+      if (linea.contenido === "") {
+        y += altoLinea / 2
+        continue
+      }
+      const wrap: string[] = pdf.splitTextToSize(linea.contenido, CONTENT_WIDTH)
+      for (const l of wrap) {
+        y = checkPage(y, altoLinea)
+        pdf.text(l, MARGIN, y)
+        y += altoLinea
+      }
+    } else {
+      const wrap: string[] = pdf.splitTextToSize(linea.contenido, CONTENT_WIDTH - SANGRIA_VINETA)
+      wrap.forEach((l, i) => {
+        y = checkPage(y, altoLinea)
+        if (i === 0) pdf.text("•", MARGIN, y)
+        pdf.text(l, MARGIN + SANGRIA_VINETA, y)
+        y += altoLinea
+      })
+    }
   }
   return y
 }

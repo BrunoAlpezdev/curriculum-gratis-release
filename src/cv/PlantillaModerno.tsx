@@ -19,6 +19,8 @@ import { getColorHex } from "@/lib/colores"
 import { formatearRangoFechas, formatearFechaEducacion, formatearFecha, urlAbsoluta } from "@/lib/formato"
 import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
+import { esTextoSimple } from "@/lib/texto-rico"
+import { TextoRico } from "@/cv/TextoRico"
 
 interface Props {
   datos: DatosCurriculum
@@ -68,13 +70,19 @@ export function PlantillaModerno({ datos, personalizacion }: Props) {
                 {exp.ubicacion && ` · ${exp.ubicacion}`}
               </p>
               {exp.descripcion && (
-                <p className="text-zinc-600 mt-0.5 whitespace-pre-line">{exp.descripcion}</p>
+                <TextoRico texto={exp.descripcion} className="text-zinc-600 mt-0.5" />
               )}
-              {exp.logros && (
-                <p className="mt-0.5 text-[11px]" style={{ color }}>
-                  <span className="font-semibold">{e.logros}: </span>{exp.logros}
-                </p>
-              )}
+              {exp.logros &&
+                (esTextoSimple(exp.logros) ? (
+                  <p className="mt-0.5 text-[11px]" style={{ color }}>
+                    <span className="font-semibold">{e.logros}: </span>{exp.logros}
+                  </p>
+                ) : (
+                  <div className="mt-0.5 text-[11px]" style={{ color }}>
+                    <span className="font-semibold">{e.logros}:</span>
+                    <TextoRico texto={exp.logros} />
+                  </div>
+                ))}
             </div>
           ))}
         </div>
@@ -99,7 +107,7 @@ export function PlantillaModerno({ datos, personalizacion }: Props) {
               </div>
               <p className="text-zinc-500 italic text-[11px]">{edu.institucion || e.institucion}</p>
               {edu.descripcion && (
-                <p className="text-zinc-600 mt-0.5 text-[11px]">{edu.descripcion}</p>
+                <TextoRico texto={edu.descripcion} className="text-zinc-600 mt-0.5 text-[11px]" />
               )}
             </div>
           ))}
@@ -169,9 +177,7 @@ export function PlantillaModerno({ datos, personalizacion }: Props) {
                 </p>
               )}
               {p.descripcion && (
-                <p className="text-zinc-600 mt-0.5 whitespace-pre-line">
-                  {p.descripcion}
-                </p>
+                <TextoRico texto={p.descripcion} className="text-zinc-600 mt-0.5" />
               )}
             </div>
           ))}
@@ -332,7 +338,7 @@ export function PlantillaModerno({ datos, personalizacion }: Props) {
             >
               {e.perfilProfesional}
             </h2>
-            <p className="text-zinc-600 whitespace-pre-line">{datos.perfil}</p>
+            <TextoRico texto={datos.perfil} className="text-zinc-600" />
           </div>
         )}
 

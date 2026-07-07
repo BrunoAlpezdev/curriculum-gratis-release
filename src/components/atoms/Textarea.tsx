@@ -6,11 +6,13 @@ interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string
   error?: string
+  hint?: string
 }
 
 export function Textarea({
   label,
   error,
+  hint,
   className,
   id,
   ...props
@@ -36,6 +38,7 @@ export function Textarea({
         )}
         {...props}
       />
+      {hint && !error && <Text variant="caption">{hint}</Text>}
       {error && <Text variant="caption" className="text-danger">{error}</Text>}
     </div>
   )

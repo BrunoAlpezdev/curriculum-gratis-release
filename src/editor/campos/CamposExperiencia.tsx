@@ -69,21 +69,23 @@ export function CamposExperiencia() {
           </div>
           <Textarea
             label="Descripción"
-            placeholder="Responsabilidades principales..."
+            placeholder={"Responsabilidades principales...\n- Gestioné el roadmap del producto\n- Coordiné a 3 equipos"}
+            hint="Una línea por punto; empieza con - para viñetas."
             value={exp.descripcion}
             onChange={(e) =>
               actualizar(exp.id, { descripcion: e.target.value })
             }
-            rows={3}
+            rows={4}
           />
           <Textarea
             label="Logros"
-            placeholder="Reducción de costos en un 15%..."
+            placeholder={"- Reduje costos en 15%\n- Lideré un equipo de 4 personas"}
+            hint="Una línea por punto; empieza con - para viñetas."
             value={exp.logros}
             onChange={(e) =>
               actualizar(exp.id, { logros: e.target.value })
             }
-            rows={2}
+            rows={3}
           />
         </EntradaRepetible>
       ))}

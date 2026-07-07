@@ -5,6 +5,7 @@ import { formatearRangoFechas, formatearFechaEducacion, formatearFecha, urlAbsol
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { registrarFuentePdf } from "@/lib/fuentes-pdf"
+import { esTextoSimple } from "@/lib/texto-rico"
 import {
   CONTENT_WIDTH,
   MARGIN,
@@ -14,6 +15,7 @@ import {
   renderSeccion,
   escribirTituloConFecha,
   escribirLineaEnlacesCentrada,
+  escribirTextoRico,
 } from "@/lib/generar-pdf-ats-helpers"
 
 export async function generarPdfAts(
@@ -39,6 +41,16 @@ export async function crearPdfAts(
       pdf.addPage()
       y = MARGIN
     }
+  }
+
+  /* Version pura de checkPage para escribirTextoRico, que gestiona su propia y:
+     recibe y devuelve la y (reiniciada a MARGIN si hubo salto de pagina). */
+  function checkPagePura(yy: number, needed: number): number {
+    if (yy + needed > PAGE_HEIGHT - MARGIN) {
+      pdf.addPage()
+      return MARGIN
+    }
+    return yy
   }
 
   function setColor(r: number, g: number, b: number) {
@@ -115,8 +127,7 @@ export async function crearPdfAts(
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(10)
     setMuted()
-    const lines = pdf.splitTextToSize(limpiarParaPdf(datos.perfil), CONTENT_WIDTH)
-    escribirLineas(lines, 4)
+    y = escribirTextoRico(pdf, limpiarParaPdf(datos.perfil), y, 4, checkPagePura)
     y += 4
   }
 
@@ -145,17 +156,25 @@ export async function crearPdfAts(
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
           setColor(82, 82, 91)
-          const lines = pdf.splitTextToSize(limpiarParaPdf(exp.descripcion), CONTENT_WIDTH)
-          escribirLineas(lines, 3.5)
+          y = escribirTextoRico(pdf, limpiarParaPdf(exp.descripcion), y, 3.5, checkPagePura)
           y += 1
         }
 
         if (exp.logros) {
-          pdf.setFont(fuenteBase, "italic")
           pdf.setFontSize(9)
           setColor(63, 63, 70)
-          const lines = pdf.splitTextToSize(`${e.logros}: ${limpiarParaPdf(exp.logros)}`, CONTENT_WIDTH)
-          escribirLineas(lines, 3.5)
+          if (esTextoSimple(exp.logros)) {
+            pdf.setFont(fuenteBase, "italic")
+            const lines = pdf.splitTextToSize(`${e.logros}: ${limpiarParaPdf(exp.logros)}`, CONTENT_WIDTH)
+            escribirLineas(lines, 3.5)
+          } else {
+            pdf.setFont(fuenteBase, "bold")
+            y = checkPagePura(y, 3.5)
+            pdf.text(`${e.logros}:`, MARGIN, y)
+            y += 3.5
+            pdf.setFont(fuenteBase, "italic")
+            y = escribirTextoRico(pdf, limpiarParaPdf(exp.logros), y, 3.5, checkPagePura)
+          }
           y += 1
         }
 
@@ -178,8 +197,7 @@ export async function crearPdfAts(
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
           setColor(82, 82, 91)
-          const lines = pdf.splitTextToSize(limpiarParaPdf(edu.descripcion), CONTENT_WIDTH)
-          escribirLineas(lines, 3.5)
+          y = escribirTextoRico(pdf, limpiarParaPdf(edu.descripcion), y, 3.5, checkPagePura)
           y += 1
         }
 
@@ -237,8 +255,7 @@ export async function crearPdfAts(
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
           setColor(82, 82, 91)
-          const lines = pdf.splitTextToSize(limpiarParaPdf(p.descripcion), CONTENT_WIDTH)
-          escribirLineas(lines, 3.5)
+          y = escribirTextoRico(pdf, limpiarParaPdf(p.descripcion), y, 3.5, checkPagePura)
           y += 1
         }
 
