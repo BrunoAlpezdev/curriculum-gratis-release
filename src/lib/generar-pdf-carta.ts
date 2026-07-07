@@ -51,10 +51,10 @@ export async function generarPdfCarta(
   }
 
   const segmentos = [
-    { texto: dp.email, url: dp.email ? urlAbsoluta(dp.email) : undefined },
-    { texto: dp.telefono },
+    { texto: limpiarParaPdf(dp.email), url: dp.email ? urlAbsoluta(dp.email) : undefined },
+    { texto: limpiarParaPdf(dp.telefono) },
     { texto: limpiarParaPdf(dp.ubicacion) },
-    { texto: dp.linkedin, url: dp.linkedin ? urlAbsoluta(dp.linkedin) : undefined },
+    { texto: limpiarParaPdf(dp.linkedin), url: dp.linkedin ? urlAbsoluta(dp.linkedin) : undefined },
   ].filter((s) => s.texto)
   if (segmentos.length > 0) {
     pdf.setFont(fuenteBase, "normal")

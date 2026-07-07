@@ -3,6 +3,7 @@ import {
   importarJson,
   normalizarCarta,
   normalizarDatosCurriculum,
+  normalizarNombreDocumento,
   normalizarPersonalizacion,
 } from "@/lib/importar-exportar"
 import { CARTA_INICIAL, PERSONALIZACION_INICIAL, ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
@@ -103,6 +104,27 @@ describe("normalizarCarta", () => {
   })
 })
 
+describe("normalizarNombreDocumento", () => {
+  it("devuelve '' cuando el valor esta ausente", () => {
+    expect(normalizarNombreDocumento(undefined)).toBe("")
+  })
+
+  it("devuelve '' cuando el valor no es string", () => {
+    expect(normalizarNombreDocumento(42)).toBe("")
+    expect(normalizarNombreDocumento(null)).toBe("")
+    expect(normalizarNombreDocumento({})).toBe("")
+  })
+
+  it("recorta espacios al inicio y al final", () => {
+    expect(normalizarNombreDocumento("  Mi CV para Acme  ")).toBe("Mi CV para Acme")
+  })
+
+  it("limita a 80 caracteres", () => {
+    const largo = "a".repeat(100)
+    expect(normalizarNombreDocumento(largo)).toHaveLength(80)
+  })
+})
+
 describe("importarJson", () => {
   function archivo(contenido: string): File {
     return new File([contenido], "cv.json", { type: "application/json" })
@@ -148,6 +170,23 @@ describe("importarJson", () => {
     const resultado = await importarJson(archivo(JSON.stringify(payload)))
     expect(resultado.ok).toBe(true)
     if (resultado.ok) expect(resultado.carta).toEqual(carta)
+  })
+
+  it("lee el nombre del documento y lo normaliza", async () => {
+    const payload = {
+      datos: { datosPersonales: { nombreCompleto: "Ana" } },
+      nombreDocumento: "  CV para Acme  ",
+    }
+    const resultado = await importarJson(archivo(JSON.stringify(payload)))
+    expect(resultado.ok).toBe(true)
+    if (resultado.ok) expect(resultado.nombreDocumento).toBe("CV para Acme")
+  })
+
+  it("cae a '' cuando el archivo no trae nombre del documento (retrocompatible)", async () => {
+    const payload = { version: 1, datos: { datosPersonales: { nombreCompleto: "Ana" } } }
+    const resultado = await importarJson(archivo(JSON.stringify(payload)))
+    expect(resultado.ok).toBe(true)
+    if (resultado.ok) expect(resultado.nombreDocumento).toBe("")
   })
 
   it("rechaza JSON malformado", async () => {

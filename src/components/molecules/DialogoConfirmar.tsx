@@ -72,6 +72,10 @@ interface DialogoNombrarCopiaProps {
   nombreSugerido: string
   onConfirmar: (nombre: string) => void
   onCerrar: () => void
+  titulo?: string
+  descripcion?: string
+  etiquetaCampo?: string
+  textoConfirmar?: string
 }
 
 /** Reemplaza el prompt nativo para nombrar una copia local, con Input del DS. */
@@ -80,7 +84,39 @@ export function DialogoNombrarCopia({
   nombreSugerido,
   onConfirmar,
   onCerrar,
+  titulo = "Guardar copia local",
+  descripcion = "Se guarda solo en este navegador.",
+  etiquetaCampo = "Nombre de la copia",
+  textoConfirmar = "Guardar",
 }: DialogoNombrarCopiaProps) {
+  return (
+    <DialogoModal abierto={abierto} onCerrar={onCerrar} ariaLabel={titulo}>
+      {/* El formulario vive como hijo del DialogoModal, que solo monta children
+          cuando esta abierto: asi su useState toma el nombreSugerido VIGENTE en
+          cada apertura (si viviera en el componente externo, siempre montado,
+          quedaria pegado al valor del primer render). */}
+      <FormularioNombrar
+        nombreSugerido={nombreSugerido}
+        onConfirmar={onConfirmar}
+        onCerrar={onCerrar}
+        titulo={titulo}
+        descripcion={descripcion}
+        etiquetaCampo={etiquetaCampo}
+        textoConfirmar={textoConfirmar}
+      />
+    </DialogoModal>
+  )
+}
+
+function FormularioNombrar({
+  nombreSugerido,
+  onConfirmar,
+  onCerrar,
+  titulo,
+  descripcion,
+  etiquetaCampo,
+  textoConfirmar,
+}: Required<Omit<DialogoNombrarCopiaProps, "abierto">>) {
   const [nombre, setNombre] = useState(nombreSugerido)
 
   function enviar(e: React.FormEvent<HTMLFormElement>) {
@@ -91,34 +127,31 @@ export function DialogoNombrarCopia({
   }
 
   return (
-    <DialogoModal abierto={abierto} onCerrar={onCerrar} ariaLabel="Nombrar copia local">
-      <Surface variant="panel" className="w-full border-0 shadow-2xl md:max-w-md">
-        {/* key remonta el form al reabrir para prellenar el nombre sugerido vigente. */}
-        <form key={nombreSugerido} onSubmit={enviar} className="flex flex-col gap-4 p-5">
-          <div className="flex flex-col gap-1">
-            <Text as="h2" variant="strong" className="text-base font-extrabold">
-              Guardar copia local
-            </Text>
-            <Text variant="small" className="text-text-muted">
-              Se guarda solo en este navegador.
-            </Text>
-          </div>
-          <Input
-            label="Nombre de la copia"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            autoFocus
-          />
-          <div className="flex justify-end gap-2">
-            <Button type="button" variant="secondary" size="sm" onClick={onCerrar}>
-              Cancelar
-            </Button>
-            <Button type="submit" size="sm">
-              Guardar
-            </Button>
-          </div>
-        </form>
-      </Surface>
-    </DialogoModal>
+    <Surface variant="panel" className="w-full border-0 shadow-2xl md:max-w-md">
+      <form onSubmit={enviar} className="flex flex-col gap-4 p-5">
+        <div className="flex flex-col gap-1">
+          <Text as="h2" variant="strong" className="text-base font-extrabold">
+            {titulo}
+          </Text>
+          <Text variant="small" className="text-text-muted">
+            {descripcion}
+          </Text>
+        </div>
+        <Input
+          label={etiquetaCampo}
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          autoFocus
+        />
+        <div className="flex justify-end gap-2">
+          <Button type="button" variant="secondary" size="sm" onClick={onCerrar}>
+            Cancelar
+          </Button>
+          <Button type="submit" size="sm">
+            {textoConfirmar}
+          </Button>
+        </div>
+      </form>
+    </Surface>
   )
 }

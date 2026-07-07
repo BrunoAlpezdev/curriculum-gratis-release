@@ -8,6 +8,7 @@ import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
 import { Textarea } from "@/components/atoms/Textarea"
 import { AiSuggestionPanel } from "@/components/molecules/AiSuggestionPanel"
+import { DialogoConfirmar } from "@/components/molecules/DialogoConfirmar"
 import { textoCv } from "@/lib/analisis-ats"
 import { intentarGuardarCopiaLocal } from "@/lib/copias-locales"
 import { useCurriculumStore } from "@/lib/store"
@@ -63,6 +64,7 @@ export function CamposCarta() {
   const [generando, setGenerando] = useState(false)
   const [sugerencia, setSugerencia] = useState("")
   const [error, setError] = useState("")
+  const [plantillaPendiente, setPlantillaPendiente] = useState<string | null>(null)
 
   async function generarCarta() {
     setGenerando(true)
@@ -95,6 +97,22 @@ export function CamposCarta() {
     intentarGuardarCopiaLocal("Respaldo antes de aplicar IA en carta", datos, personalizacion, carta)
     set({ cuerpo: sugerencia })
     setSugerencia("")
+  }
+
+  function aplicarPlantilla(texto: string) {
+    /* No pisar texto ya escrito sin confirmar antes. */
+    if (carta.cuerpo.trim()) {
+      setPlantillaPendiente(texto)
+      return
+    }
+    set({ cuerpo: texto })
+  }
+
+  function confirmarPlantilla() {
+    if (plantillaPendiente === null) return
+    intentarGuardarCopiaLocal("Respaldo antes de aplicar plantilla", datos, personalizacion, carta)
+    set({ cuerpo: plantillaPendiente })
+    setPlantillaPendiente(null)
   }
 
   return (
@@ -135,7 +153,7 @@ export function CamposCarta() {
             <Button
               key={p.nombre}
               type="button"
-              onClick={() => set({ cuerpo: p.texto })}
+              onClick={() => aplicarPlantilla(p.texto)}
               variant="secondary"
               size="xs"
             >
@@ -213,6 +231,16 @@ export function CamposCarta() {
         placeholder="Atentamente,"
         value={carta.despedida}
         onChange={(e) => set({ despedida: e.target.value })}
+      />
+
+      <DialogoConfirmar
+        abierto={plantillaPendiente !== null}
+        titulo="Reemplazar el cuerpo de la carta"
+        descripcion="Ya escribiste contenido en el cuerpo. Aplicar la plantilla lo reemplazará. Se guardará una copia local antes. ¿Continuar?"
+        textoConfirmar="Reemplazar"
+        variante="peligro"
+        onConfirmar={confirmarPlantilla}
+        onCerrar={() => setPlantillaPendiente(null)}
       />
     </>
   )

@@ -94,9 +94,9 @@ export async function crearPdfAts(
   }
 
   const contacto = [
-    { texto: dp.email, url: dp.email ? urlAbsoluta(dp.email) : undefined },
-    { texto: dp.telefono },
-    { texto: dp.rut ? `RUT ${dp.rut}` : "" },
+    { texto: limpiarParaPdf(dp.email), url: dp.email ? urlAbsoluta(dp.email) : undefined },
+    { texto: limpiarParaPdf(dp.telefono) },
+    { texto: dp.rut ? `RUT ${limpiarParaPdf(dp.rut)}` : "" },
     { texto: limpiarParaPdf(dp.ubicacion) },
   ].filter((s) => s.texto)
   if (contacto.length > 0) {
@@ -108,7 +108,7 @@ export async function crearPdfAts(
 
   const enlaces = [dp.linkedin, dp.github, dp.sitioWeb]
     .filter(Boolean)
-    .map((v) => ({ texto: v, url: urlAbsoluta(v) }))
+    .map((v) => ({ texto: limpiarParaPdf(v), url: urlAbsoluta(v) }))
   if (enlaces.length > 0) {
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(9)
@@ -335,7 +335,7 @@ export async function crearPdfAts(
           y += 4
         }
 
-        const contactoRef = [ref.email, ref.telefono].filter(Boolean).join("  ·  ")
+        const contactoRef = [ref.email, ref.telefono].filter(Boolean).map(limpiarParaPdf).join("  ·  ")
         if (contactoRef) {
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)

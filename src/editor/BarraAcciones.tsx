@@ -17,6 +17,7 @@ import {
   CopyIcon,
   ClockCounterClockwiseIcon,
   EnvelopeIcon,
+  PencilSimpleIcon,
 } from "@phosphor-icons/react"
 import { Button, buttonVariants } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
@@ -82,15 +83,19 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   const [enviarAbierto, setEnviarAbierto] = useState(false)
   const [confirmacionPendiente, setConfirmacionPendiente] = useState<Confirmacion | null>(null)
   const [nombrarCopiaAbierto, setNombrarCopiaAbierto] = useState(false)
+  const [duplicarAbierto, setDuplicarAbierto] = useState(false)
+  const [renombrarAbierto, setRenombrarAbierto] = useState(false)
   const [aviso, setAviso] = useState<Aviso | null>(null)
   const menuId = useId()
   const datos = useCurriculumStore((s) => s.datos)
   const carta = useCurriculumStore((s) => s.carta)
   const personalizacion = useCurriculumStore((s) => s.personalizacion)
+  const nombreDocumento = useCurriculumStore((s) => s.nombreDocumento)
   const reiniciarStore = useCurriculumStore((s) => s.reiniciar)
   const setDatos = useCurriculumStore((s) => s.setDatos)
   const setPersonalizacion = useCurriculumStore((s) => s.setPersonalizacion)
   const setCarta = useCurriculumStore((s) => s.setCarta)
+  const setNombreDocumento = useCurriculumStore((s) => s.setNombreDocumento)
   const tapsRef = useRef<number[]>([])
   const menuRef = useRef<HTMLDivElement>(null)
   const botonMenuRef = useRef<HTMLButtonElement>(null)
@@ -146,7 +151,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   }
 
   function exportar() {
-    exportarJson(datos, personalizacion, carta)
+    exportarJson(datos, personalizacion, carta, nombreDocumento)
     setMenuAbierto(false)
   }
 
@@ -160,11 +165,35 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
     setMenuAbierto(false)
   }
 
-  const nombreSugeridoCopia = `${datos.datosPersonales.nombreCompleto.trim() || "Curriculum"} - copia`
+  const nombreActivo = nombreDocumento.trim() || "Mi CV"
+  const nombreSugeridoCopia = `${nombreDocumento.trim() || datos.datosPersonales.nombreCompleto.trim() || "Curriculum"} - copia`
 
   function abrirNombrarCopia() {
     setNombrarCopiaAbierto(true)
     setMenuAbierto(false)
+  }
+
+  function abrirRenombrar() {
+    setRenombrarAbierto(true)
+    setMenuAbierto(false)
+  }
+
+  function confirmarRenombrar(nombre: string) {
+    setNombreDocumento(nombre)
+    setRenombrarAbierto(false)
+  }
+
+  function duplicarParaOferta() {
+    /* Respaldo del estado actual con su nombre vigente antes de renombrar. */
+    intentarGuardarCopiaLocal(nombreActivo, datos, personalizacion, carta)
+    setDuplicarAbierto(true)
+    setMenuAbierto(false)
+  }
+
+  function confirmarDuplicar(nombre: string) {
+    /* Solo cambia el nombre: los datos quedan idénticos, listos para adaptar. */
+    setNombreDocumento(nombre)
+    setDuplicarAbierto(false)
   }
 
   function confirmarGuardarCopia(nombre: string) {
@@ -203,6 +232,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
         setDatos(copia.datos)
         setPersonalizacion(copia.personalizacion)
         setCarta(copia.carta)
+        setNombreDocumento(copia.nombre)
         setCopiasAbierto(false)
       },
     })
@@ -226,6 +256,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
         setDatos(resultado.datos)
         setPersonalizacion(resultado.personalizacion)
         setCarta(resultado.carta)
+        setNombreDocumento(resultado.nombreDocumento)
       },
     })
   }
@@ -272,6 +303,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
     { icono: <FileArrowDownIcon size={16} />, etiqueta: "Exportar Markdown", onClick: () => exportarFormatoTexto("md") },
     { icono: <FileArrowUpIcon size={16} />, etiqueta: "Importar JSON", onClick: pedirImportar },
     { icono: <CopyIcon size={16} />, etiqueta: "Guardar copia local", onClick: abrirNombrarCopia },
+    { icono: <CopyIcon size={16} />, etiqueta: "Duplicar para otra oferta", onClick: duplicarParaOferta },
     { icono: <ClockCounterClockwiseIcon size={16} />, etiqueta: "Ver copias locales", onClick: abrirCopias },
     { icono: <ArrowCounterClockwiseIcon size={16} />, etiqueta: "Reiniciar", onClick: reiniciar },
     ...(modo === "cv"
@@ -299,7 +331,15 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
           <span className="hidden md:inline">Generador de Curriculum</span>
         </Text>
         <Text as="span" variant="caption" className="hidden md:inline">·</Text>
-        <Text as="span" variant="caption" className="hidden md:inline shrink-0">100% gratuito</Text>
+        <button
+          type="button"
+          onClick={abrirRenombrar}
+          title="Renombrar documento"
+          className="hidden md:inline-flex items-center gap-1 min-w-0 max-w-[220px] rounded px-1 py-0.5 text-xs text-text-muted transition-colors hover:text-text-strong"
+        >
+          <span className="truncate">{nombreActivo}</span>
+          <PencilSimpleIcon size={12} className="shrink-0" />
+        </button>
         <Text as="span" variant="caption" className="hidden md:inline">·</Text>
         <IndicadorGuardado className="hidden md:inline shrink-0" />
       </div>
@@ -405,6 +445,26 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
         nombreSugerido={nombreSugeridoCopia}
         onConfirmar={confirmarGuardarCopia}
         onCerrar={() => setNombrarCopiaAbierto(false)}
+      />
+      <DialogoNombrarCopia
+        abierto={duplicarAbierto}
+        nombreSugerido={`${nombreActivo} - copia`}
+        titulo="Duplicar para otra oferta"
+        descripcion="Se guardó una copia local del CV actual. Nombra la nueva versión para adaptarla a la oferta."
+        etiquetaCampo="Nombre del nuevo documento"
+        textoConfirmar="Duplicar"
+        onConfirmar={confirmarDuplicar}
+        onCerrar={() => setDuplicarAbierto(false)}
+      />
+      <DialogoNombrarCopia
+        abierto={renombrarAbierto}
+        nombreSugerido={nombreDocumento.trim()}
+        titulo="Renombrar documento"
+        descripcion="Este nombre te ayuda a saber qué CV estás editando."
+        etiquetaCampo="Nombre del documento"
+        textoConfirmar="Guardar"
+        onConfirmar={confirmarRenombrar}
+        onCerrar={() => setRenombrarAbierto(false)}
       />
       <DialogoConfirmar
         abierto={aviso !== null}

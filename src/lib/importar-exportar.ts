@@ -21,6 +21,7 @@ const VERSION_FORMATO = 1
 
 interface ArchivoCurriculum {
   version: number
+  nombreDocumento: string
   datos: DatosCurriculum
   personalizacion: Personalizacion
   carta: Carta
@@ -156,6 +157,10 @@ export function normalizarDatosCurriculum(valor: unknown): DatosCurriculum {
   }
 }
 
+export function normalizarNombreDocumento(valor: unknown): string {
+  return typeof valor === "string" ? valor.trim().slice(0, 80) : ""
+}
+
 export function normalizarCarta(valor: unknown): Carta {
   const crudo = esRegistro(valor) ? valor : {}
   return {
@@ -189,9 +194,11 @@ export function exportarJson(
   datos: DatosCurriculum,
   personalizacion: Personalizacion,
   carta: Carta,
+  nombreDocumento: string,
 ) {
   const payload: ArchivoCurriculum = {
     version: VERSION_FORMATO,
+    nombreDocumento: normalizarNombreDocumento(nombreDocumento),
     datos,
     personalizacion,
     carta,
@@ -213,7 +220,7 @@ export function exportarJson(
 }
 
 export type ResultadoImport =
-  | { ok: true; datos: DatosCurriculum; personalizacion: Personalizacion; carta: Carta }
+  | { ok: true; datos: DatosCurriculum; personalizacion: Personalizacion; carta: Carta; nombreDocumento: string }
   | { ok: false; error: string }
 
 export async function importarJson(archivo: File): Promise<ResultadoImport> {
@@ -239,8 +246,10 @@ export async function importarJson(archivo: File): Promise<ResultadoImport> {
     const personalizacion = normalizarPersonalizacion(raiz.personalizacion)
     /* Retrocompatible: archivos exportados antes de incluir carta caen a CARTA_INICIAL. */
     const carta = normalizarCarta(raiz.carta)
+    /* Retrocompatible: archivos exportados antes de incluir el nombre caen a "". */
+    const nombreDocumento = normalizarNombreDocumento(raiz.nombreDocumento)
 
-    return { ok: true, datos, personalizacion, carta }
+    return { ok: true, datos, personalizacion, carta, nombreDocumento }
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error desconocido"
     return { ok: false, error: `No se pudo leer el archivo: ${msg}` }

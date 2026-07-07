@@ -13,16 +13,18 @@ import type {
   Carta,
 } from "@/types"
 import { DATOS_INICIALES, PERSONALIZACION_INICIAL, CARTA_INICIAL } from "@/lib/constantes"
-import { normalizarCarta, normalizarDatosCurriculum, normalizarPersonalizacion } from "@/lib/importar-exportar"
+import { normalizarCarta, normalizarDatosCurriculum, normalizarNombreDocumento, normalizarPersonalizacion } from "@/lib/importar-exportar"
 
 interface CurriculumStore {
   datos: DatosCurriculum
   personalizacion: Personalizacion
   carta: Carta
+  nombreDocumento: string
 
   // Reemplazo completo (import/export)
   setDatos: (datos: DatosCurriculum) => void
   setCarta: (campos: Partial<Carta>) => void
+  setNombreDocumento: (nombre: string) => void
 
   // Datos personales
   setDatosPersonales: (datos: Partial<DatosPersonales>) => void
@@ -77,10 +79,12 @@ export const useCurriculumStore = create<CurriculumStore>()(
       datos: DATOS_INICIALES,
       personalizacion: PERSONALIZACION_INICIAL,
       carta: CARTA_INICIAL,
+      nombreDocumento: "",
 
       setDatos: (nuevos) => set({ datos: nuevos }),
       setCarta: (campos) =>
         set((s) => ({ carta: { ...s.carta, ...campos } })),
+      setNombreDocumento: (nombre) => set({ nombreDocumento: nombre }),
 
       setDatosPersonales: (nuevos) =>
         set((s) => ({
@@ -347,6 +351,7 @@ export const useCurriculumStore = create<CurriculumStore>()(
           datos: DATOS_INICIALES,
           personalizacion: PERSONALIZACION_INICIAL,
           carta: CARTA_INICIAL,
+          nombreDocumento: "",
         }),
     }),
     {
@@ -361,6 +366,7 @@ export const useCurriculumStore = create<CurriculumStore>()(
           datos: normalizarDatosCurriculum(estado?.datos),
           personalizacion: normalizarPersonalizacion(estado?.personalizacion),
           carta: normalizarCarta(estado?.carta),
+          nombreDocumento: normalizarNombreDocumento(estado?.nombreDocumento),
         } as CurriculumStore
       },
     },
