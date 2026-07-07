@@ -21,7 +21,7 @@ export function PreviewOverlay({ abierto, modo, onCerrar }: PreviewOverlayProps)
      exista aunque el overlay esté cerrado: crearPdfVisual lo busca por id y sin
      esto la descarga de plantillas visuales fallaría en mobile. */
   return (
-    <div className={cn("fixed inset-0 z-50 flex flex-col bg-app-bg md:hidden", !abierto && "hidden")}>
+    <div className={cn("fixed inset-0 z-50 flex flex-col bg-app-bg md:hidden", !abierto && "invisible pointer-events-none")}>
       <Surface variant="toolbar" className="flex items-center justify-between px-4 py-3">
         <Text as="h2" variant="strong" className="text-base font-extrabold">
           {modo === "carta" ? "Vista previa de la carta" : "Vista previa del CV"}

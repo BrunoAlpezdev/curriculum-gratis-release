@@ -103,7 +103,7 @@ export function CamposDatosPersonales() {
         value={datos.titulo}
         onChange={(e) => set({ titulo: e.target.value })}
       />
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3">
         <Input
           label="Email"
           type="email"
@@ -119,7 +119,7 @@ export function CamposDatosPersonales() {
           onChange={(e) => set({ telefono: e.target.value })}
         />
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3">
         <Input
           label="Ubicación"
           placeholder="Santiago, Chile"
@@ -133,7 +133,7 @@ export function CamposDatosPersonales() {
           onChange={(e) => set({ rut: e.target.value })}
         />
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3">
         <Input
           label="LinkedIn"
           placeholder="linkedin.com/in/perfil-ejemplo"

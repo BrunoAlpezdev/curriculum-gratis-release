@@ -31,6 +31,7 @@ import { guardarCopiaLocal, intentarGuardarCopiaLocal, ErrorCopiaLocal, type Cop
 import { DialogCopiasLocales } from "@/editor/DialogCopiasLocales"
 import { DialogEnviarCv } from "@/editor/DialogEnviarCv"
 import { DialogEjemploCv } from "@/editor/DialogEjemploCv"
+import { IndicadorGuardado } from "@/editor/IndicadorGuardado"
 import { generarDatosMock } from "@/editor/datos-ejemplo"
 import type { Modo } from "@/editor/Editor"
 
@@ -128,7 +129,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   }
 
   function exportar() {
-    exportarJson(datos, personalizacion)
+    exportarJson(datos, personalizacion, carta)
     setMenuAbierto(false)
   }
 
@@ -190,6 +191,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
     intentarGuardarCopiaLocal("Respaldo antes de importar", datos, personalizacion, carta)
     setDatos(resultado.datos)
     setPersonalizacion(resultado.personalizacion)
+    setCarta(resultado.carta)
   }
 
   function handleTapTitulo() {
@@ -262,6 +264,8 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
         </Text>
         <Text as="span" variant="caption" className="hidden md:inline">·</Text>
         <Text as="span" variant="caption" className="hidden md:inline shrink-0">100% gratuito</Text>
+        <Text as="span" variant="caption" className="hidden md:inline">·</Text>
+        <IndicadorGuardado className="hidden md:inline shrink-0" />
       </div>
       <div className="flex items-center gap-1 md:gap-2 shrink-0">
         <Button variant="ghost" size="sm" className="hidden md:inline-flex" onClick={() => setEjemploAbierto(true)}>

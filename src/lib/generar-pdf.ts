@@ -52,6 +52,14 @@ async function crearPdfVisual(
   const el = document.getElementById("curriculum-pdf")
   if (!el) throw new Error("No se encontro la vista previa del CV.")
 
+  /* Con el overlay de preview cerrado (mobile) el contenedor queda `invisible`,
+     no `display:none`, para que scrollHeight siga siendo medible. Si aun asi
+     mide 0 el corte multipagina se rompe: fallamos explicito en vez de generar
+     un PDF clavado en 1 pagina. */
+  if (el.scrollHeight === 0) {
+    throw new Error("No se pudo medir la vista previa para el PDF.")
+  }
+
   /* scrollHeight incluye overflow invisible; offsetHeight solo el box renderizado.
      En flex columns el contenido a veces queda flush al border y offsetHeight
      se queda corto — scrollHeight es mas robusto para medir el contenido real. */
@@ -83,12 +91,13 @@ async function crearPdfVisual(
     onclone: (_doc: Document, elClonado: HTMLElement) => {
       /* No forzamos height — dejamos que el clon crezca con su contenido.
          Forzar height + position absolute colapsaba el rendering a 1 pagina. */
-      elClonado.style.cssText += `width:${A4_WIDTH_PX}px;min-width:${A4_WIDTH_PX}px;max-width:${A4_WIDTH_PX}px;min-height:${A4_HEIGHT_PX}px;transform:none;`
+      elClonado.style.cssText += `width:${A4_WIDTH_PX}px;min-width:${A4_WIDTH_PX}px;max-width:${A4_WIDTH_PX}px;min-height:${A4_HEIGHT_PX}px;transform:none;visibility:visible;`
+      elClonado.classList.remove("invisible")
 
       let ancestro: HTMLElement | null = elClonado.parentElement
       while (ancestro) {
-        ancestro.style.cssText += "transform:none;overflow:visible;"
-        ancestro.classList.remove("hidden")
+        ancestro.style.cssText += "transform:none;overflow:visible;visibility:visible;"
+        ancestro.classList.remove("hidden", "invisible")
         ancestro = ancestro.parentElement
       }
     },

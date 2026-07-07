@@ -1,6 +1,7 @@
 import { jsPDF } from "jspdf"
 import type { Carta, DatosCurriculum, Personalizacion } from "@/types"
 import { getColorHex } from "@/lib/colores"
+import { etiquetasCv } from "@/lib/etiquetas-cv"
 import { urlAbsoluta } from "@/lib/formato"
 import { registrarFuentePdf } from "@/lib/fuentes-pdf"
 import { hexToRgb } from "@/lib/generar-pdf-ats-helpers"
@@ -16,6 +17,7 @@ export async function generarPdfCarta(
   personalizacion: Personalizacion,
 ) {
   const color = hexToRgb(getColorHex(personalizacion.color))
+  const et = etiquetasCv(personalizacion.idiomaCv)
   const pdf = new jsPDF("p", "mm", "a4")
   const fuenteBase = await registrarFuentePdf(pdf, personalizacion.fuente)
   let y = MARGIN
@@ -37,7 +39,7 @@ export async function generarPdfCarta(
   pdf.setFont(fuenteBase, "bold")
   pdf.setFontSize(14)
   setColor(24, 24, 27)
-  pdf.text(dp.nombreCompleto || "Tu Nombre", MARGIN, y)
+  pdf.text(dp.nombreCompleto || et.tuNombre, MARGIN, y)
   y += 5
 
   if (dp.titulo) {
@@ -112,7 +114,7 @@ export async function generarPdfCarta(
     pdf.setFont(fuenteBase, "italic")
     pdf.setFontSize(9)
     setColor(113, 113, 122)
-    pdf.text(`Postulación: ${carta.cargoPostulado}`, MARGIN, y)
+    pdf.text(`${et.postulacion}: ${carta.cargoPostulado}`, MARGIN, y)
     y += 6
   } else if (carta.destinatario || carta.empresaDestino) {
     y += 4
@@ -149,11 +151,11 @@ export async function generarPdfCarta(
   pdf.setFont(fuenteBase, "bold")
   pdf.setFontSize(11)
   setColor(24, 24, 27)
-  pdf.text(dp.nombreCompleto || "Tu Nombre", MARGIN, y)
+  pdf.text(dp.nombreCompleto || et.tuNombre, MARGIN, y)
 
-  const nombreDoc = dp.nombreCompleto || "Tu Nombre"
+  const nombreDoc = dp.nombreCompleto || et.tuNombre
   pdf.setProperties({
-    title: `${nombreDoc} - Carta de presentación`,
+    title: `${nombreDoc} - ${et.cartaPresentacion}`,
     author: nombreDoc,
     subject: carta.cargoPostulado ?? "",
     creator: "curriculum-gratis",

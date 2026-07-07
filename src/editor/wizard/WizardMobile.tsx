@@ -10,6 +10,7 @@ import { PasoLayout } from "@/editor/wizard/PasoLayout"
 import { PasoRevision } from "@/editor/wizard/PasoRevision"
 import { SheetIndice } from "@/editor/wizard/SheetIndice"
 import { PreviewOverlay } from "@/editor/wizard/PreviewOverlay"
+import { IndicadorGuardado } from "@/editor/IndicadorGuardado"
 import type { Paso } from "@/editor/wizard/useEditorPasos"
 import type { Modo } from "@/editor/Editor"
 
@@ -33,6 +34,7 @@ export function WizardMobile({ pasos, actual, modo, onIr, onAnterior, onSiguient
       {/* Encabezado fijo: progreso + accesos rápidos */}
       <Surface variant="strip" className="flex flex-col gap-3 px-4 py-3">
         <BarraProgreso actual={actual} total={pasos.length} />
+        <IndicadorGuardado className="self-end" />
         <div className="flex items-center gap-2">
           <Button variant="secondary" size="sm" className="flex-1" onClick={() => setIndiceAbierto(true)}>
             <ListNumbersIcon size={16} />

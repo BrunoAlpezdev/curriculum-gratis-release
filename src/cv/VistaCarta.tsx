@@ -1,5 +1,6 @@
 import type { Carta, DatosCurriculum, Personalizacion } from "@/types"
 import { getColorHex } from "@/lib/colores"
+import { etiquetasCv } from "@/lib/etiquetas-cv"
 import { FUENTE_CSS } from "@/lib/constantes"
 import { A4_WIDTH_PX, A4_HEIGHT_PX } from "@/cv/CurriculumVista"
 
@@ -11,6 +12,7 @@ interface Props {
 
 export function VistaCarta({ datos, carta, personalizacion }: Props) {
   const color = getColorHex(personalizacion.color)
+  const et = etiquetasCv(personalizacion.idiomaCv)
   const { datosPersonales: dp } = datos
 
   return (
@@ -26,7 +28,7 @@ export function VistaCarta({ datos, carta, personalizacion }: Props) {
       {/* Header con datos del remitente */}
       <div className="mb-8 pb-4 border-b" style={{ borderColor: color }}>
         <h1 className="text-[18px] font-bold text-zinc-900">
-          {dp.nombreCompleto || "Tu Nombre"}
+          {dp.nombreCompleto || et.tuNombre}
         </h1>
         {dp.titulo && (
           <p className="text-[12px] text-zinc-600">{dp.titulo}</p>
@@ -51,7 +53,7 @@ export function VistaCarta({ datos, carta, personalizacion }: Props) {
           {carta.empresaDestino && <p>{carta.empresaDestino}</p>}
           {carta.cargoPostulado && (
             <p className="text-zinc-500 text-[11px] italic mt-0.5">
-              Postulación: {carta.cargoPostulado}
+              {et.postulacion}: {carta.cargoPostulado}
             </p>
           )}
         </div>
@@ -70,7 +72,7 @@ export function VistaCarta({ datos, carta, personalizacion }: Props) {
       <div className="mt-8 text-zinc-700">
         {carta.despedida && <p>{carta.despedida}</p>}
         <p className="mt-8 font-bold text-zinc-900">
-          {dp.nombreCompleto || "Tu Nombre"}
+          {dp.nombreCompleto || et.tuNombre}
         </p>
       </div>
     </div>

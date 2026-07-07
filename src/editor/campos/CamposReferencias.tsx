@@ -26,7 +26,7 @@ export function CamposReferencias() {
           key={ref.id}
           onEliminar={() => eliminar(ref.id)}
         >
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3">
             <Input
               label="Nombre"
               placeholder="Nombre de la referencia"
@@ -52,7 +52,7 @@ export function CamposReferencias() {
               actualizar(ref.id, { empresa: e.target.value })
             }
           />
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3">
             <Input
               label="Email"
               type="email"

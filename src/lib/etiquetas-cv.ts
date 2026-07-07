@@ -15,6 +15,13 @@ export interface EtiquetasCv {
   logros: string
   disponibilidad: string
   pretensionRenta: string
+  infoAdicional: string
+  tecnologias: string
+
+  // Carta de presentacion
+  cartaPresentacion: string
+  postulacion: string
+  destinatario: string
 
   // Placeholders cuando los campos estan vacios
   tuNombre: string
@@ -41,6 +48,11 @@ const ES: EtiquetasCv = {
   logros: "Logros",
   disponibilidad: "Disponibilidad",
   pretensionRenta: "Pretensión de renta",
+  infoAdicional: "Información adicional",
+  tecnologias: "Tecnologías",
+  cartaPresentacion: "Carta de presentación",
+  postulacion: "Postulación",
+  destinatario: "Destinatario",
   tuNombre: "Tu Nombre",
   cargo: "Cargo",
   empresa: "Empresa",
@@ -70,6 +82,11 @@ const EN: EtiquetasCv = {
   logros: "Achievements",
   disponibilidad: "Availability",
   pretensionRenta: "Expected salary",
+  infoAdicional: "Additional information",
+  tecnologias: "Technologies",
+  cartaPresentacion: "Cover letter",
+  postulacion: "Applying for",
+  destinatario: "Recipient",
   tuNombre: "Your Name",
   cargo: "Role",
   empresa: "Company",

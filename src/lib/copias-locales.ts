@@ -1,6 +1,5 @@
 import type { Carta, DatosCurriculum, Personalizacion } from "@/types"
-import { CARTA_INICIAL } from "@/lib/constantes"
-import { normalizarDatosCurriculum, normalizarPersonalizacion } from "@/lib/importar-exportar"
+import { normalizarCarta, normalizarDatosCurriculum, normalizarPersonalizacion } from "@/lib/importar-exportar"
 
 const STORAGE_KEY = "curriculum-gratis:copias-locales"
 const MAX_COPIAS = 20
@@ -40,10 +39,7 @@ function normalizarCopia(valor: unknown): CopiaLocalCv | null {
     creadoEn: typeof valor.creadoEn === "string" ? valor.creadoEn : new Date().toISOString(),
     datos: normalizarDatosCurriculum(valor.datos),
     personalizacion: normalizarPersonalizacion(valor.personalizacion),
-    carta: {
-      ...CARTA_INICIAL,
-      ...(esRegistro(valor.carta) ? valor.carta : {}),
-    },
+    carta: normalizarCarta(valor.carta),
   }
 }
 

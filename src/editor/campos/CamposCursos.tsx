@@ -34,7 +34,7 @@ export function CamposCursos() {
             value={curso.nombre}
             onChange={(e) => actualizar(curso.id, { nombre: e.target.value })}
           />
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3">
             <Input
               label="Institucion"
               placeholder="Amazon Web Services"

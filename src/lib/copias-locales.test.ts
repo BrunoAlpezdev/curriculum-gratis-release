@@ -85,6 +85,26 @@ describe("copias-locales", () => {
     expect(obtenerCopiasLocales()).toHaveLength(0)
   })
 
+  it("normaliza una carta corrupta al recuperar copias", () => {
+    almacen.setItem(
+      "curriculum-gratis:copias-locales",
+      JSON.stringify([
+        {
+          id: "c1",
+          nombre: "Con carta corrupta",
+          creadoEn: new Date().toISOString(),
+          datos: DATOS_INICIALES,
+          personalizacion: PERSONALIZACION_INICIAL,
+          carta: { cuerpo: 123, despedida: null },
+        },
+      ]),
+    )
+    const copias = obtenerCopiasLocales()
+    expect(copias).toHaveLength(1)
+    expect(copias[0]!.carta.cuerpo).toBe("")
+    expect(copias[0]!.carta.despedida).toBe(CARTA_INICIAL.despedida)
+  })
+
   it("respeta el tope de 20 copias", () => {
     for (let i = 1; i <= 25; i++) guardar(`Copia ${i}`)
     const copias = obtenerCopiasLocales()

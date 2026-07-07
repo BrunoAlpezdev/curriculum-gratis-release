@@ -13,7 +13,7 @@ import type {
   Carta,
 } from "@/types"
 import { DATOS_INICIALES, PERSONALIZACION_INICIAL, CARTA_INICIAL } from "@/lib/constantes"
-import { normalizarDatosCurriculum, normalizarPersonalizacion } from "@/lib/importar-exportar"
+import { normalizarCarta, normalizarDatosCurriculum, normalizarPersonalizacion } from "@/lib/importar-exportar"
 
 interface CurriculumStore {
   datos: DatosCurriculum
@@ -245,11 +245,16 @@ export const useCurriculumStore = create<CurriculumStore>()(
 
       agregarHabilidad: (nombre) =>
         set((s) => {
-          if (s.datos.habilidades.includes(nombre)) return s
+          const limpio = nombre.trim()
+          if (!limpio) return s
+          const duplicada = s.datos.habilidades.some(
+            (h) => h.trim().toLocaleLowerCase() === limpio.toLocaleLowerCase(),
+          )
+          if (duplicada) return s
           return {
             datos: {
               ...s.datos,
-              habilidades: [...s.datos.habilidades, nombre],
+              habilidades: [...s.datos.habilidades, limpio],
             },
           }
         }),
@@ -355,10 +360,7 @@ export const useCurriculumStore = create<CurriculumStore>()(
           ...current,
           datos: normalizarDatosCurriculum(estado?.datos),
           personalizacion: normalizarPersonalizacion(estado?.personalizacion),
-          carta: {
-            ...CARTA_INICIAL,
-            ...(estado?.carta && typeof estado.carta === "object" ? estado.carta : {}),
-          },
+          carta: normalizarCarta(estado?.carta),
         } as CurriculumStore
       },
     },

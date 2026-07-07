@@ -1,10 +1,11 @@
 import { describe, it, expect } from "vitest"
 import {
   importarJson,
+  normalizarCarta,
   normalizarDatosCurriculum,
   normalizarPersonalizacion,
 } from "@/lib/importar-exportar"
-import { PERSONALIZACION_INICIAL, ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
+import { CARTA_INICIAL, PERSONALIZACION_INICIAL, ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 
 describe("normalizarDatosCurriculum", () => {
   it("devuelve la estructura base ante entradas no validas", () => {
@@ -73,6 +74,26 @@ describe("normalizarPersonalizacion", () => {
   })
 })
 
+describe("normalizarCarta", () => {
+  it("devuelve la carta inicial ante entradas no validas", () => {
+    expect(normalizarCarta(undefined)).toEqual(CARTA_INICIAL)
+    expect(normalizarCarta(42)).toEqual(CARTA_INICIAL)
+  })
+
+  it("normaliza campos con tipos corruptos y conserva la despedida por defecto", () => {
+    const carta = normalizarCarta({ cuerpo: 123, destinatario: null, despedida: false })
+    expect(carta.cuerpo).toBe("")
+    expect(carta.destinatario).toBe("")
+    expect(carta.despedida).toBe(CARTA_INICIAL.despedida)
+  })
+
+  it("conserva strings validos", () => {
+    const carta = normalizarCarta({ cuerpo: "Hola", despedida: "Saludos," })
+    expect(carta.cuerpo).toBe("Hola")
+    expect(carta.despedida).toBe("Saludos,")
+  })
+})
+
 describe("importarJson", () => {
   function archivo(contenido: string): File {
     return new File([contenido], "cv.json", { type: "application/json" })
@@ -90,6 +111,34 @@ describe("importarJson", () => {
       expect(resultado.datos.datosPersonales.nombreCompleto).toBe("Ana")
       expect(resultado.personalizacion.color).toBe("azul")
     }
+  })
+
+  it("cae a la carta inicial cuando el archivo no trae carta", async () => {
+    const payload = { version: 1, datos: { datosPersonales: { nombreCompleto: "Ana" } } }
+    const resultado = await importarJson(archivo(JSON.stringify(payload)))
+    expect(resultado.ok).toBe(true)
+    if (resultado.ok) expect(resultado.carta).toEqual(CARTA_INICIAL)
+  })
+
+  it("normaliza una carta con tipos corruptos", async () => {
+    const payload = {
+      datos: { datosPersonales: { nombreCompleto: "Ana" } },
+      carta: { cuerpo: 123, despedida: null },
+    }
+    const resultado = await importarJson(archivo(JSON.stringify(payload)))
+    expect(resultado.ok).toBe(true)
+    if (resultado.ok) {
+      expect(resultado.carta.cuerpo).toBe("")
+      expect(resultado.carta.despedida).toBe(CARTA_INICIAL.despedida)
+    }
+  })
+
+  it("roundtrip conserva la carta", async () => {
+    const carta = { ...CARTA_INICIAL, cuerpo: "Estimado equipo", despedida: "Saludos," }
+    const payload = { datos: { datosPersonales: { nombreCompleto: "Ana" } }, carta }
+    const resultado = await importarJson(archivo(JSON.stringify(payload)))
+    expect(resultado.ok).toBe(true)
+    if (resultado.ok) expect(resultado.carta).toEqual(carta)
   })
 
   it("rechaza JSON malformado", async () => {

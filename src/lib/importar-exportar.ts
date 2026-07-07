@@ -1,4 +1,5 @@
 import type {
+  Carta,
   ColorTema,
   Curso,
   DatosCurriculum,
@@ -14,7 +15,7 @@ import type {
   Referencia,
   SeccionOrdenable,
 } from "@/types"
-import { DATOS_INICIALES, ORDEN_SECCIONES_INICIAL, PERSONALIZACION_INICIAL } from "@/lib/constantes"
+import { CARTA_INICIAL, DATOS_INICIALES, ORDEN_SECCIONES_INICIAL, PERSONALIZACION_INICIAL } from "@/lib/constantes"
 
 const VERSION_FORMATO = 1
 
@@ -22,6 +23,7 @@ interface ArchivoCurriculum {
   version: number
   datos: DatosCurriculum
   personalizacion: Personalizacion
+  carta: Carta
 }
 
 const COLORES_VALIDOS = new Set<ColorTema>(["azul", "verde", "rojo", "morado", "teal", "naranja", "gris"])
@@ -154,6 +156,18 @@ export function normalizarDatosCurriculum(valor: unknown): DatosCurriculum {
   }
 }
 
+export function normalizarCarta(valor: unknown): Carta {
+  const crudo = esRegistro(valor) ? valor : {}
+  return {
+    destinatario: texto(crudo.destinatario),
+    empresaDestino: texto(crudo.empresaDestino),
+    cargoPostulado: texto(crudo.cargoPostulado),
+    ciudadFecha: texto(crudo.ciudadFecha),
+    cuerpo: texto(crudo.cuerpo),
+    despedida: typeof crudo.despedida === "string" ? crudo.despedida : CARTA_INICIAL.despedida,
+  }
+}
+
 export function normalizarPersonalizacion(valor: unknown): Personalizacion {
   const crudo = esRegistro(valor) ? valor : {}
   const secciones = Array.isArray(crudo.ordenSecciones)
@@ -173,11 +187,13 @@ export function normalizarPersonalizacion(valor: unknown): Personalizacion {
 export function exportarJson(
   datos: DatosCurriculum,
   personalizacion: Personalizacion,
+  carta: Carta,
 ) {
   const payload: ArchivoCurriculum = {
     version: VERSION_FORMATO,
     datos,
     personalizacion,
+    carta,
   }
   const blob = new Blob([JSON.stringify(payload, null, 2)], {
     type: "application/json",
@@ -196,7 +212,7 @@ export function exportarJson(
 }
 
 export type ResultadoImport =
-  | { ok: true; datos: DatosCurriculum; personalizacion: Personalizacion }
+  | { ok: true; datos: DatosCurriculum; personalizacion: Personalizacion; carta: Carta }
   | { ok: false; error: string }
 
 export async function importarJson(archivo: File): Promise<ResultadoImport> {
@@ -220,8 +236,10 @@ export async function importarJson(archivo: File): Promise<ResultadoImport> {
 
     const datos = normalizarDatosCurriculum(raiz.datos)
     const personalizacion = normalizarPersonalizacion(raiz.personalizacion)
+    /* Retrocompatible: archivos exportados antes de incluir carta caen a CARTA_INICIAL. */
+    const carta = normalizarCarta(raiz.carta)
 
-    return { ok: true, datos, personalizacion }
+    return { ok: true, datos, personalizacion, carta }
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error desconocido"
     return { ok: false, error: `No se pudo leer el archivo: ${msg}` }
