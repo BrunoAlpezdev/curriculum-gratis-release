@@ -45,6 +45,14 @@ export function nombreMes(mes: string, idioma: IdiomaCv | undefined): string {
   return encontrado?.etiquetas[idioma ?? "es"] ?? mes
 }
 
+/** Elimina emoji, pictogramas y variation selectors de un texto antes de
+ *  pasarlo al PDF: las TTF embebidas solo tienen glifos latinos, asi que un
+ *  emoji saldria como caja/tofu. NO toca CJK ni otros scripts (borrar un nombre
+ *  legitimo es peor que mostrar tofu). */
+export function limpiarParaPdf(texto: string): string {
+  return texto.replace(/[\p{Extended_Pictographic}\u{FE0F}\u{200D}]/gu, "")
+}
+
 /** Normaliza un valor a URL absoluta usable en href / textWithLink.
  *  Deja pasar http(s)/mailto/tel; agrega mailto: a emails; si no, https://. */
 export function urlAbsoluta(valor: string): string {

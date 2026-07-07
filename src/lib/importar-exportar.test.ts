@@ -72,6 +72,15 @@ describe("normalizarPersonalizacion", () => {
     expect(new Set(p.ordenSecciones)).toEqual(new Set(ORDEN_SECCIONES_INICIAL))
     expect(p.ordenSecciones).not.toContain("fantasma")
   })
+
+  it("deduplica secciones repetidas en el orden importado", () => {
+    const p = normalizarPersonalizacion({ ordenSecciones: ["experiencia", "experiencia", "idiomas"] })
+    expect(p.ordenSecciones).toHaveLength(ORDEN_SECCIONES_INICIAL.length)
+    expect(new Set(p.ordenSecciones)).toEqual(new Set(ORDEN_SECCIONES_INICIAL))
+    // sin duplicados: cada seccion aparece exactamente una vez
+    expect(p.ordenSecciones.filter((s) => s === "experiencia")).toHaveLength(1)
+    expect(p.ordenSecciones.slice(0, 2)).toEqual(["experiencia", "idiomas"])
+  })
 })
 
 describe("normalizarCarta", () => {

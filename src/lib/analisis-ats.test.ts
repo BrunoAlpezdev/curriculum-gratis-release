@@ -62,6 +62,14 @@ describe("analizar", () => {
     expect(resultado.recomendaciones[0]!.id).toBe("perfil")
   })
 
+  it("no marca 'java' como presente cuando el CV solo dice 'javascript'", () => {
+    const datos = cvCon({ perfil: "Experto en javascript y frontend" })
+    const resultado = analizar("Buscamos experiencia en Java", datos)
+
+    const java = resultado.palabras.find((p) => p.palabra === "java")
+    expect(java?.enCv).toBe(false)
+  })
+
   it("descarta stopwords y numeros sueltos como keywords", () => {
     const resultado = analizar("para los 2024 con the and Kubernetes", DATOS_INICIALES)
     const palabras = resultado.palabras.map((p) => p.palabra)

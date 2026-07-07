@@ -170,9 +170,10 @@ export function normalizarCarta(valor: unknown): Carta {
 
 export function normalizarPersonalizacion(valor: unknown): Personalizacion {
   const crudo = esRegistro(valor) ? valor : {}
-  const secciones = Array.isArray(crudo.ordenSecciones)
+  const crudoValidas = Array.isArray(crudo.ordenSecciones)
     ? crudo.ordenSecciones.filter((s): s is SeccionOrdenable => typeof s === "string" && SECCIONES_VALIDAS.has(s as SeccionOrdenable))
     : ORDEN_SECCIONES_INICIAL
+  const secciones = [...new Set(crudoValidas)]
   const ordenCompleto = [...secciones, ...ORDEN_SECCIONES_INICIAL.filter((s) => !secciones.includes(s))]
 
   return {

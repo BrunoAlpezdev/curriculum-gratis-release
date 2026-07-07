@@ -1,7 +1,7 @@
 import { jsPDF } from "jspdf"
 import type { DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types"
 import { getColorHex } from "@/lib/colores"
-import { formatearRangoFechas, formatearFechaEducacion, formatearFecha, urlAbsoluta } from "@/lib/formato"
+import { formatearRangoFechas, formatearFechaEducacion, formatearFecha, urlAbsoluta, limpiarParaPdf } from "@/lib/formato"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { registrarFuentePdf } from "@/lib/fuentes-pdf"
@@ -70,14 +70,14 @@ export async function crearPdfAts(
   pdf.setFont(fuenteBase, "bold")
   pdf.setFontSize(20)
   setBlack()
-  pdf.text(dp.nombreCompleto || e.tuNombre, PAGE_WIDTH / 2, y, { align: "center" })
+  pdf.text(limpiarParaPdf(dp.nombreCompleto) || e.tuNombre, PAGE_WIDTH / 2, y, { align: "center" })
   y += 7
 
   if (dp.titulo) {
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(11)
     setColor(82, 82, 91)
-    pdf.text(dp.titulo, PAGE_WIDTH / 2, y, { align: "center" })
+    pdf.text(limpiarParaPdf(dp.titulo), PAGE_WIDTH / 2, y, { align: "center" })
     y += 5
   }
 
@@ -85,14 +85,13 @@ export async function crearPdfAts(
     { texto: dp.email, url: dp.email ? urlAbsoluta(dp.email) : undefined },
     { texto: dp.telefono },
     { texto: dp.rut ? `RUT ${dp.rut}` : "" },
-    { texto: dp.ubicacion },
+    { texto: limpiarParaPdf(dp.ubicacion) },
   ].filter((s) => s.texto)
   if (contacto.length > 0) {
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(9)
     setMuted()
-    escribirLineaEnlacesCentrada(pdf, contacto, y)
-    y += 4
+    y = escribirLineaEnlacesCentrada(pdf, contacto, y)
   }
 
   const enlaces = [dp.linkedin, dp.github, dp.sitioWeb]
@@ -102,8 +101,7 @@ export async function crearPdfAts(
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(9)
     setMuted()
-    escribirLineaEnlacesCentrada(pdf, enlaces, y)
-    y += 4
+    y = escribirLineaEnlacesCentrada(pdf, enlaces, y)
   }
 
   setAccent()
@@ -117,7 +115,7 @@ export async function crearPdfAts(
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(10)
     setMuted()
-    const lines = pdf.splitTextToSize(datos.perfil, CONTENT_WIDTH)
+    const lines = pdf.splitTextToSize(limpiarParaPdf(datos.perfil), CONTENT_WIDTH)
     escribirLineas(lines, 4)
     y += 4
   }
@@ -129,8 +127,9 @@ export async function crearPdfAts(
       for (const exp of datos.experiencia) {
         checkPage(20)
 
-        const cargo = exp.cargo || e.cargo
-        const tituloLinea = exp.empresa ? `${cargo}, ${exp.empresa}` : cargo
+        const cargo = limpiarParaPdf(exp.cargo) || e.cargo
+        const empresa = limpiarParaPdf(exp.empresa)
+        const tituloLinea = empresa ? `${cargo}, ${empresa}` : cargo
         const fecha = formatearRangoFechas(exp.fechaInicio, exp.fechaFin, personalizacion.idiomaCv)
         y = escribirTituloConFecha(pdf, tituloLinea, fecha, y, fuenteBase)
 
@@ -138,7 +137,7 @@ export async function crearPdfAts(
           pdf.setFont(fuenteBase, "italic")
           pdf.setFontSize(9)
           setMuted()
-          pdf.text(exp.ubicacion, MARGIN, y)
+          pdf.text(limpiarParaPdf(exp.ubicacion), MARGIN, y)
           y += 4
         }
 
@@ -146,7 +145,7 @@ export async function crearPdfAts(
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
           setColor(82, 82, 91)
-          const lines = pdf.splitTextToSize(exp.descripcion, CONTENT_WIDTH)
+          const lines = pdf.splitTextToSize(limpiarParaPdf(exp.descripcion), CONTENT_WIDTH)
           escribirLineas(lines, 3.5)
           y += 1
         }
@@ -155,7 +154,7 @@ export async function crearPdfAts(
           pdf.setFont(fuenteBase, "italic")
           pdf.setFontSize(9)
           setColor(63, 63, 70)
-          const lines = pdf.splitTextToSize(`${e.logros}: ${exp.logros}`, CONTENT_WIDTH)
+          const lines = pdf.splitTextToSize(`${e.logros}: ${limpiarParaPdf(exp.logros)}`, CONTENT_WIDTH)
           escribirLineas(lines, 3.5)
           y += 1
         }
@@ -169,8 +168,9 @@ export async function crearPdfAts(
       for (const edu of datos.educacion) {
         checkPage(12)
 
-        const titulo = edu.titulo || e.titulo
-        const tituloLinea = edu.institucion ? `${titulo}, ${edu.institucion}` : titulo
+        const titulo = limpiarParaPdf(edu.titulo) || e.titulo
+        const institucion = limpiarParaPdf(edu.institucion)
+        const tituloLinea = institucion ? `${titulo}, ${institucion}` : titulo
         const fecha = formatearFechaEducacion(edu.fechaInicio, edu.fechaFin, personalizacion.idiomaCv)
         y = escribirTituloConFecha(pdf, tituloLinea, fecha, y, fuenteBase)
 
@@ -178,7 +178,7 @@ export async function crearPdfAts(
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
           setColor(82, 82, 91)
-          const lines = pdf.splitTextToSize(edu.descripcion, CONTENT_WIDTH)
+          const lines = pdf.splitTextToSize(limpiarParaPdf(edu.descripcion), CONTENT_WIDTH)
           escribirLineas(lines, 3.5)
           y += 1
         }
@@ -192,8 +192,9 @@ export async function crearPdfAts(
       for (const curso of datos.cursos) {
         checkPage(10)
 
-        const nombre = curso.nombre || e.curso
-        const tituloCurso = curso.institucion ? `${nombre}, ${curso.institucion}` : nombre
+        const nombre = limpiarParaPdf(curso.nombre) || e.curso
+        const institucionCurso = limpiarParaPdf(curso.institucion)
+        const tituloCurso = institucionCurso ? `${nombre}, ${institucionCurso}` : nombre
         const fecha = curso.fecha ? formatearFecha(curso.fecha, personalizacion.idiomaCv) : ""
         y = escribirTituloConFecha(pdf, tituloCurso, fecha, y, fuenteBase)
 
@@ -217,7 +218,7 @@ export async function crearPdfAts(
 
         y = escribirTituloConFecha(
           pdf,
-          p.nombre || e.proyecto,
+          limpiarParaPdf(p.nombre) || e.proyecto,
           p.url ?? "",
           y,
           fuenteBase,
@@ -228,7 +229,7 @@ export async function crearPdfAts(
           pdf.setFont(fuenteBase, "italic")
           pdf.setFontSize(9)
           setMuted()
-          pdf.text(p.tecnologias, MARGIN, y)
+          pdf.text(limpiarParaPdf(p.tecnologias), MARGIN, y)
           y += 4
         }
 
@@ -236,7 +237,7 @@ export async function crearPdfAts(
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
           setColor(82, 82, 91)
-          const lines = pdf.splitTextToSize(p.descripcion, CONTENT_WIDTH)
+          const lines = pdf.splitTextToSize(limpiarParaPdf(p.descripcion), CONTENT_WIDTH)
           escribirLineas(lines, 3.5)
           y += 1
         }
@@ -258,7 +259,8 @@ export async function crearPdfAts(
       const gapX = 1.8
       const gapY = 1.6
       let x = MARGIN
-      for (const h of datos.habilidades) {
+      for (const habilidad of datos.habilidades) {
+        const h = limpiarParaPdf(habilidad)
         const ancho = pdf.getTextWidth(h) + padX * 2
         if (x + ancho > PAGE_WIDTH - MARGIN) {
           x = MARGIN
@@ -281,7 +283,7 @@ export async function crearPdfAts(
       pdf.setFontSize(10)
       setColor(63, 63, 70)
       const texto = datos.idiomas
-        .map((i) => `${i.nombre || e.idioma} (${etiquetaNivelIdioma(i.nivel, personalizacion.idiomaCv)})`)
+        .map((i) => `${limpiarParaPdf(i.nombre) || e.idioma} (${etiquetaNivelIdioma(i.nivel, personalizacion.idiomaCv)})`)
         .join("     ")
       const lines = pdf.splitTextToSize(texto, CONTENT_WIDTH)
       escribirLineas(lines, 4)
@@ -296,10 +298,10 @@ export async function crearPdfAts(
         pdf.setFont(fuenteBase, "bold")
         pdf.setFontSize(10)
         setBlack()
-        pdf.text(ref.nombre || e.nombre, MARGIN, y)
+        pdf.text(limpiarParaPdf(ref.nombre) || e.nombre, MARGIN, y)
         y += 4
 
-        const cargoEmpresa = [ref.cargo, ref.empresa].filter(Boolean).join(" · ")
+        const cargoEmpresa = [ref.cargo, ref.empresa].filter(Boolean).map(limpiarParaPdf).join(" · ")
         if (cargoEmpresa) {
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
@@ -312,7 +314,7 @@ export async function crearPdfAts(
           pdf.setFont(fuenteBase, "italic")
           pdf.setFontSize(9)
           setMuted()
-          pdf.text(ref.relacion, MARGIN, y)
+          pdf.text(limpiarParaPdf(ref.relacion), MARGIN, y)
           y += 4
         }
 
@@ -352,7 +354,7 @@ export async function crearPdfAts(
       const w = pdf.getTextWidth(`${etiquetaDisp} `)
       pdf.setFont(fuenteBase, "normal")
       setColor(82, 82, 91)
-      pdf.text(datos.disponibilidad, MARGIN + w, y)
+      pdf.text(limpiarParaPdf(datos.disponibilidad), MARGIN + w, y)
       y += 4
     }
     if (datos.pretensionesRenta) {
@@ -363,7 +365,7 @@ export async function crearPdfAts(
       const w = pdf.getTextWidth(`${etiquetaPret} `)
       pdf.setFont(fuenteBase, "normal")
       setColor(82, 82, 91)
-      pdf.text(datos.pretensionesRenta, MARGIN + w, y)
+      pdf.text(limpiarParaPdf(datos.pretensionesRenta), MARGIN + w, y)
       y += 4
     }
   }

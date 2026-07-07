@@ -2,7 +2,7 @@ import { jsPDF } from "jspdf"
 import type { Carta, DatosCurriculum, Personalizacion } from "@/types"
 import { getColorHex } from "@/lib/colores"
 import { etiquetasCv } from "@/lib/etiquetas-cv"
-import { urlAbsoluta } from "@/lib/formato"
+import { urlAbsoluta, limpiarParaPdf } from "@/lib/formato"
 import { registrarFuentePdf } from "@/lib/fuentes-pdf"
 import { hexToRgb } from "@/lib/generar-pdf-ats-helpers"
 
@@ -39,21 +39,21 @@ export async function generarPdfCarta(
   pdf.setFont(fuenteBase, "bold")
   pdf.setFontSize(14)
   setColor(24, 24, 27)
-  pdf.text(dp.nombreCompleto || et.tuNombre, MARGIN, y)
+  pdf.text(limpiarParaPdf(dp.nombreCompleto) || et.tuNombre, MARGIN, y)
   y += 5
 
   if (dp.titulo) {
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(10)
     setColor(113, 113, 122)
-    pdf.text(dp.titulo, MARGIN, y)
+    pdf.text(limpiarParaPdf(dp.titulo), MARGIN, y)
     y += 4
   }
 
   const segmentos = [
     { texto: dp.email, url: dp.email ? urlAbsoluta(dp.email) : undefined },
     { texto: dp.telefono },
-    { texto: dp.ubicacion },
+    { texto: limpiarParaPdf(dp.ubicacion) },
     { texto: dp.linkedin, url: dp.linkedin ? urlAbsoluta(dp.linkedin) : undefined },
   ].filter((s) => s.texto)
   if (segmentos.length > 0) {
@@ -91,7 +91,7 @@ export async function generarPdfCarta(
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(10)
     setColor(82, 82, 91)
-    pdf.text(carta.ciudadFecha, PAGE_WIDTH - MARGIN, y, { align: "right" })
+    pdf.text(limpiarParaPdf(carta.ciudadFecha), PAGE_WIDTH - MARGIN, y, { align: "right" })
     y += 8
   }
 
@@ -100,21 +100,21 @@ export async function generarPdfCarta(
     pdf.setFont(fuenteBase, "bold")
     pdf.setFontSize(10)
     setColor(24, 24, 27)
-    pdf.text(carta.destinatario, MARGIN, y)
+    pdf.text(limpiarParaPdf(carta.destinatario), MARGIN, y)
     y += 4
   }
   if (carta.empresaDestino) {
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(10)
     setColor(82, 82, 91)
-    pdf.text(carta.empresaDestino, MARGIN, y)
+    pdf.text(limpiarParaPdf(carta.empresaDestino), MARGIN, y)
     y += 4
   }
   if (carta.cargoPostulado) {
     pdf.setFont(fuenteBase, "italic")
     pdf.setFontSize(9)
     setColor(113, 113, 122)
-    pdf.text(`${et.postulacion}: ${carta.cargoPostulado}`, MARGIN, y)
+    pdf.text(`${et.postulacion}: ${limpiarParaPdf(carta.cargoPostulado)}`, MARGIN, y)
     y += 6
   } else if (carta.destinatario || carta.empresaDestino) {
     y += 4
@@ -126,7 +126,7 @@ export async function generarPdfCarta(
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(11)
     setColor(55, 55, 60)
-    const parrafos = carta.cuerpo.split(/\n\n+/)
+    const parrafos = limpiarParaPdf(carta.cuerpo).split(/\n\n+/)
     for (const parrafo of parrafos) {
       const lineas = pdf.splitTextToSize(parrafo, CONTENT_WIDTH)
       for (const linea of lineas) {
@@ -145,13 +145,13 @@ export async function generarPdfCarta(
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(11)
     setColor(55, 55, 60)
-    pdf.text(carta.despedida, MARGIN, y)
+    pdf.text(limpiarParaPdf(carta.despedida), MARGIN, y)
     y += 10
   }
   pdf.setFont(fuenteBase, "bold")
   pdf.setFontSize(11)
   setColor(24, 24, 27)
-  pdf.text(dp.nombreCompleto || et.tuNombre, MARGIN, y)
+  pdf.text(limpiarParaPdf(dp.nombreCompleto) || et.tuNombre, MARGIN, y)
 
   const nombreDoc = dp.nombreCompleto || et.tuNombre
   pdf.setProperties({

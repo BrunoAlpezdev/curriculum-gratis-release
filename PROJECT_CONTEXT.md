@@ -127,6 +127,9 @@ Regla actual:
 - `clasico` y `minimalista` son ATS y deben priorizar texto nativo.
 - `moderno` y `colorido` son visuales y pueden depender de captura.
 
+Limitacion de glifos: las TTF embebidas solo traen glifos latinos, asi que `limpiarParaPdf` (en `src/lib/formato.ts`) elimina emoji/pictogramas del contenido del usuario antes de renderizar para evitar cajas (tofu).
+El texto CJK (chino/japones/coreano) no esta soportado por la fuente y saldra como tofu; no se elimina porque borrar un nombre legitimo es peor que mostrar tofu.
+
 ## Acciones Globales
 
 - `src/editor/BarraAcciones.tsx`: descargar PDF, reiniciar datos, cambiar tema, abrir ejemplo, exportar JSON, exportar TXT/Markdown e importar JSON.

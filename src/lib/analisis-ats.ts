@@ -102,16 +102,17 @@ export function analizar(jobDescription: string, datos: DatosCurriculum): Result
     frecuencias.set(t, (frecuencias.get(t) ?? 0) + 1)
   }
 
-  /* Construimos y normalizamos el texto del CV una sola vez: esto corre en cada
-     tecla del textarea de la oferta (useMemo), asi que evitamos el doble trabajo. */
-  const cvNormalizado = normalizar(textoCv(datos))
-  const cvTokens = new Set(filtrarTokens(cvNormalizado))
+  /* Tokenizamos el texto del CV una sola vez: esto corre en cada tecla del
+     textarea de la oferta (useMemo), asi que evitamos el doble trabajo.
+     Comparamos por token exacto (no substring) para no marcar "java" como
+     presente cuando el CV solo dice "javascript". */
+  const cvTokens = new Set(tokenizar(textoCv(datos)))
 
   const palabras: PalabraClave[] = Array.from(frecuencias.entries())
     .map(([palabra, frecuencia]) => ({
       palabra,
       frecuencia,
-      enCv: cvTokens.has(palabra) || cvNormalizado.includes(palabra),
+      enCv: cvTokens.has(palabra),
     }))
     .sort((a, b) => b.frecuencia - a.frecuencia)
     .slice(0, 30)

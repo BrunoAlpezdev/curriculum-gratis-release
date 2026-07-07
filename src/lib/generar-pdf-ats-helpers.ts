@@ -80,34 +80,66 @@ export function escribirTituloConFecha(
   return y
 }
 
-/* Dibuja una linea de segmentos centrada horizontalmente, donde los segmentos
-   con `url` se renderizan como enlaces clickeables (textWithLink) y el resto
-   como texto plano. Usa la fuente/tamano/color ya activos en el pdf. */
+/* Dibuja segmentos centrados horizontalmente, donde los segmentos con `url` se
+   renderizan como enlaces clickeables (textWithLink) y el resto como texto plano.
+   Si todos caben en CONTENT_WIDTH van en una sola linea centrada; si no, se
+   agrupan en filas (sin partir cada segmento) y cada fila se centra por separado.
+   Devuelve la nueva `y`. Usa la fuente/tamano/color ya activos en el pdf. */
 export function escribirLineaEnlacesCentrada(
   pdf: jsPDF,
   segmentos: { texto: string; url?: string }[],
   y: number,
-): void {
+  altoLinea = 4,
+): number {
   const visibles = segmentos.filter((s) => s.texto)
-  if (visibles.length === 0) return
+  if (visibles.length === 0) return y
   const SEP = "  |  "
   const anchoSep = pdf.getTextWidth(SEP)
   const anchos = visibles.map((s) => pdf.getTextWidth(s.texto))
   const total =
     anchos.reduce((a, b) => a + b, 0) + anchoSep * (visibles.length - 1)
-  let x = PAGE_WIDTH / 2 - total / 2
-  visibles.forEach((seg, i) => {
-    if (seg.url) {
-      pdf.textWithLink(seg.texto, x, y, { url: seg.url })
-    } else {
-      pdf.text(seg.texto, x, y)
+
+  /* Agrupamos en filas: acumulamos mientras el ancho de la fila no exceda
+     CONTENT_WIDTH. Un segmento que por si solo no cabe va en su propia fila. */
+  const filas: { seg: { texto: string; url?: string }; ancho: number }[][] = []
+  if (total <= CONTENT_WIDTH) {
+    filas.push(visibles.map((seg, i) => ({ seg, ancho: anchos[i]! })))
+  } else {
+    let filaActual: { seg: { texto: string; url?: string }; ancho: number }[] = []
+    let anchoFila = 0
+    for (let i = 0; i < visibles.length; i++) {
+      const ancho = anchos[i]!
+      const extra = filaActual.length === 0 ? ancho : anchoSep + ancho
+      if (filaActual.length > 0 && anchoFila + extra > CONTENT_WIDTH) {
+        filas.push(filaActual)
+        filaActual = []
+        anchoFila = 0
+      }
+      filaActual.push({ seg: visibles[i]!, ancho })
+      anchoFila += filaActual.length === 1 ? ancho : anchoSep + ancho
     }
-    x += anchos[i]!
-    if (i < visibles.length - 1) {
-      pdf.text(SEP, x, y)
-      x += anchoSep
-    }
-  })
+    if (filaActual.length > 0) filas.push(filaActual)
+  }
+
+  for (const fila of filas) {
+    const anchoFila =
+      fila.reduce((a, f) => a + f.ancho, 0) + anchoSep * (fila.length - 1)
+    let x = PAGE_WIDTH / 2 - anchoFila / 2
+    fila.forEach(({ seg, ancho }, i) => {
+      if (seg.url) {
+        pdf.textWithLink(seg.texto, x, y, { url: seg.url })
+      } else {
+        pdf.text(seg.texto, x, y)
+      }
+      x += ancho
+      if (i < fila.length - 1) {
+        pdf.text(SEP, x, y)
+        x += anchoSep
+      }
+    })
+    y += altoLinea
+  }
+  return y
 }
 
 export function hexToRgb(hex: string): PdfColor {
