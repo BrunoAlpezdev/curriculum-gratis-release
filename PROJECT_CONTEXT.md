@@ -163,6 +163,9 @@ El texto CJK (chino/japones/coreano) no esta soportado por la fuente y saldra co
 - `src/components/atoms/Chip.tsx`: chips.
 - `src/components/molecules/SeccionFormulario.tsx`: contenedor reutilizable de secciones con tips; por defecto las secciones parten colapsadas salvo que pasen `defaultAbierta`.
 - `src/components/molecules/EntradaRepetible.tsx`: wrapper para items repetibles.
+- `src/components/molecules/DialogoModal.tsx`: wrapper del `<dialog>` nativo. Unico lugar que implementa ESC + scroll-lock + trap/retorno de foco para modales (el trap y el foco los da la plataforma). Soporta `alineacion` ("centro" | "abajo" para hoja inferior mobile). El overlay se pinta con `dialog::backdrop` en `globals.css`. Lo usan `DialogEjemploCv`, `DialogEnviarCv`, `DialogCopiasLocales`, `SheetIndice` y `DialogoConfirmar`.
+- `src/components/molecules/DialogoConfirmar.tsx`: confirmaciones sobre `DialogoModal`. Variantes `normal`/`peligro`/`aviso` (aviso = solo cerrar, para errores). Exporta tambien `DialogoNombrarCopia` (Input del DS) que reemplaza al `window.prompt` de nombrar copias. No quedan `window.prompt/confirm/alert` en `src/`.
+- Excepcion deliberada: `src/editor/wizard/PreviewOverlay.tsx` NO usa `<dialog>` porque `crearPdfVisual` (generar-pdf.ts) necesita `#curriculum-pdf` montado y medible aun con el overlay cerrado (por eso el truco `invisible`, no `display:none`). Repone a mano ESC, foco de entrada/salida y `role="dialog"`/`aria-modal` solo cuando esta abierto.
 - `src/components/ui/cn.ts`: merge de clases.
 
 Regla visual:

@@ -149,6 +149,13 @@ body {
   transform-origin: bottom center;
 }
 
+/* Backdrop de los <dialog> nativos (DialogoModal). Usa el mismo tono que la
+   Surface variant="overlay": tinta al 65% con blur. */
+dialog::backdrop {
+  background-color: color-mix(in srgb, var(--text-main) 65%, transparent);
+  backdrop-filter: blur(4px);
+}
+
 /* Print styles — solo muestra el CV */
 @media print {
   body {

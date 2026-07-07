@@ -19,6 +19,14 @@ const STOPWORDS = new Set([
   "about", "within", "across", "each", "other", "using", "role", "team",
   "work", "working", "job", "position", "candidate", "company", "company's",
   "year", "years", "month", "months", "day", "days",
+  // Palabras de 2 letras (umbral bajado a >= 2 para captar siglas como QA/Go):
+  // solo conectores frecuentes, nunca siglas tecnicas.
+  // Español
+  "de", "la", "el", "en", "un", "es", "se", "al", "lo", "su", "mi", "tu",
+  "ni", "ya", "le", "os", "te", "me", "he", "ha",
+  // Inglés
+  "of", "to", "in", "on", "at", "or", "as", "by", "an", "it", "if", "be",
+  "do", "we", "us", "so", "my", "up", "no",
 ])
 
 function normalizar(texto: string): string {
@@ -34,7 +42,7 @@ function normalizar(texto: string): string {
 function filtrarTokens(textoNormalizado: string): string[] {
   return textoNormalizado
     .split(/\s+/)
-    .filter((t) => t.length >= 3 && !STOPWORDS.has(t) && !/^\d+$/.test(t))
+    .filter((t) => t.length >= 2 && !STOPWORDS.has(t) && !/^\d+$/.test(t))
 }
 
 function tokenizar(texto: string): string[] {

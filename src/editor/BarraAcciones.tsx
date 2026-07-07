@@ -28,9 +28,11 @@ import { useTema, type Tema } from "@/lib/useTema"
 import { exportarJson, importarJson } from "@/lib/importar-exportar"
 import { exportarTexto } from "@/lib/exportar-texto"
 import { guardarCopiaLocal, intentarGuardarCopiaLocal, ErrorCopiaLocal, type CopiaLocalCv } from "@/lib/copias-locales"
+import { descargarDocumento } from "@/lib/descargar-documento"
 import { DialogCopiasLocales } from "@/editor/DialogCopiasLocales"
 import { DialogEnviarCv } from "@/editor/DialogEnviarCv"
 import { DialogEjemploCv } from "@/editor/DialogEjemploCv"
+import { DialogoConfirmar, DialogoNombrarCopia } from "@/components/molecules/DialogoConfirmar"
 import { IndicadorGuardado } from "@/editor/IndicadorGuardado"
 import { generarDatosMock } from "@/editor/datos-ejemplo"
 import type { Modo } from "@/editor/Editor"
@@ -60,12 +62,27 @@ interface BarraAccionesProps {
   modo: Modo
 }
 
+type Confirmacion = {
+  titulo: string
+  descripcion: string
+  textoConfirmar?: string
+  accion: () => void
+}
+
+type Aviso = {
+  titulo: string
+  descripcion: string
+}
+
 export function BarraAcciones({ modo }: BarraAccionesProps) {
   const [descargando, setDescargando] = useState(false)
   const [menuAbierto, setMenuAbierto] = useState(false)
   const [ejemploAbierto, setEjemploAbierto] = useState(false)
   const [copiasAbierto, setCopiasAbierto] = useState(false)
   const [enviarAbierto, setEnviarAbierto] = useState(false)
+  const [confirmacionPendiente, setConfirmacionPendiente] = useState<Confirmacion | null>(null)
+  const [nombrarCopiaAbierto, setNombrarCopiaAbierto] = useState(false)
+  const [aviso, setAviso] = useState<Aviso | null>(null)
   const menuId = useId()
   const datos = useCurriculumStore((s) => s.datos)
   const carta = useCurriculumStore((s) => s.carta)
@@ -143,20 +160,27 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
     setMenuAbierto(false)
   }
 
-  function guardarCopia(nombreSugerido?: string) {
-    const nombreBase = datos.datosPersonales.nombreCompleto.trim() || "Curriculum"
-    const nombre = window.prompt("Nombre de la copia local", nombreSugerido ?? `${nombreBase} - copia`)
-    if (nombre === null) return
+  const nombreSugeridoCopia = `${datos.datosPersonales.nombreCompleto.trim() || "Curriculum"} - copia`
+
+  function abrirNombrarCopia() {
+    setNombrarCopiaAbierto(true)
+    setMenuAbierto(false)
+  }
+
+  function confirmarGuardarCopia(nombre: string) {
     try {
       guardarCopiaLocal(nombre, datos, personalizacion, carta)
     } catch (err) {
       if (err instanceof ErrorCopiaLocal) {
-        window.alert("No hay espacio para guardar la copia. Elimina copias antiguas.")
+        setAviso({
+          titulo: "No se pudo guardar la copia",
+          descripcion: "No hay espacio en este navegador. Elimina copias antiguas e intenta de nuevo.",
+        })
       } else {
         throw err
       }
     }
-    setMenuAbierto(false)
+    setNombrarCopiaAbierto(false)
   }
 
   function abrirCopias() {
@@ -170,12 +194,18 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   }
 
   function restaurarCopia(copia: CopiaLocalCv) {
-    if (!window.confirm("Esto reemplazará el CV y la carta actuales. ¿Continuar?")) return
-    intentarGuardarCopiaLocal("Respaldo antes de restaurar", datos, personalizacion, carta)
-    setDatos(copia.datos)
-    setPersonalizacion(copia.personalizacion)
-    setCarta(copia.carta)
-    setCopiasAbierto(false)
+    setConfirmacionPendiente({
+      titulo: "Restaurar copia",
+      descripcion: "Esto reemplazará el CV y la carta actuales. ¿Continuar?",
+      textoConfirmar: "Restaurar",
+      accion: () => {
+        intentarGuardarCopiaLocal("Respaldo antes de restaurar", datos, personalizacion, carta)
+        setDatos(copia.datos)
+        setPersonalizacion(copia.personalizacion)
+        setCarta(copia.carta)
+        setCopiasAbierto(false)
+      },
+    })
   }
 
   async function handleArchivo(e: React.ChangeEvent<HTMLInputElement>) {
@@ -184,14 +214,20 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
     if (!archivo) return
     const resultado = await importarJson(archivo)
     if (!resultado.ok) {
-      window.alert(`No se pudo importar: ${resultado.error}`)
+      setAviso({ titulo: "No se pudo importar", descripcion: resultado.error })
       return
     }
-    if (!window.confirm("Esto reemplazará los datos actuales. ¿Continuar?")) return
-    intentarGuardarCopiaLocal("Respaldo antes de importar", datos, personalizacion, carta)
-    setDatos(resultado.datos)
-    setPersonalizacion(resultado.personalizacion)
-    setCarta(resultado.carta)
+    setConfirmacionPendiente({
+      titulo: "Importar datos",
+      descripcion: "Esto reemplazará los datos actuales. ¿Continuar?",
+      textoConfirmar: "Importar",
+      accion: () => {
+        intentarGuardarCopiaLocal("Respaldo antes de importar", datos, personalizacion, carta)
+        setDatos(resultado.datos)
+        setPersonalizacion(resultado.personalizacion)
+        setCarta(resultado.carta)
+      },
+    })
   }
 
   function handleTapTitulo() {
@@ -205,26 +241,26 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   }
 
   function reiniciar() {
-    if (window.confirm("¿Seguro que quieres reiniciar? Se borrarán el curriculum, la personalización y la carta.")) {
-      intentarGuardarCopiaLocal("Respaldo antes de reiniciar", datos, personalizacion, carta)
-      reiniciarStore()
-    }
+    setMenuAbierto(false)
+    setConfirmacionPendiente({
+      titulo: "Reiniciar todo",
+      descripcion: "Se borrarán el curriculum, la personalización y la carta. ¿Continuar?",
+      textoConfirmar: "Reiniciar",
+      accion: () => {
+        intentarGuardarCopiaLocal("Respaldo antes de reiniciar", datos, personalizacion, carta)
+        reiniciarStore()
+      },
+    })
   }
   const { tema, setTema } = useTema()
 
   async function descargar() {
     setDescargando(true)
     try {
-      if (modo === "carta") {
-        const { generarPdfCarta } = await import("@/lib/generar-pdf-carta")
-        await generarPdfCarta(datos, carta, personalizacion)
-      } else {
-        const { generarPdf } = await import("@/lib/generar-pdf")
-        await generarPdf(datos, personalizacion)
-      }
+      await descargarDocumento(modo, datos, carta, personalizacion)
     } catch (err) {
-      const detalle = err instanceof Error && err.message ? `\n${err.message}` : ""
-      window.alert(`No se pudo generar el PDF. Intenta de nuevo.${detalle}`)
+      const detalle = err instanceof Error && err.message ? ` ${err.message}` : ""
+      setAviso({ titulo: "No se pudo generar el PDF", descripcion: `Intenta de nuevo.${detalle}` })
     } finally {
       setDescargando(false)
     }
@@ -235,7 +271,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
     { icono: <FileArrowDownIcon size={16} />, etiqueta: "Exportar TXT", onClick: () => exportarFormatoTexto("txt") },
     { icono: <FileArrowDownIcon size={16} />, etiqueta: "Exportar Markdown", onClick: () => exportarFormatoTexto("md") },
     { icono: <FileArrowUpIcon size={16} />, etiqueta: "Importar JSON", onClick: pedirImportar },
-    { icono: <CopyIcon size={16} />, etiqueta: "Guardar copia local", onClick: () => guardarCopia() },
+    { icono: <CopyIcon size={16} />, etiqueta: "Guardar copia local", onClick: abrirNombrarCopia },
     { icono: <ClockCounterClockwiseIcon size={16} />, etiqueta: "Ver copias locales", onClick: abrirCopias },
     { icono: <ArrowCounterClockwiseIcon size={16} />, etiqueta: "Reiniciar", onClick: reiniciar },
     ...(modo === "cv"
@@ -352,6 +388,31 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
       <DialogEjemploCv abierto={ejemploAbierto} onCerrar={() => setEjemploAbierto(false)} />
       <DialogCopiasLocales abierto={copiasAbierto} onCerrar={() => setCopiasAbierto(false)} onRestaurar={restaurarCopia} />
       <DialogEnviarCv abierto={enviarAbierto} datos={datos} personalizacion={personalizacion} onCerrar={() => setEnviarAbierto(false)} />
+      <DialogoConfirmar
+        abierto={confirmacionPendiente !== null}
+        titulo={confirmacionPendiente?.titulo ?? ""}
+        descripcion={confirmacionPendiente?.descripcion}
+        textoConfirmar={confirmacionPendiente?.textoConfirmar}
+        variante="peligro"
+        onConfirmar={() => {
+          confirmacionPendiente?.accion()
+          setConfirmacionPendiente(null)
+        }}
+        onCerrar={() => setConfirmacionPendiente(null)}
+      />
+      <DialogoNombrarCopia
+        abierto={nombrarCopiaAbierto}
+        nombreSugerido={nombreSugeridoCopia}
+        onConfirmar={confirmarGuardarCopia}
+        onCerrar={() => setNombrarCopiaAbierto(false)}
+      />
+      <DialogoConfirmar
+        abierto={aviso !== null}
+        variante="aviso"
+        titulo={aviso?.titulo ?? ""}
+        descripcion={aviso?.descripcion}
+        onCerrar={() => setAviso(null)}
+      />
     </Surface>
   )
 }

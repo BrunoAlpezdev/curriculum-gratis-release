@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { UserIcon, CameraIcon, TrashIcon } from "@phosphor-icons/react"
 import { Input } from "@/components/atoms/Input"
 import { Button } from "@/components/atoms/Button"
@@ -24,25 +24,27 @@ export function CamposDatosPersonales() {
   const datos = useCurriculumStore((s) => s.datos.datosPersonales)
   const set = useCurriculumStore((s) => s.setDatosPersonales)
   const inputFotoRef = useRef<HTMLInputElement>(null)
+  const [errorFoto, setErrorFoto] = useState("")
 
   async function handleFoto(e: React.ChangeEvent<HTMLInputElement>) {
     const archivo = e.target.files?.[0]
     e.target.value = ""
     if (!archivo) return
     if (!archivo.type.startsWith("image/")) {
-      window.alert("El archivo debe ser una imagen.")
+      setErrorFoto("El archivo debe ser una imagen.")
       return
     }
     if (archivo.size > TAMANO_MAX_FOTO) {
-      window.alert("La imagen es muy grande. Usa una de menos de 10 MB.")
+      setErrorFoto("La imagen es muy grande. Usa una de menos de 10 MB.")
       return
     }
+    setErrorFoto("")
     try {
       const foto = await comprimirFoto(archivo)
       set({ foto })
     } catch (err) {
-      const detalle = err instanceof Error && err.message ? `\n${err.message}` : ""
-      window.alert(`No se pudo procesar la imagen.${detalle}`)
+      const detalle = err instanceof Error && err.message ? ` ${err.message}` : ""
+      setErrorFoto(`No se pudo procesar la imagen.${detalle}`)
     }
   }
 
@@ -89,6 +91,13 @@ export function CamposDatosPersonales() {
             className="hidden"
             onChange={handleFoto}
           />
+          {errorFoto && (
+            <Surface variant="panelMuted" className="border-danger-line bg-danger-soft px-3 py-2">
+              <Text variant="small" className="text-danger-text">
+                {errorFoto}
+              </Text>
+            </Surface>
+          )}
         </div>
       </div>
       <Input

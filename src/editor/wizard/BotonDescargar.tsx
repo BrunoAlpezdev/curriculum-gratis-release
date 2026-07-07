@@ -7,6 +7,7 @@ import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
 import { cn } from "@/components/ui/cn"
 import { useCurriculumStore } from "@/lib/store"
+import { descargarDocumento } from "@/lib/descargar-documento"
 import type { Modo } from "@/editor/Editor"
 
 interface BotonDescargarProps {
@@ -30,13 +31,7 @@ export function BotonDescargar({ modo, className, size = "lg" }: BotonDescargarP
     setDescargando(true)
     setError("")
     try {
-      if (modo === "carta") {
-        const { generarPdfCarta } = await import("@/lib/generar-pdf-carta")
-        await generarPdfCarta(datos, carta, personalizacion)
-      } else {
-        const { generarPdf } = await import("@/lib/generar-pdf")
-        await generarPdf(datos, personalizacion)
-      }
+      await descargarDocumento(modo, datos, carta, personalizacion)
     } catch (err) {
       const detalle = err instanceof Error && err.message ? ` ${err.message}` : ""
       setError(`No se pudo generar el PDF. Intenta de nuevo.${detalle}`)

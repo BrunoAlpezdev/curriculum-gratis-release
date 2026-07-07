@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useEffectEvent, useRef } from "react"
 import { XIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
@@ -17,16 +18,41 @@ interface PreviewOverlayProps {
 
 /** Vista previa a pantalla completa para mobile, donde no hay panel lateral. */
 export function PreviewOverlay({ abierto, modo, onCerrar }: PreviewOverlayProps) {
-  /* Siempre montado en mobile (solo alterna visibilidad) para que #curriculum-pdf
-     exista aunque el overlay esté cerrado: crearPdfVisual lo busca por id y sin
-     esto la descarga de plantillas visuales fallaría en mobile. */
+  const cerrar = useEffectEvent(onCerrar)
+  const botonCerrarRef = useRef<HTMLButtonElement>(null)
+  const triggerRef = useRef<Element | null>(null)
+
+  /* NO usamos <dialog> aqui a proposito: crearPdfVisual (generar-pdf.ts) busca
+     #curriculum-pdf en el DOM y lo mide, asi que el contenedor debe seguir
+     montado y medible aunque el overlay este cerrado (por eso el truco
+     "invisible"). Un <dialog> cerrado es display:none y romperia la descarga
+     multipagina en mobile. Reponemos a mano ESC + foco de entrada/salida. */
+  useEffect(() => {
+    if (!abierto) return
+    triggerRef.current = document.activeElement
+    botonCerrarRef.current?.focus()
+    function alTecla(e: KeyboardEvent) {
+      if (e.key === "Escape") cerrar()
+    }
+    document.addEventListener("keydown", alTecla)
+    return () => {
+      document.removeEventListener("keydown", alTecla)
+      if (triggerRef.current instanceof HTMLElement) triggerRef.current.focus()
+    }
+  }, [abierto])
+
   return (
-    <div className={cn("fixed inset-0 z-50 flex flex-col bg-app-bg md:hidden", !abierto && "invisible pointer-events-none")}>
+    <div
+      role={abierto ? "dialog" : undefined}
+      aria-modal={abierto ? true : undefined}
+      aria-label={modo === "carta" ? "Vista previa de la carta" : "Vista previa del CV"}
+      className={cn("fixed inset-0 z-50 flex flex-col bg-app-bg md:hidden", !abierto && "invisible pointer-events-none")}
+    >
       <Surface variant="toolbar" className="flex items-center justify-between px-4 py-3">
         <Text as="h2" variant="strong" className="text-base font-extrabold">
           {modo === "carta" ? "Vista previa de la carta" : "Vista previa del CV"}
         </Text>
-        <Button variant="ghost" size="icon" onClick={onCerrar} aria-label="Cerrar vista previa">
+        <Button ref={botonCerrarRef} variant="ghost" size="icon" onClick={onCerrar} aria-label="Cerrar vista previa">
           <XIcon size={18} />
         </Button>
       </Surface>

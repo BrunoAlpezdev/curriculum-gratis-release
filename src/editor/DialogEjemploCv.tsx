@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useEffectEvent, useState } from "react"
+import { useState } from "react"
 import {
   XIcon,
   ArrowSquareOutIcon,
@@ -11,6 +11,7 @@ import {
 import { Button, buttonVariants } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
+import { DialogoModal } from "@/components/molecules/DialogoModal"
 import { cn } from "@/components/ui/cn"
 
 const URL_PDF = "/Bruno_Alexis_Perez_Valenzuela_CV.pdf"
@@ -25,26 +26,6 @@ interface Props {
 
 export function DialogEjemploCv({ abierto, onCerrar }: Props) {
   const [zoom, setZoom] = useState(100)
-  const cerrarDialogo = useEffectEvent(onCerrar)
-
-  useEffect(() => {
-    if (!abierto) return
-    function handleEscape(e: KeyboardEvent) {
-      if (e.key === "Escape") cerrarDialogo()
-    }
-    document.addEventListener("keydown", handleEscape)
-    /* Bloquear scroll del body mientras el dialog esta abierto.
-       En mobile el iframe del PDF puede tener su propio scroll y queremos
-       que el body no se mueva detras. */
-    const overflowPrev = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    return () => {
-      document.removeEventListener("keydown", handleEscape)
-      document.body.style.overflow = overflowPrev
-    }
-  }, [abierto])
-
-  if (!abierto) return null
 
   const urlPdfEmbebido = `${URL_PDF}#navpanes=0&pagemode=none&zoom=${zoom}`
 
@@ -57,18 +38,15 @@ export function DialogEjemploCv({ abierto, onCerrar }: Props) {
   }
 
   return (
-    <Surface
-      variant="overlay"
-      role="dialog"
-      aria-modal="true"
-      aria-label="CV de ejemplo"
-      className="fixed inset-0 z-50 flex items-stretch justify-center md:items-center md:p-6"
-      onClick={onCerrar}
+    <DialogoModal
+      abierto={abierto}
+      onCerrar={onCerrar}
+      ariaLabel="CV de ejemplo"
+      className="items-stretch"
     >
       <Surface
         variant="panel"
         className="flex h-dvh w-full flex-col border-0 shadow-2xl md:h-[calc(100dvh-3rem)] md:max-w-3xl"
-        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
           <div className="min-w-0">
@@ -170,6 +148,6 @@ export function DialogEjemploCv({ abierto, onCerrar }: Props) {
               el boton "Abrir" del header para verlo en pestaña nueva. */}
         </Surface>
       </Surface>
-    </Surface>
+    </DialogoModal>
   )
 }

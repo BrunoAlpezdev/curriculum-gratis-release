@@ -1,11 +1,12 @@
 "use client"
 
-import { useEffect, useEffectEvent, useState } from "react"
+import { useState } from "react"
 import { EnvelopeIcon, SpinnerIcon, XIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
 import { Input } from "@/components/atoms/Input"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
+import { DialogoModal } from "@/components/molecules/DialogoModal"
 import { useUsageLimits } from "@/lib/use-usage-limits"
 import type { DatosCurriculum, Personalizacion } from "@/types"
 
@@ -32,27 +33,6 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
   const [error, setError] = useState("")
   const [enviado, setEnviado] = useState(false)
   const { usage, refresh: refreshUsage } = useUsageLimits()
-  const cerrarDialogo = useEffectEvent(onCerrar)
-  const prellenarEmail = useEffectEvent(() => {
-    if (!email.trim()) setEmail(datos.datosPersonales.email)
-  })
-
-  useEffect(() => {
-    if (!abierto) return
-    prellenarEmail()
-    function handleEscape(e: KeyboardEvent) {
-      if (e.key === "Escape") cerrarDialogo()
-    }
-    document.addEventListener("keydown", handleEscape)
-    const overflowPrev = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    return () => {
-      document.removeEventListener("keydown", handleEscape)
-      document.body.style.overflow = overflowPrev
-    }
-  }, [abierto])
-
-  if (!abierto) return null
 
   async function enviar(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -85,18 +65,10 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
   }
 
   return (
-    <Surface
-      variant="overlay"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Enviar CV por correo"
-      className="fixed inset-0 z-50 flex items-end justify-center md:items-center md:p-6"
-      onClick={onCerrar}
-    >
+    <DialogoModal abierto={abierto} onCerrar={onCerrar} ariaLabel="Enviar CV por correo">
       <Surface
         variant="panel"
         className="w-full border-0 shadow-2xl md:max-w-md"
-        onClick={(evento) => evento.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-3 border-b border-border-subtle px-4 py-3">
           <div>
@@ -150,6 +122,6 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
           </Button>
         </form>
       </Surface>
-    </Surface>
+    </DialogoModal>
   )
 }

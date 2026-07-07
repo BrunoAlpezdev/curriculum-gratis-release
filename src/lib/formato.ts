@@ -20,10 +20,6 @@ export const MESES_ORDENADOS: MesFecha[] = [
   { valor: "12", etiquetas: { es: "Dic", en: "Dec" } },
 ]
 
-export const MESES: Record<string, string> = Object.fromEntries(
-  MESES_ORDENADOS.map((mes) => [mes.valor, mes.etiquetas.es]),
-)
-
 export function mesesFecha(idioma: IdiomaCv | undefined): { valor: string; etiqueta: string }[] {
   const idiomaSeguro = idioma ?? "es"
   return MESES_ORDENADOS.map((mes) => ({
