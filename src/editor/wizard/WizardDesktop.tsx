@@ -36,7 +36,8 @@ export function WizardDesktop({ pasos, actual, modo, onIr, onAnterior, onSiguien
 
       {/* Formulario del paso */}
       <main className="flex flex-1 flex-col overflow-hidden">
-        <div className="flex-1 overflow-y-auto px-8 py-6">
+        {/* key remonta el contenedor al cambiar de paso, reseteando el scroll arriba */}
+        <div key={paso.id} className="flex-1 overflow-y-auto px-8 py-6">
           <div className="mx-auto max-w-2xl">
             {paso.esRevision ? (
               <PasoRevision modo={modo} />

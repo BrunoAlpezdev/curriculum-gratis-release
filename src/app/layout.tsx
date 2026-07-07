@@ -1,10 +1,51 @@
 import type { Metadata } from "next"
+import { Inter, Roboto, Lato, Merriweather, Libre_Baskerville } from "next/font/google"
 import Script from "next/script"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { LOGO_URL, ORGANIZATION, SITE_NAME, SITE_URL } from "@/lib/seo"
 import "./globals.css"
+
+/* Fuentes reales self-hosted por next/font (subset latin, font-display swap).
+   Inter es variable → sin weight. El resto pide 400/700 y ambas cursivas. */
+const inter = Inter({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  variable: "--font-inter",
+})
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-roboto",
+})
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-lato",
+})
+const merriweather = Merriweather({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-merriweather",
+})
+const libreBaskerville = Libre_Baskerville({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-libre-baskerville",
+})
+
+const CLASES_FUENTES = [
+  inter.variable,
+  roboto.variable,
+  lato.variable,
+  merriweather.variable,
+  libreBaskerville.variable,
+].join(" ")
 
 const TITLE = "Curriculum Vitae Gratis Chile 2026 | Crear CV en PDF"
 const DESCRIPTION =
@@ -93,7 +134,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es-CL" suppressHydrationWarning>
+    <html lang="es-CL" className={CLASES_FUENTES} suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <Script id="tema-inicial" strategy="beforeInteractive">
           {`(function(){try{var t=localStorage.getItem("tema");var d=t==="oscuro"||(t!=="claro"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}})()`}

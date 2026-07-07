@@ -212,6 +212,9 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
         const { generarPdf } = await import("@/lib/generar-pdf")
         await generarPdf(datos, personalizacion)
       }
+    } catch (err) {
+      const detalle = err instanceof Error && err.message ? `\n${err.message}` : ""
+      window.alert(`No se pudo generar el PDF. Intenta de nuevo.${detalle}`)
     } finally {
       setDescargando(false)
     }

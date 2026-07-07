@@ -3,6 +3,7 @@ import { jsPDF } from "jspdf"
 import type { DatosCurriculum, Personalizacion } from "@/types"
 import { PLANTILLAS } from "@/lib/constantes"
 import { getColorHex } from "@/lib/colores"
+import { hexToRgb } from "@/lib/generar-pdf-ats-helpers"
 import { A4_WIDTH_PX, A4_HEIGHT_PX } from "@/cv/CurriculumVista"
 
 const A4_WIDTH_MM = 210
@@ -237,13 +238,6 @@ function calcularBlancosPorFila(
     }
   }
   return scores
-}
-
-function hexToRgb(hex: string): { r: number; g: number; b: number } {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return { r, g, b }
 }
 
 /* Encuentra la fila con mas pixeles blancos en [minimo, ideal].

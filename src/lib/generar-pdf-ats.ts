@@ -11,6 +11,7 @@ import {
   PAGE_WIDTH,
   hexToRgb,
   renderSeccion,
+  escribirTituloConFecha,
 } from "@/lib/generar-pdf-ats-helpers"
 
 export function generarPdfAts(
@@ -119,21 +120,10 @@ export function crearPdfAts(
       for (const exp of datos.experiencia) {
         checkPage(20)
 
-        pdf.setFont(fuenteBase, "bold")
-        pdf.setFontSize(10)
-        setBlack()
         const cargo = exp.cargo || e.cargo
         const tituloLinea = exp.empresa ? `${cargo}, ${exp.empresa}` : cargo
-        pdf.text(tituloLinea, MARGIN, y)
-
         const fecha = formatearRangoFechas(exp.fechaInicio, exp.fechaFin, personalizacion.idiomaCv)
-        if (fecha) {
-          pdf.setFont(fuenteBase, "normal")
-          pdf.setFontSize(9)
-          setMuted()
-          pdf.text(fecha, PAGE_WIDTH - MARGIN, y, { align: "right" })
-        }
-        y += 4
+        y = escribirTituloConFecha(pdf, tituloLinea, fecha, y, fuenteBase)
 
         if (exp.ubicacion) {
           pdf.setFont(fuenteBase, "italic")
@@ -170,21 +160,10 @@ export function crearPdfAts(
       for (const edu of datos.educacion) {
         checkPage(12)
 
-        pdf.setFont(fuenteBase, "bold")
-        pdf.setFontSize(10)
-        setBlack()
         const titulo = edu.titulo || e.titulo
         const tituloLinea = edu.institucion ? `${titulo}, ${edu.institucion}` : titulo
-        pdf.text(tituloLinea, MARGIN, y)
-
         const fecha = formatearFechaEducacion(edu.fechaInicio, edu.fechaFin, personalizacion.idiomaCv)
-        if (fecha) {
-          pdf.setFont(fuenteBase, "normal")
-          pdf.setFontSize(9)
-          setMuted()
-          pdf.text(fecha, PAGE_WIDTH - MARGIN, y, { align: "right" })
-        }
-        y += 4
+        y = escribirTituloConFecha(pdf, tituloLinea, fecha, y, fuenteBase)
 
         if (edu.descripcion) {
           pdf.setFont(fuenteBase, "normal")
@@ -205,25 +184,9 @@ export function crearPdfAts(
         checkPage(10)
 
         const nombre = curso.nombre || e.curso
-        pdf.setFont(fuenteBase, "bold")
-        pdf.setFontSize(10)
-        setBlack()
-        pdf.text(nombre, MARGIN, y)
-
-        if (curso.institucion) {
-          const offsetX = MARGIN + pdf.getTextWidth(nombre)
-          pdf.setFont(fuenteBase, "normal")
-          setColor(82, 82, 91)
-          pdf.text(`, ${curso.institucion}`, offsetX, y)
-        }
-
-        if (curso.fecha) {
-          pdf.setFont(fuenteBase, "normal")
-          pdf.setFontSize(9)
-          setMuted()
-          pdf.text(formatearFecha(curso.fecha, personalizacion.idiomaCv), PAGE_WIDTH - MARGIN, y, { align: "right" })
-        }
-        y += 4
+        const tituloCurso = curso.institucion ? `${nombre}, ${curso.institucion}` : nombre
+        const fecha = curso.fecha ? formatearFecha(curso.fecha, personalizacion.idiomaCv) : ""
+        y = escribirTituloConFecha(pdf, tituloCurso, fecha, y, fuenteBase)
 
         if (curso.url) {
           pdf.setFont(fuenteBase, "italic")
@@ -243,18 +206,7 @@ export function crearPdfAts(
       for (const p of datos.proyectos) {
         checkPage(14)
 
-        pdf.setFont(fuenteBase, "bold")
-        pdf.setFontSize(10)
-        setBlack()
-        pdf.text(p.nombre || e.proyecto, MARGIN, y)
-
-        if (p.url) {
-          pdf.setFont(fuenteBase, "italic")
-          pdf.setFontSize(9)
-          setMuted()
-          pdf.text(p.url, PAGE_WIDTH - MARGIN, y, { align: "right" })
-        }
-        y += 4
+        y = escribirTituloConFecha(pdf, p.nombre || e.proyecto, p.url ?? "", y, fuenteBase)
 
         if (p.tecnologias) {
           pdf.setFont(fuenteBase, "italic")

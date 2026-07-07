@@ -42,3 +42,8 @@ next-env.d.ts
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+# loop verification tooling (local only)
+.driver.mjs
+.verificar.mjs
+.debug.mjs

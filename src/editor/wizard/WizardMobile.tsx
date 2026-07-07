@@ -45,8 +45,8 @@ export function WizardMobile({ pasos, actual, modo, onIr, onAnterior, onSiguient
         </div>
       </Surface>
 
-      {/* Contenido del paso */}
-      <div className="flex-1 overflow-y-auto px-4 py-5">
+      {/* Contenido del paso — key remonta el contenedor al cambiar de paso, reseteando el scroll arriba */}
+      <div key={paso.id} className="flex-1 overflow-y-auto px-4 py-5">
         {paso.esRevision ? (
           <PasoRevision modo={modo} />
         ) : (

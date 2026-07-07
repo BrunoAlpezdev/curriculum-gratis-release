@@ -2,6 +2,7 @@ import { jsPDF } from "jspdf"
 import type { Carta, DatosCurriculum, Personalizacion } from "@/types"
 import { getColorHex } from "@/lib/colores"
 import { FUENTES } from "@/lib/constantes"
+import { hexToRgb } from "@/lib/generar-pdf-ats-helpers"
 
 const MARGIN = 25
 const PAGE_WIDTH = 210
@@ -90,7 +91,7 @@ export function generarPdfCarta(
     y += 4
   }
   if (carta.cargoPostulado) {
-    pdf.setFont(fuenteBase, "oblique")
+    pdf.setFont(fuenteBase, "italic")
     pdf.setFontSize(9)
     setColor(113, 113, 122)
     pdf.text(`Postulacion: ${carta.cargoPostulado}`, MARGIN, y)
@@ -100,6 +101,7 @@ export function generarPdfCarta(
   }
 
   // --- Cuerpo ---
+  const ALTO_LINEA = 5.5
   if (carta.cuerpo) {
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(11)
@@ -107,9 +109,12 @@ export function generarPdfCarta(
     const parrafos = carta.cuerpo.split(/\n\n+/)
     for (const parrafo of parrafos) {
       const lineas = pdf.splitTextToSize(parrafo, CONTENT_WIDTH)
-      checkPage(lineas.length * 5)
-      pdf.text(lineas, MARGIN, y, { lineHeightFactor: 1.5 })
-      y += lineas.length * 5 + 3
+      for (const linea of lineas) {
+        checkPage(ALTO_LINEA)
+        pdf.text(linea, MARGIN, y)
+        y += ALTO_LINEA
+      }
+      y += 3
     }
   }
 
@@ -130,11 +135,4 @@ export function generarPdfCarta(
 
   const nombre = dp.nombreCompleto.trim().replace(/\s+/g, "_") || "carta"
   pdf.save(`${nombre}_carta.pdf`)
-}
-
-function hexToRgb(hex: string): { r: number; g: number; b: number } {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return { r, g, b }
 }
