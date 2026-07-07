@@ -27,7 +27,7 @@ import { useCurriculumStore } from "@/lib/store"
 import { useTema, type Tema } from "@/lib/useTema"
 import { exportarJson, importarJson } from "@/lib/importar-exportar"
 import { exportarTexto } from "@/lib/exportar-texto"
-import { guardarCopiaLocal, type CopiaLocalCv } from "@/lib/copias-locales"
+import { guardarCopiaLocal, intentarGuardarCopiaLocal, ErrorCopiaLocal, type CopiaLocalCv } from "@/lib/copias-locales"
 import { DialogCopiasLocales } from "@/editor/DialogCopiasLocales"
 import { DialogEnviarCv } from "@/editor/DialogEnviarCv"
 import { DialogEjemploCv } from "@/editor/DialogEjemploCv"
@@ -146,7 +146,15 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
     const nombreBase = datos.datosPersonales.nombreCompleto.trim() || "Curriculum"
     const nombre = window.prompt("Nombre de la copia local", nombreSugerido ?? `${nombreBase} - copia`)
     if (nombre === null) return
-    guardarCopiaLocal(nombre, datos, personalizacion, carta)
+    try {
+      guardarCopiaLocal(nombre, datos, personalizacion, carta)
+    } catch (err) {
+      if (err instanceof ErrorCopiaLocal) {
+        window.alert("No hay espacio para guardar la copia. Elimina copias antiguas.")
+      } else {
+        throw err
+      }
+    }
     setMenuAbierto(false)
   }
 
@@ -162,7 +170,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
 
   function restaurarCopia(copia: CopiaLocalCv) {
     if (!window.confirm("Esto reemplazará el CV y la carta actuales. ¿Continuar?")) return
-    guardarCopiaLocal("Respaldo antes de restaurar", datos, personalizacion, carta)
+    intentarGuardarCopiaLocal("Respaldo antes de restaurar", datos, personalizacion, carta)
     setDatos(copia.datos)
     setPersonalizacion(copia.personalizacion)
     setCarta(copia.carta)
@@ -179,7 +187,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
       return
     }
     if (!window.confirm("Esto reemplazará los datos actuales. ¿Continuar?")) return
-    guardarCopiaLocal("Respaldo antes de importar", datos, personalizacion, carta)
+    intentarGuardarCopiaLocal("Respaldo antes de importar", datos, personalizacion, carta)
     setDatos(resultado.datos)
     setPersonalizacion(resultado.personalizacion)
   }
@@ -195,8 +203,8 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
   }
 
   function reiniciar() {
-    if (window.confirm("¿Seguro que quieres reiniciar? Se borrarán todos los datos del curriculum.")) {
-      guardarCopiaLocal("Respaldo antes de reiniciar", datos, personalizacion, carta)
+    if (window.confirm("¿Seguro que quieres reiniciar? Se borrarán el curriculum, la personalización y la carta.")) {
+      intentarGuardarCopiaLocal("Respaldo antes de reiniciar", datos, personalizacion, carta)
       reiniciarStore()
     }
   }

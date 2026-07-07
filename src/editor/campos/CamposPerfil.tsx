@@ -7,7 +7,7 @@ import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
 import { Textarea } from "@/components/atoms/Textarea"
 import { AiSuggestionPanel } from "@/components/molecules/AiSuggestionPanel"
-import { guardarCopiaLocal } from "@/lib/copias-locales"
+import { intentarGuardarCopiaLocal } from "@/lib/copias-locales"
 import { useCurriculumStore } from "@/lib/store"
 import { useUsageLimits } from "@/lib/use-usage-limits"
 
@@ -52,7 +52,7 @@ export function CamposPerfil() {
   }
 
   function aplicarSugerencia() {
-    guardarCopiaLocal("Respaldo antes de aplicar IA en perfil", datos, personalizacion, carta)
+    intentarGuardarCopiaLocal("Respaldo antes de aplicar IA en perfil", datos, personalizacion, carta)
     setPerfil(sugerencia)
     setSugerencia("")
   }

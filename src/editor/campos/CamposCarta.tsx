@@ -9,7 +9,7 @@ import { Text } from "@/components/atoms/Text"
 import { Textarea } from "@/components/atoms/Textarea"
 import { AiSuggestionPanel } from "@/components/molecules/AiSuggestionPanel"
 import { textoCv } from "@/lib/analisis-ats"
-import { guardarCopiaLocal } from "@/lib/copias-locales"
+import { intentarGuardarCopiaLocal } from "@/lib/copias-locales"
 import { useCurriculumStore } from "@/lib/store"
 import { useUsageLimits } from "@/lib/use-usage-limits"
 
@@ -92,7 +92,7 @@ export function CamposCarta() {
   }
 
   function aplicarSugerencia() {
-    guardarCopiaLocal("Respaldo antes de aplicar IA en carta", datos, personalizacion, carta)
+    intentarGuardarCopiaLocal("Respaldo antes de aplicar IA en carta", datos, personalizacion, carta)
     set({ cuerpo: sugerencia })
     setSugerencia("")
   }

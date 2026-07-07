@@ -62,8 +62,32 @@ export function obtenerCopiasLocales(): CopiaLocalCv[] {
   }
 }
 
+export class ErrorCopiaLocal extends Error {
+  constructor(mensaje = "No hay espacio para guardar la copia local.") {
+    super(mensaje)
+    this.name = "ErrorCopiaLocal"
+  }
+}
+
+/**
+ * Guarda la lista de copias (mas nuevas primero). Si localStorage se queda sin
+ * espacio, descarta progresivamente la copia mas antigua y reintenta hasta
+ * guardar o quedar solo con la mas nueva. Nunca deja escapar QuotaExceededError.
+ */
 function guardarLista(copias: CopiaLocalCv[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(copias.slice(0, MAX_COPIAS)))
+  let candidatas = copias.slice(0, MAX_COPIAS)
+  while (true) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(candidatas))
+      return
+    } catch {
+      if (candidatas.length <= 1) {
+        throw new ErrorCopiaLocal()
+      }
+      // Descarta la mas antigua (al final) y reintenta con las mas nuevas.
+      candidatas = candidatas.slice(0, candidatas.length - 1)
+    }
+  }
 }
 
 export function guardarCopiaLocal(
@@ -82,6 +106,23 @@ export function guardarCopiaLocal(
   }
   guardarLista([copia, ...obtenerCopiasLocales()])
   return copia
+}
+
+/**
+ * Igual que guardarCopiaLocal pero no lanza: devuelve null si no se pudo
+ * guardar (ej. sin espacio). Para respaldos automaticos no criticos.
+ */
+export function intentarGuardarCopiaLocal(
+  nombre: string,
+  datos: DatosCurriculum,
+  personalizacion: Personalizacion,
+  carta: Carta,
+): CopiaLocalCv | null {
+  try {
+    return guardarCopiaLocal(nombre, datos, personalizacion, carta)
+  } catch {
+    return null
+  }
 }
 
 export function eliminarCopiaLocal(id: string) {

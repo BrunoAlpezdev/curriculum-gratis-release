@@ -47,3 +47,4 @@ next-env.d.ts
 .driver.mjs
 .verificar.mjs
 .debug.mjs
+.verificar2.mjs

@@ -7,8 +7,9 @@ import { Button } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
 import { useCurriculumStore } from "@/lib/store"
+import { comprimirFoto } from "@/lib/comprimir-imagen"
 
-const TAMANO_MAX_FOTO = 1_500_000 // 1.5 MB
+const TAMANO_MAX_FOTO = 10_000_000 // 10 MB (solo como sanidad; se comprime al subir)
 
 export const CONSEJOS_DATOS_PERSONALES = [
   "Pon solo ciudad y país en ubicación — la dirección completa es innecesaria y un riesgo de privacidad.",
@@ -33,16 +34,16 @@ export function CamposDatosPersonales() {
       return
     }
     if (archivo.size > TAMANO_MAX_FOTO) {
-      window.alert("La imagen es muy grande. Usa una de menos de 1.5 MB.")
+      window.alert("La imagen es muy grande. Usa una de menos de 10 MB.")
       return
     }
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        set({ foto: reader.result })
-      }
+    try {
+      const foto = await comprimirFoto(archivo)
+      set({ foto })
+    } catch (err) {
+      const detalle = err instanceof Error && err.message ? `\n${err.message}` : ""
+      window.alert(`No se pudo procesar la imagen.${detalle}`)
     }
-    reader.readAsDataURL(archivo)
   }
 
   return (
