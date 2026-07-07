@@ -1,12 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { CaretDownIcon, PaletteIcon, ListChecksIcon, TargetIcon } from "@phosphor-icons/react"
+import { CaretDownIcon, ListChecksIcon, TargetIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/atoms/Button"
 import { Surface } from "@/components/atoms/Surface"
 import { Text } from "@/components/atoms/Text"
 import { cn } from "@/components/ui/cn"
-import { CamposPersonalizacion } from "@/editor/campos/CamposPersonalizacion"
 import { CamposCalidadCv } from "@/editor/campos/CamposCalidadCv"
 import { CamposAnalisisAts } from "@/editor/campos/CamposAnalisisAts"
 import { BotonDescargar } from "@/editor/wizard/BotonDescargar"
@@ -62,18 +61,14 @@ export function PasoRevision({ modo }: { modo: Modo }) {
     <div className="flex flex-col gap-4">
       <Surface variant="notice" className="px-4 py-3">
         <Text variant="small" className="leading-relaxed">
-          Último paso. Elige el diseño, revisa que esté todo en orden y descarga tu{" "}
+          Último paso. Revisa que esté todo en orden y descarga tu{" "}
           {modo === "carta" ? "carta" : "CV"} en PDF.
         </Text>
       </Surface>
 
-      <BloqueColapsable titulo="Diseño" icono={<PaletteIcon size={18} />} defaultAbierto>
-        <CamposPersonalizacion modo={modo} />
-      </BloqueColapsable>
-
       {modo === "cv" && (
         <>
-          <BloqueColapsable titulo="¿Está listo?" icono={<ListChecksIcon size={18} />}>
+          <BloqueColapsable titulo="¿Está listo?" icono={<ListChecksIcon size={18} />} defaultAbierto>
             <CamposCalidadCv />
           </BloqueColapsable>
 

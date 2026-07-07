@@ -3,7 +3,7 @@
 import { useState } from "react"
 import type { Modo } from "@/editor/Editor"
 
-const CLAVE = "curriculum-gratis:wizard"
+const CLAVE = "curriculum-gratis:wizard:v2"
 
 interface EstadoWizard {
   modo: Modo
@@ -20,6 +20,7 @@ function indiceValido(valor: unknown): number {
 function leer(): EstadoWizard {
   if (typeof window === "undefined") return INICIAL
   try {
+    window.localStorage.removeItem("curriculum-gratis:wizard")
     const crudo = window.localStorage.getItem(CLAVE)
     if (!crudo) return INICIAL
     const dato = JSON.parse(crudo) as Partial<EstadoWizard>

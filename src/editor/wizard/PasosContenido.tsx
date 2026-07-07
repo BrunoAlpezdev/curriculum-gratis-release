@@ -8,6 +8,7 @@ import { CamposIdiomas } from "@/editor/campos/CamposIdiomas"
 import { CamposProyectos } from "@/editor/campos/CamposProyectos"
 import { CamposReferencias } from "@/editor/campos/CamposReferencias"
 import { CamposInfoAdicional } from "@/editor/campos/CamposInfoAdicional"
+import { CamposPersonalizacion } from "@/editor/campos/CamposPersonalizacion"
 
 /**
  * Sub-bloque dentro de un paso que agrupa varias secciones. Mantiene una jerarquia
@@ -21,6 +22,22 @@ function SubSeccion({ titulo, children }: { titulo: string; children: React.Reac
       </Text>
       {children}
     </section>
+  )
+}
+
+export function ContenidoDisenoCv() {
+  return (
+    <div className="flex flex-col gap-6">
+      <CamposPersonalizacion modo="cv" />
+    </div>
+  )
+}
+
+export function ContenidoDisenoCarta() {
+  return (
+    <div className="flex flex-col gap-6">
+      <CamposPersonalizacion modo="carta" />
+    </div>
   )
 }
 

@@ -9,6 +9,7 @@ import {
   PlusCircleIcon,
   CheckCircleIcon,
   EnvelopeIcon,
+  PaletteIcon,
 } from "@phosphor-icons/react"
 import { useCurriculumStore } from "@/lib/store"
 import { CamposDatosPersonales, CONSEJOS_DATOS_PERSONALES } from "@/editor/campos/CamposDatosPersonales"
@@ -18,7 +19,14 @@ import { CamposCarta, CONSEJOS_CARTA } from "@/editor/campos/CamposCarta"
 import { CONSEJOS_EDUCACION } from "@/editor/campos/CamposEducacion"
 import { CONSEJOS_HABILIDADES } from "@/editor/campos/CamposHabilidades"
 import { CONSEJOS_PROYECTOS } from "@/editor/campos/CamposProyectos"
-import { ContenidoFormacion, ContenidoAptitudes, ContenidoExtras } from "@/editor/wizard/PasosContenido"
+import { CONSEJOS_PERSONALIZACION } from "@/editor/campos/CamposPersonalizacion"
+import {
+  ContenidoFormacion,
+  ContenidoAptitudes,
+  ContenidoExtras,
+  ContenidoDisenoCv,
+  ContenidoDisenoCarta,
+} from "@/editor/wizard/PasosContenido"
 import type { Modo } from "@/editor/Editor"
 
 export interface Paso {
@@ -49,6 +57,16 @@ export function useEditorPasos(modo: Modo): Paso[] {
   if (modo === "carta") {
     return [
       {
+        id: "diseno",
+        titulo: "Diseño",
+        descripcion: "Color, fuente e idioma de tu carta",
+        icono: <PaletteIcon size={20} />,
+        opcional: false,
+        consejos: CONSEJOS_PERSONALIZACION,
+        completo: true,
+        Contenido: ContenidoDisenoCarta,
+      },
+      {
         id: "datos",
         titulo: "Tus datos",
         descripcion: "Quién eres y cómo te contactan",
@@ -71,7 +89,7 @@ export function useEditorPasos(modo: Modo): Paso[] {
       {
         id: "revision",
         titulo: "Revisar y descargar",
-        descripcion: "Elige el diseño y descarga tu carta",
+        descripcion: "Revisa y descarga tu carta en PDF",
         icono: <CheckCircleIcon size={20} />,
         opcional: false,
         consejos: [],
@@ -82,6 +100,16 @@ export function useEditorPasos(modo: Modo): Paso[] {
   }
 
   return [
+    {
+      id: "diseno",
+      titulo: "Diseño",
+      descripcion: "Plantilla, color, fuente y orden de secciones",
+      icono: <PaletteIcon size={20} />,
+      opcional: false,
+      consejos: CONSEJOS_PERSONALIZACION,
+      completo: true,
+      Contenido: ContenidoDisenoCv,
+    },
     {
       id: "datos",
       titulo: "Tus datos",
@@ -145,7 +173,7 @@ export function useEditorPasos(modo: Modo): Paso[] {
     {
       id: "revision",
       titulo: "Revisar y descargar",
-      descripcion: "Elige el diseño y descarga tu CV",
+      descripcion: "Revisa que esté todo en orden y descarga tu CV",
       icono: <CheckCircleIcon size={20} />,
       opcional: false,
       consejos: [],
