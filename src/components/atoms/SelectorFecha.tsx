@@ -172,18 +172,26 @@ function VistaAnios({
         </Button>
       </div>
       <div className="grid grid-cols-3 gap-1">
-        {aniosPagina.map((a) => (
-          <Button
-            key={a}
-            type="button"
-            onClick={() => onSeleccionar(a)}
-            variant={a === anioSeleccionado ? "segmentedActive" : "ghost"}
-            size="none"
-            className={cn("py-2 text-sm", a === anioVisible && a !== anioSeleccionado && "bg-panel-muted text-text-main")}
-          >
-            {a}
-          </Button>
-        ))}
+        {aniosPagina.map((a) => {
+          const fueraDeRango = a < ANIO_MIN || a > ANIO_MAX
+          return (
+            <Button
+              key={a}
+              type="button"
+              onClick={() => onSeleccionar(a)}
+              disabled={fueraDeRango}
+              variant={a === anioSeleccionado ? "segmentedActive" : "ghost"}
+              size="none"
+              className={cn(
+                "py-2 text-sm",
+                a === anioVisible && a !== anioSeleccionado && "bg-panel-muted text-text-main",
+                fueraDeRango && "opacity-30 cursor-not-allowed",
+              )}
+            >
+              {a}
+            </Button>
+          )
+        })}
       </div>
     </>
   )
@@ -254,6 +262,14 @@ export function SelectorFecha({
     setAbierto(false)
   }
 
+  // "Borrar" deja el campo vacio emitiendo "" (no null): null se reserva para
+  // "Presente" en las fechas de termino. Solo se ofrece cuando no hay Presente,
+  // porque ahi Presente ya cubre el caso de "sin fecha de termino".
+  function borrar() {
+    onChange("")
+    setAbierto(false)
+  }
+
   const textoMostrado = esPresente ? textoPresente : formatearTexto(valor, placeholderFinal, idiomaCv)
   const tieneValor = valor !== null && valor !== ""
   const meses = mesesFecha(idiomaCv)
@@ -310,6 +326,18 @@ export function SelectorFecha({
               className="w-full border py-2 text-sm"
             >
               {textoPresente}
+            </Button>
+          )}
+
+          {tieneValor && !permitirPresente && (
+            <Button
+              type="button"
+              onClick={borrar}
+              variant="secondary"
+              size="none"
+              className="w-full border py-2 text-sm"
+            >
+              {idiomaCv === "en" ? "Clear" : "Borrar"}
             </Button>
           )}
         </Surface>

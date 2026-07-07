@@ -68,7 +68,7 @@ export function PasoRevision({ modo }: { modo: Modo }) {
       </Surface>
 
       <BloqueColapsable titulo="Diseño" icono={<PaletteIcon size={18} />} defaultAbierto>
-        <CamposPersonalizacion />
+        <CamposPersonalizacion modo={modo} />
       </BloqueColapsable>
 
       {modo === "cv" && (

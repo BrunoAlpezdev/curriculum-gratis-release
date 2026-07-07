@@ -41,7 +41,7 @@ const IDIOMAS_CV: { valor: IdiomaCv; etiqueta: string; descripcion: string }[] =
   { valor: "en", etiqueta: "English", descripcion: "CV in English" },
 ]
 
-export function CamposPersonalizacion() {
+export function CamposPersonalizacion({ modo = "cv" }: { modo?: "cv" | "carta" } = {}) {
   const personalizacion = useCurriculumStore((s) => s.personalizacion)
   const set = useCurriculumStore((s) => s.setPersonalizacion)
   const [arrastrando, setArrastrando] = useState<number | null>(null)
@@ -84,6 +84,7 @@ export function CamposPersonalizacion() {
         </div>
       </fieldset>
 
+      {modo === "cv" && (
       <fieldset className="flex flex-col gap-1.5">
         <Text as="legend" variant="label">Plantilla</Text>
         <div className="grid grid-cols-2 gap-2">
@@ -110,6 +111,7 @@ export function CamposPersonalizacion() {
           ))}
         </div>
       </fieldset>
+      )}
 
       <fieldset className="flex flex-col gap-2">
         <Text as="legend" variant="label">Color</Text>
@@ -162,6 +164,7 @@ export function CamposPersonalizacion() {
         </div>
       </fieldset>
 
+      {modo === "cv" && (
       <fieldset className="flex flex-col gap-1.5">
         <Text as="legend" variant="label">
           Orden de secciones
@@ -232,6 +235,7 @@ export function CamposPersonalizacion() {
           ))}
         </div>
       </fieldset>
+      )}
     </>
   )
 }

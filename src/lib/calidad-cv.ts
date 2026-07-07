@@ -28,9 +28,12 @@ function tieneNumero(texto: string): boolean {
   return /\d/.test(texto)
 }
 
-function valorFecha(fecha: string | null): number | null {
+function valorFecha(fecha: string | null, esFin = false): number | null {
   if (!fecha) return null
-  const [anio, mes = "01"] = fecha.split("-")
+  // Una fecha sin mes ("2023", opcion "Solo ano") abarca el ano completo: como
+  // inicio cuenta desde enero, como termino hasta diciembre. Asi "2023-06" a
+  // "2023" no se marca como invertida.
+  const [anio, mes = esFin ? "12" : "01"] = fecha.split("-")
   const anioNumero = Number(anio)
   const mesNumero = Number(mes)
   if (!Number.isFinite(anioNumero) || !Number.isFinite(mesNumero)) return null
@@ -39,7 +42,7 @@ function valorFecha(fecha: string | null): number | null {
 
 function fechaInvertida(inicio: string, fin: string | null): boolean {
   const valorInicio = valorFecha(inicio)
-  const valorFin = valorFecha(fin)
+  const valorFin = valorFecha(fin, true)
   return valorInicio !== null && valorFin !== null && valorInicio > valorFin
 }
 

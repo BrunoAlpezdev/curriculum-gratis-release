@@ -59,7 +59,7 @@ export function DialogCopiasLocales({ abierto, onCerrar, onRestaurar }: Props) {
               <Surface variant="panelMuted" className="p-4 text-center">
                 <ClockCounterClockwiseIcon size={24} className="mx-auto text-text-muted" />
                 <Text variant="small" className="mt-2">
-                  Todavia no tienes copias locales guardadas.
+                  Todavía no tienes copias locales guardadas.
                 </Text>
               </Surface>
             ) : (

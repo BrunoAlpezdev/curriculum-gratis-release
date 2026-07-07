@@ -28,6 +28,16 @@ function arrayBufferABase64(buffer: ArrayBuffer): string {
 }
 
 export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Props) {
+  return (
+    <DialogoModal abierto={abierto} onCerrar={onCerrar} ariaLabel="Enviar CV por correo">
+      {/* DialogoModal desmonta sus children al cerrar, asi que ContenidoEnviarCv
+          se remonta en cada apertura y su useState lee el email vigente. */}
+      <ContenidoEnviarCv datos={datos} personalizacion={personalizacion} onCerrar={onCerrar} />
+    </DialogoModal>
+  )
+}
+
+function ContenidoEnviarCv({ datos, personalizacion, onCerrar }: Omit<Props, "abierto">) {
   const [email, setEmail] = useState(datos.datosPersonales.email)
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState("")
@@ -65,11 +75,10 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
   }
 
   return (
-    <DialogoModal abierto={abierto} onCerrar={onCerrar} ariaLabel="Enviar CV por correo">
-      <Surface
-        variant="panel"
-        className="w-full border-0 shadow-2xl md:max-w-md"
-      >
+    <Surface
+      variant="panel"
+      className="w-full border-0 shadow-2xl md:max-w-md"
+    >
         <div className="flex items-start justify-between gap-3 border-b border-border-subtle px-4 py-3">
           <div>
             <Text as="h2" variant="strong" className="text-base font-extrabold">
@@ -121,7 +130,6 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
             {enviando ? "Enviando..." : "Enviar CV"}
           </Button>
         </form>
-      </Surface>
-    </DialogoModal>
+    </Surface>
   )
 }

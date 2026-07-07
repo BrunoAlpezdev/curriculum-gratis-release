@@ -9,9 +9,9 @@ import { analizarCalidadCv, type NivelRevision } from "@/lib/calidad-cv"
 import { useCurriculumStore } from "@/lib/store"
 
 export const CONSEJOS_CALIDAD_CV = [
-  "Este checklist corre 100% en tu navegador. No envia datos a servidores ni usa IA.",
+  "Este checklist corre 100% en tu navegador. No envía datos a servidores ni usa IA.",
   "Primero resuelve los puntos urgentes. Luego trabaja las mejoras para subir la calidad general.",
-  "No agregues informacion falsa solo para completar el checklist. Es mejor un CV honesto y enfocado.",
+  "No agregues información falsa solo para completar el checklist. Es mejor un CV honesto y enfocado.",
 ]
 
 const ESTILO_NIVEL: Record<
@@ -45,7 +45,7 @@ const ESTILO_NIVEL: Record<
 
 function mensajePuntaje(puntaje: number): string {
   if (puntaje >= 80) return "Tu CV esta bien encaminado. Quedan ajustes finos antes de descargar."
-  if (puntaje >= 50) return "Tu CV tiene una base util, pero todavia hay mejoras importantes."
+  if (puntaje >= 50) return "Tu CV tiene una base útil, pero todavía hay mejoras importantes."
   return "Completa los puntos urgentes antes de usar este CV para postular."
 }
 

@@ -36,7 +36,7 @@ export function CamposCursos() {
           />
           <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3">
             <Input
-              label="Institucion"
+              label="Institución"
               placeholder="Amazon Web Services"
               value={curso.institucion}
               onChange={(e) =>
@@ -44,7 +44,7 @@ export function CamposCursos() {
               }
             />
             <SelectorFecha
-              label="Fecha de obtencion"
+              label="Fecha de obtención"
               valor={curso.fecha || null}
               onChange={(v) => actualizar(curso.id, { fecha: v ?? "" })}
               idiomaCv={idiomaCv}

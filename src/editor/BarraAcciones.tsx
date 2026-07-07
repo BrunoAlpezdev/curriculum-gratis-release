@@ -331,7 +331,7 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
             variant="ghost"
             size="icon"
             onClick={() => setMenuAbierto((v) => !v)}
-            title="Mas opciones"
+            title="Más opciones"
             aria-haspopup="menu"
             aria-expanded={menuAbierto}
             aria-controls={menuAbierto ? menuId : undefined}

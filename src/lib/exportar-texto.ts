@@ -48,7 +48,7 @@ function unirLineas(lineas: Array<string | null | undefined>): string {
 }
 
 function nombreArchivoBase(datos: DatosCurriculum, documento: DocumentoTexto): string {
-  const nombre = datos.datosPersonales.nombreCompleto.trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "_")
+  const nombre = datos.datosPersonales.nombreCompleto.trim().replace(/\s+/g, "_")
   const base = nombre || (documento === "carta" ? "carta_presentacion" : "curriculum")
   return documento === "carta" ? `${base}_carta` : `${base}_curriculum`
 }
@@ -136,7 +136,7 @@ function seccionMd(seccion: SeccionOrdenable, datos: DatosCurriculum, personaliz
     case "experiencia":
       return bloqueMd(tituloSeccion(seccion, et), datos.experiencia.flatMap((exp) => [
         ...limpiar([
-          `### ${exp.cargo || exp.empresa}`,
+          exp.cargo || exp.empresa ? `### ${exp.cargo || exp.empresa}` : "",
           limpiar([exp.empresa, exp.ubicacion, formatearRangoFechas(exp.fechaInicio, exp.fechaFin, personalizacion.idiomaCv)]).join(" | "),
           exp.descripcion,
           exp.logros,
@@ -146,7 +146,7 @@ function seccionMd(seccion: SeccionOrdenable, datos: DatosCurriculum, personaliz
     case "educacion":
       return bloqueMd(tituloSeccion(seccion, et), datos.educacion.flatMap((edu) => [
         ...limpiar([
-          `### ${edu.titulo || edu.institucion}`,
+          edu.titulo || edu.institucion ? `### ${edu.titulo || edu.institucion}` : "",
           limpiar([edu.institucion, formatearRangoFechas(edu.fechaInicio, edu.fechaFin, personalizacion.idiomaCv)]).join(" | "),
           edu.descripcion,
         ]),

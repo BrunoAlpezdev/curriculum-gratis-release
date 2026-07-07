@@ -7,10 +7,12 @@ import type { DatosCurriculum } from "@/types"
    node no hay DOM, asi que capturamos el contenido subclaseando el Blob global
    (existe en node) y stubeamos las APIs de descarga que toca la funcion. */
 let contenidoDescargado = ""
+let nombreDescargado = ""
 const BlobOriginal = globalThis.Blob
 
 beforeEach(() => {
   contenidoDescargado = ""
+  nombreDescargado = ""
   class BlobEspia extends BlobOriginal {
     constructor(partes?: BlobPart[], opciones?: BlobPropertyBag) {
       super(partes, opciones)
@@ -23,7 +25,11 @@ beforeEach(() => {
     revokeObjectURL: () => {},
   })
   vi.stubGlobal("document", {
-    createElement: () => ({ href: "", download: "", click: () => {} }),
+    createElement: () => ({
+      href: "",
+      set download(valor: string) { nombreDescargado = valor },
+      click: () => {},
+    }),
     body: { appendChild: () => {}, removeChild: () => {} },
   })
 })
@@ -77,5 +83,15 @@ describe("exportarTexto (TXT)", () => {
     // No debe empezar ni terminar con lineas en blanco.
     expect(texto.startsWith("\n")).toBe(false)
     expect(texto.endsWith("\n\n")).toBe(false)
+  })
+
+  it("conserva tildes y ñ en el nombre de archivo", () => {
+    const datos = cvCon({
+      datosPersonales: { ...DATOS_INICIALES.datosPersonales, nombreCompleto: "José Peña" },
+    })
+
+    exportarTexto("cv", "txt", datos, PERSONALIZACION_INICIAL, CARTA_INICIAL)
+
+    expect(nombreDescargado).toBe("José_Peña_curriculum.txt")
   })
 })
