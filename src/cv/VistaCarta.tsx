@@ -51,7 +51,7 @@ export function VistaCarta({ datos, carta, personalizacion }: Props) {
           {carta.empresaDestino && <p>{carta.empresaDestino}</p>}
           {carta.cargoPostulado && (
             <p className="text-zinc-500 text-[11px] italic mt-0.5">
-              Postulacion: {carta.cargoPostulado}
+              Postulación: {carta.cargoPostulado}
             </p>
           )}
         </div>

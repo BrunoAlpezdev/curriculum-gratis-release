@@ -30,7 +30,7 @@ export const ORDEN_SECCIONES_INICIAL: SeccionOrdenable[] = [
 
 export const ETIQUETAS_SECCION_ORDENABLE: Record<SeccionOrdenable, string> = {
   experiencia: "Experiencia laboral",
-  educacion: "Educacion",
+  educacion: "Educación",
   cursos: "Cursos y certificaciones",
   proyectos: "Proyectos",
   habilidades: "Competencias",
@@ -39,7 +39,7 @@ export const ETIQUETAS_SECCION_ORDENABLE: Record<SeccionOrdenable, string> = {
 }
 
 export const NIVELES_IDIOMA: { valor: NivelIdioma; etiqueta: string }[] = [
-  { valor: "basico", etiqueta: "Basico" },
+  { valor: "basico", etiqueta: "Básico" },
   { valor: "intermedio", etiqueta: "Intermedio" },
   { valor: "avanzado", etiqueta: "Avanzado" },
   { valor: "nativo", etiqueta: "Nativo" },

@@ -29,7 +29,7 @@ export function CamposProyectos() {
         >
           <Input
             label="Nombre del proyecto"
-            placeholder="App de gestion de inventario"
+            placeholder="App de gestión de inventario"
             value={proyecto.nombre}
             onChange={(e) => actualizar(proyecto.id, { nombre: e.target.value })}
           />
@@ -40,7 +40,7 @@ export function CamposProyectos() {
             onChange={(e) => actualizar(proyecto.id, { url: e.target.value })}
           />
           <Input
-            label="Tecnologias"
+            label="Tecnologías"
             placeholder="React, Node.js, PostgreSQL"
             value={proyecto.tecnologias}
             onChange={(e) =>
@@ -48,8 +48,8 @@ export function CamposProyectos() {
             }
           />
           <Textarea
-            label="Descripcion"
-            placeholder="Que hace, que problema resuelve, tu rol..."
+            label="Descripción"
+            placeholder="Qué hace, qué problema resuelve, tu rol..."
             value={proyecto.descripcion}
             onChange={(e) =>
               actualizar(proyecto.id, { descripcion: e.target.value })

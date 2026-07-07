@@ -79,8 +79,8 @@ export function analizarCalidadCv(datos: DatosCurriculum): ResultadoCalidadCv {
       !!limpio(dp.nombreCompleto) && !!limpio(dp.titulo),
       {
         id: "identidad",
-        titulo: "Nombre y titulo profesional",
-        descripcion: "Agrega tu nombre completo y un titulo claro del cargo o perfil al que postulas.",
+        titulo: "Nombre y título profesional",
+        descripcion: "Agrega tu nombre completo y un título claro del cargo o perfil al que postulas.",
       },
       "error",
     ),
@@ -89,7 +89,7 @@ export function analizarCalidadCv(datos: DatosCurriculum): ResultadoCalidadCv {
       {
         id: "contacto",
         titulo: "Contacto disponible",
-        descripcion: "Incluye al menos email o telefono para que puedan contactarte.",
+        descripcion: "Incluye al menos email o teléfono para que puedan contactarte.",
       },
       "error",
     ),
@@ -115,7 +115,7 @@ export function analizarCalidadCv(datos: DatosCurriculum): ResultadoCalidadCv {
       {
         id: "experiencia-completa",
         titulo: "Experiencias completas",
-        descripcion: "Cada experiencia deberia tener empresa, cargo, fecha de inicio y descripcion o logros.",
+        descripcion: "Cada experiencia debería tener empresa, cargo, fecha de inicio y descripción o logros.",
       },
     ),
     crearRevision(
@@ -123,7 +123,7 @@ export function analizarCalidadCv(datos: DatosCurriculum): ResultadoCalidadCv {
       {
         id: "logros-medibles",
         titulo: "Logros medibles",
-        descripcion: "Incluye al menos un logro con numeros: porcentajes, volumen, tiempos, ahorro o impacto.",
+        descripcion: "Incluye al menos un logro con números: porcentajes, volumen, tiempos, ahorro o impacto.",
       },
     ),
     crearRevision(
@@ -131,7 +131,7 @@ export function analizarCalidadCv(datos: DatosCurriculum): ResultadoCalidadCv {
       {
         id: "fechas",
         titulo: "Fechas coherentes",
-        descripcion: "Revisa que las fechas de inicio no sean posteriores a las fechas de termino.",
+        descripcion: "Revisa que las fechas de inicio no sean posteriores a las fechas de término.",
       },
       "error",
     ),
@@ -147,8 +147,8 @@ export function analizarCalidadCv(datos: DatosCurriculum): ResultadoCalidadCv {
       datos.educacion.length > 0 || datos.cursos.length > 0,
       {
         id: "formacion",
-        titulo: "Formacion visible",
-        descripcion: "Agrega educacion formal o cursos/certificaciones relevantes para respaldar tu perfil.",
+        titulo: "Formación visible",
+        descripcion: "Agrega educación formal o cursos/certificaciones relevantes para respaldar tu perfil.",
       },
     ),
     crearRevision(
@@ -156,7 +156,7 @@ export function analizarCalidadCv(datos: DatosCurriculum): ResultadoCalidadCv {
       {
         id: "enlaces",
         titulo: "Enlaces profesionales",
-        descripcion: "LinkedIn, GitHub o portafolio ayudan a validar tu experiencia, especialmente en cargos tecnicos o creativos.",
+        descripcion: "LinkedIn, GitHub o portafolio ayudan a validar tu experiencia, especialmente en cargos técnicos o creativos.",
       },
     ),
   ]

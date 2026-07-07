@@ -69,7 +69,7 @@ function seccionTxt(seccion: SeccionOrdenable, datos: DatosCurriculum, personali
       return bloqueTxt(ETIQUETAS_SECCION_ORDENABLE.proyectos, datos.proyectos.flatMap((proyecto) => limpiar([
         proyecto.nombre,
         proyecto.descripcion,
-        proyecto.tecnologias ? `Tecnologias: ${proyecto.tecnologias}` : "",
+        proyecto.tecnologias ? `Tecnologías: ${proyecto.tecnologias}` : "",
         proyecto.url,
         "",
       ])))
@@ -117,7 +117,7 @@ function seccionMd(seccion: SeccionOrdenable, datos: DatosCurriculum, personaliz
       return bloqueMd(ETIQUETAS_SECCION_ORDENABLE.proyectos, datos.proyectos.flatMap((proyecto) => limpiar([
         `### ${proyecto.nombre}`,
         proyecto.descripcion,
-        proyecto.tecnologias ? `Tecnologias: ${proyecto.tecnologias}` : "",
+        proyecto.tecnologias ? `Tecnologías: ${proyecto.tecnologias}` : "",
         proyecto.url,
         "",
       ])))
@@ -149,7 +149,7 @@ function cvTxt(datos: DatosCurriculum, personalizacion: Personalizacion): string
     "",
     ...bloqueTxt("Perfil profesional", limpiar([datos.perfil])),
     ...personalizacion.ordenSecciones.flatMap((seccion) => seccionTxt(seccion, datos, personalizacion)),
-    ...bloqueTxt("Informacion adicional", limpiar([datos.disponibilidad, datos.pretensionesRenta])),
+    ...bloqueTxt("Información adicional", limpiar([datos.disponibilidad, datos.pretensionesRenta])),
   ]
   return limpiar(lineas).join("\n") + "\n"
 }
@@ -166,7 +166,7 @@ function cvMd(datos: DatosCurriculum, personalizacion: Personalizacion): string 
     "",
     ...bloqueMd("Perfil profesional", limpiar([datos.perfil])),
     ...personalizacion.ordenSecciones.flatMap((seccion) => seccionMd(seccion, datos, personalizacion)),
-    ...bloqueMd("Informacion adicional", limpiar([datos.disponibilidad, datos.pretensionesRenta])),
+    ...bloqueMd("Información adicional", limpiar([datos.disponibilidad, datos.pretensionesRenta])),
   ]
   return limpiar(lineas).join("\n") + "\n"
 }
@@ -187,7 +187,7 @@ function cartaTxt(datos: DatosCurriculum, carta: Carta): string {
 
 function cartaMd(datos: DatosCurriculum, carta: Carta): string {
   return limpiar([
-    `# Carta de presentacion${carta.cargoPostulado ? ` - ${carta.cargoPostulado}` : ""}`,
+    `# Carta de presentación${carta.cargoPostulado ? ` - ${carta.cargoPostulado}` : ""}`,
     carta.ciudadFecha,
     carta.destinatario ? `**Destinatario:** ${carta.destinatario}` : "",
     carta.empresaDestino ? `**Empresa:** ${carta.empresaDestino}` : "",

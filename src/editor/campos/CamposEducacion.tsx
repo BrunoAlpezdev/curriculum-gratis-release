@@ -11,7 +11,7 @@ import { useCurriculumStore } from "@/lib/store"
 export const CONSEJOS_EDUCACION = [
   "Si tienes más de 2 años de experiencia laboral, la educación va DESPUÉS de la experiencia — lo que importa es lo que hiciste, no dónde estudiaste.",
   "No enumeres materias ni promedio salvo que sean excepcionalmente relevantes para el puesto.",
-  "Las certificaciones de AWS, Google, Microsoft o cursos de plataformas reconocidas tienen peso real — ponelas.",
+  "Las certificaciones de AWS, Google, Microsoft o cursos de plataformas reconocidas tienen peso real — ponlas.",
   "Si tu título no es directamente relevante para el puesto, menciona solo la institución y el área general.",
 ]
 
@@ -27,7 +27,7 @@ export function CamposEducacion() {
       {educacion.map((edu) => (
         <EntradaRepetible key={edu.id} onEliminar={() => eliminar(edu.id)}>
           <Input
-            label="Institucion"
+            label="Institución"
             placeholder="Universidad de Chile"
             value={edu.institucion}
             onChange={(e) =>
@@ -35,8 +35,8 @@ export function CamposEducacion() {
             }
           />
           <Input
-            label="Titulo o certificacion"
-            placeholder="Ingenieria Civil Informatica"
+            label="Título o certificación"
+            placeholder="Ingeniería Civil Informática"
             value={edu.titulo}
             onChange={(e) =>
               actualizar(edu.id, { titulo: e.target.value })
@@ -58,8 +58,8 @@ export function CamposEducacion() {
             />
           </div>
           <Textarea
-            label="Descripcion (opcional)"
-            placeholder="Menciones, logros academicos..."
+            label="Descripción (opcional)"
+            placeholder="Menciones, logros académicos..."
             value={edu.descripcion}
             onChange={(e) =>
               actualizar(edu.id, { descripcion: e.target.value })
@@ -70,7 +70,7 @@ export function CamposEducacion() {
       ))}
       <Button variant="secondary" size="sm" onClick={agregar}>
         <PlusIcon size={16} />
-        Agregar educacion
+        Agregar educación
       </Button>
     </>
   )

@@ -228,6 +228,19 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
     }
   }
 
+  const opcionesMenu: { icono: React.ReactNode; etiqueta: string; onClick: () => void }[] = [
+    { icono: <FileArrowDownIcon size={16} />, etiqueta: "Exportar JSON", onClick: exportar },
+    { icono: <FileArrowDownIcon size={16} />, etiqueta: "Exportar TXT", onClick: () => exportarFormatoTexto("txt") },
+    { icono: <FileArrowDownIcon size={16} />, etiqueta: "Exportar Markdown", onClick: () => exportarFormatoTexto("md") },
+    { icono: <FileArrowUpIcon size={16} />, etiqueta: "Importar JSON", onClick: pedirImportar },
+    { icono: <CopyIcon size={16} />, etiqueta: "Guardar copia local", onClick: () => guardarCopia() },
+    { icono: <ClockCounterClockwiseIcon size={16} />, etiqueta: "Ver copias locales", onClick: abrirCopias },
+    { icono: <ArrowCounterClockwiseIcon size={16} />, etiqueta: "Reiniciar", onClick: reiniciar },
+    ...(modo === "cv"
+      ? [{ icono: <EnvelopeIcon size={16} />, etiqueta: "Enviar CV por correo", onClick: abrirEnviar }]
+      : []),
+  ]
+
   return (
     <Surface data-no-print variant="toolbar" className="flex items-center justify-between px-3 py-2.5 md:px-4">
       <div className="flex items-center gap-1.5 min-w-0">
@@ -261,14 +274,10 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="hidden md:inline-flex"
           onClick={() => setTema(CICLO_TEMA[tema])}
           title={ETIQUETA_TEMA[tema]}
         >
           {ICONO_TEMA[tema]}
-        </Button>
-        <Button variant="ghost" size="icon" className="md:hidden" onClick={reiniciar} title="Reiniciar">
-          <ArrowCounterClockwiseIcon size={16} />
         </Button>
         <Button variant="ghost" size="sm" className="hidden md:inline-flex" onClick={reiniciar}>
           <ArrowCounterClockwiseIcon size={16} />
@@ -297,104 +306,23 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
               onKeyDown={handleTeclaMenu}
               className="absolute right-0 top-full mt-1 z-50 min-w-[260px] py-1"
             >
-              <Button
-                ref={(el) => {
-                  opcionesMenuRef.current[0] = el
-                }}
-                type="button"
-                role="menuitem"
-                onClick={exportar}
-                variant="menu"
-                size="none"
-                className="whitespace-nowrap px-3 py-2 text-sm"
-              >
-                <FileArrowDownIcon size={16} />
-                Exportar JSON
-              </Button>
-              <Button
-                ref={(el) => {
-                  opcionesMenuRef.current[1] = el
-                }}
-                type="button"
-                role="menuitem"
-                onClick={() => exportarFormatoTexto("txt")}
-                variant="menu"
-                size="none"
-                className="whitespace-nowrap px-3 py-2 text-sm"
-              >
-                <FileArrowDownIcon size={16} />
-                Exportar TXT
-              </Button>
-              <Button
-                ref={(el) => {
-                  opcionesMenuRef.current[2] = el
-                }}
-                type="button"
-                role="menuitem"
-                onClick={() => exportarFormatoTexto("md")}
-                variant="menu"
-                size="none"
-                className="whitespace-nowrap px-3 py-2 text-sm"
-              >
-                <FileArrowDownIcon size={16} />
-                Exportar Markdown
-              </Button>
-              <Button
-                ref={(el) => {
-                  opcionesMenuRef.current[3] = el
-                }}
-                type="button"
-                role="menuitem"
-                onClick={pedirImportar}
-                variant="menu"
-                size="none"
-                className="whitespace-nowrap px-3 py-2 text-sm"
-              >
-                <FileArrowUpIcon size={16} />
-                Importar JSON
-              </Button>
-              <Button
-                ref={(el) => {
-                  opcionesMenuRef.current[4] = el
-                }}
-                type="button"
-                role="menuitem"
-                onClick={() => guardarCopia()}
-                variant="menu"
-                size="none"
-                className="whitespace-nowrap px-3 py-2 text-sm"
-              >
-                <CopyIcon size={16} />
-                Guardar copia local
-              </Button>
-              <Button
-                ref={(el) => {
-                  opcionesMenuRef.current[5] = el
-                }}
-                type="button"
-                role="menuitem"
-                onClick={abrirCopias}
-                variant="menu"
-                size="none"
-                className="whitespace-nowrap px-3 py-2 text-sm"
-              >
-                <ClockCounterClockwiseIcon size={16} />
-                Ver copias locales
-              </Button>
-              <Button
-                ref={(el) => {
-                  opcionesMenuRef.current[6] = el
-                }}
-                type="button"
-                role="menuitem"
-                onClick={abrirEnviar}
-                variant="menu"
-                size="none"
-                className="whitespace-nowrap px-3 py-2 text-sm"
-              >
-                <EnvelopeIcon size={16} />
-                Enviar CV por correo
-              </Button>
+              {opcionesMenu.map((opcion, i) => (
+                <Button
+                  key={opcion.etiqueta}
+                  ref={(el) => {
+                    opcionesMenuRef.current[i] = el
+                  }}
+                  type="button"
+                  role="menuitem"
+                  onClick={opcion.onClick}
+                  variant="menu"
+                  size="none"
+                  className="whitespace-nowrap px-3 py-2 text-sm"
+                >
+                  {opcion.icono}
+                  {opcion.etiqueta}
+                </Button>
+              ))}
             </Surface>
           )}
           <input
@@ -412,7 +340,9 @@ export function BarraAcciones({ modo }: BarraAccionesProps) {
           ) : (
             <DownloadSimpleIcon size={16} />
           )}
-          {descargando ? "Descargando..." : "Descargar PDF"}
+          <span className="hidden min-[360px]:inline">
+            {descargando ? "Descargando..." : "Descargar PDF"}
+          </span>
         </Button>
       </div>
       <DialogEjemploCv abierto={ejemploAbierto} onCerrar={() => setEjemploAbierto(false)} />

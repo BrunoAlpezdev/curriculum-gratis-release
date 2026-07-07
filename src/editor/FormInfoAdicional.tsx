@@ -7,7 +7,7 @@ import { CamposInfoAdicional, CONSEJOS_INFO_ADICIONAL } from "@/editor/campos/Ca
 export function FormInfoAdicional() {
   return (
     <SeccionFormulario
-      titulo="Informacion Adicional"
+      titulo="Información Adicional"
       icono={<InfoIcon size={18} />}
       defaultAbierta={false}
       tip={CONSEJOS_INFO_ADICIONAL}

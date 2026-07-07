@@ -27,7 +27,7 @@ function SubSeccion({ titulo, children }: { titulo: string; children: React.Reac
 export function ContenidoFormacion() {
   return (
     <div className="flex flex-col gap-8">
-      <SubSeccion titulo="Educacion">
+      <SubSeccion titulo="Educación">
         <CamposEducacion />
       </SubSeccion>
       <SubSeccion titulo="Cursos y certificaciones">
@@ -59,7 +59,7 @@ export function ContenidoExtras() {
       <SubSeccion titulo="Referencias">
         <CamposReferencias />
       </SubSeccion>
-      <SubSeccion titulo="Informacion adicional">
+      <SubSeccion titulo="Información adicional">
         <CamposInfoAdicional />
       </SubSeccion>
     </div>

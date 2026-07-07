@@ -20,13 +20,13 @@ export function CamposInfoAdicional() {
     <>
       <Input
         label="Disponibilidad"
-        placeholder="Inmediata, 15 dias, 1 mes..."
+        placeholder="Inmediata, 15 días, 1 mes..."
         value={disponibilidad}
         onChange={(e) => setDisponibilidad(e.target.value)}
       />
       <Input
-        label="Pretension de renta"
-        placeholder="$1.800.000 liquido o Negociable"
+        label="Pretensión de renta"
+        placeholder="$1.800.000 líquido o Negociable"
         value={pretensiones}
         onChange={(e) => setPretensiones(e.target.value)}
       />

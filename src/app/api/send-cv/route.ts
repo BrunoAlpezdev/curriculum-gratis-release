@@ -35,8 +35,8 @@ export async function POST(request: Request) {
     limit: userId ? USAGE_LIMITS.free.email : USAGE_LIMITS.anonymous.email,
     windowSeconds: USAGE_WINDOW_SECONDS,
     message: userId
-      ? "Alcanzaste tu limite diario de envios por correo. Intenta nuevamente manana."
-      : "Alcanzaste el limite anonimo de envios. Inicia sesion gratis para mas envios diarios.",
+      ? "Alcanzaste tu límite diario de envíos por correo. Intenta nuevamente mañana."
+      : "Alcanzaste el límite anónimo de envíos. Inicia sesión gratis para más envíos diarios.",
     identity: userId ? { type: "user", id: userId } : undefined,
   })
   if (rateLimit) return rateLimit
@@ -45,11 +45,11 @@ export async function POST(request: Request) {
   try {
     body = await request.json()
   } catch {
-    return Response.json({ error: "Payload invalido." }, { status: 400 })
+    return Response.json({ error: "Payload inválido." }, { status: 400 })
   }
 
   if (!body || typeof body !== "object") {
-    return Response.json({ error: "Payload invalido." }, { status: 400 })
+    return Response.json({ error: "Payload inválido." }, { status: 400 })
   }
 
   const payload = body as Record<string, unknown>
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   const nombre = typeof payload.nombre === "string" ? payload.nombre.trim() : ""
 
   if (!emailValido(email)) {
-    return Response.json({ error: "Email invalido." }, { status: 400 })
+    return Response.json({ error: "Email inválido." }, { status: 400 })
   }
   if (!pdfBase64) {
     return Response.json({ error: "Falta el PDF adjunto." }, { status: 400 })

@@ -7,7 +7,7 @@ import { CamposEducacion, CONSEJOS_EDUCACION } from "@/editor/campos/CamposEduca
 export function FormEducacion() {
   return (
     <SeccionFormulario
-      titulo="Educacion y Certificaciones"
+      titulo="Educación y Certificaciones"
       icono={<GraduationCapIcon size={18} />}
       tip={CONSEJOS_EDUCACION}
     >

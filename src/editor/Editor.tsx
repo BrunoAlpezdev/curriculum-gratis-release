@@ -60,7 +60,7 @@ export function Editor() {
           className="min-h-10"
         >
           <EnvelopeIcon size={14} />
-          Carta de presentacion
+          Carta de presentación
         </Button>
       </Surface>
 

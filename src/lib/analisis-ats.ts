@@ -137,7 +137,7 @@ function crearRecomendaciones(
     {
       id: "perfil",
       titulo: "Ajusta el perfil profesional",
-      descripcion: "Si estas palabras representan experiencia real, mencionalas en el perfil con una frase natural sobre tu foco profesional.",
+      descripcion: "Si estas palabras representan experiencia real, menciónalas en el perfil con una frase natural sobre tu foco profesional.",
       palabras: principales,
     },
   ]
@@ -146,7 +146,7 @@ function crearRecomendaciones(
     recomendaciones.push({
       id: "experiencia",
       titulo: "Conecta keywords con logros reales",
-      descripcion: "Revisa tus experiencias y agrega evidencia concreta: contexto, accion e impacto medible. No pegues keywords sueltas.",
+      descripcion: "Revisa tus experiencias y agrega evidencia concreta: contexto, acción e impacto medible. No pegues keywords sueltas.",
       palabras: faltantes.slice(0, 6).map((p) => p.palabra),
     })
   }
@@ -155,7 +155,7 @@ function crearRecomendaciones(
     recomendaciones.push({
       id: "proyectos",
       titulo: "Usa proyectos para respaldar habilidades",
-      descripcion: "Si alguna keyword corresponde a tecnologia, herramienta o metodo usado, agregala al proyecto donde realmente la aplicaste.",
+      descripcion: "Si alguna keyword corresponde a tecnología, herramienta o método usado, agrégala al proyecto donde realmente la aplicaste.",
       palabras: faltantes.slice(0, 6).map((p) => p.palabra),
     })
   }
@@ -164,7 +164,7 @@ function crearRecomendaciones(
     recomendaciones.push({
       id: "habilidades",
       titulo: "Refina la lista de competencias",
-      descripcion: "Agrega solo habilidades que puedas defender en entrevista. Prioriza las que se repiten mas en la oferta.",
+      descripcion: "Agrega solo habilidades que puedas defender en entrevista. Prioriza las que se repiten más en la oferta.",
       palabras: faltantes.slice(0, Math.min(6, 12 - datos.habilidades.length)).map((p) => p.palabra),
     })
   }

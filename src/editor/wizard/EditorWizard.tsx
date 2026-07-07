@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { FileTextIcon, EnvelopeIcon } from "@phosphor-icons/react"
 import { BarraAcciones } from "@/editor/BarraAcciones"
 import { Button } from "@/components/atoms/Button"
@@ -9,31 +8,26 @@ import { Text } from "@/components/atoms/Text"
 import { useHidratado } from "@/lib/useHidratado"
 import { useEsEscritorio } from "@/editor/wizard/useEsEscritorio"
 import { useEditorPasos } from "@/editor/wizard/useEditorPasos"
+import { usePasoPersistido } from "@/editor/wizard/usePasoPersistido"
 import { WizardMobile } from "@/editor/wizard/WizardMobile"
 import { WizardDesktop } from "@/editor/wizard/WizardDesktop"
-import type { Modo } from "@/editor/Editor"
 
 export function EditorWizard() {
-  const [modo, setModo] = useState<Modo>("cv")
-  const [actual, setActual] = useState(0)
+  const { modo, actual: actualCrudo, setActual, cambiarModo } = usePasoPersistido()
   const hidratado = useHidratado()
   const esEscritorio = useEsEscritorio()
   const pasos = useEditorPasos(modo)
-
-  function cambiarModo(nuevo: Modo) {
-    if (nuevo === modo) return
-    setModo(nuevo)
-    setActual(0)
-  }
+  const maxIndice = Math.max(0, pasos.length - 1)
+  const actual = Math.min(actualCrudo, maxIndice)
 
   function irA(indice: number) {
-    setActual(Math.max(0, Math.min(indice, pasos.length - 1)))
+    setActual(Math.max(0, Math.min(indice, maxIndice)))
   }
   function siguiente() {
-    setActual((i) => Math.min(i + 1, pasos.length - 1))
+    setActual(Math.min(actual + 1, maxIndice))
   }
   function anterior() {
-    setActual((i) => Math.max(i - 1, 0))
+    setActual(Math.max(actual - 1, 0))
   }
 
   if (!hidratado) {
@@ -75,7 +69,7 @@ export function EditorWizard() {
           className="min-h-10"
         >
           <EnvelopeIcon size={14} />
-          Carta de presentacion
+          Carta de presentación
         </Button>
       </Surface>
 

@@ -94,7 +94,7 @@ export function generarPdfCarta(
     pdf.setFont(fuenteBase, "italic")
     pdf.setFontSize(9)
     setColor(113, 113, 122)
-    pdf.text(`Postulacion: ${carta.cargoPostulado}`, MARGIN, y)
+    pdf.text(`Postulación: ${carta.cargoPostulado}`, MARGIN, y)
     y += 6
   } else if (carta.destinatario || carta.empresaDestino) {
     y += 4

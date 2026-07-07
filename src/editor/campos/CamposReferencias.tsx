@@ -63,7 +63,7 @@ export function CamposReferencias() {
               }
             />
             <Input
-              label="Telefono"
+              label="Teléfono"
               type="tel"
               placeholder="+56 9 0000 0000"
               value={ref.telefono}
@@ -73,8 +73,8 @@ export function CamposReferencias() {
             />
           </div>
           <Input
-            label="Relacion"
-            placeholder="Jefe directo, cliente, profesor guia..."
+            label="Relación"
+            placeholder="Jefe directo, cliente, profesor guía..."
             value={ref.relacion}
             onChange={(e) =>
               actualizar(ref.id, { relacion: e.target.value })

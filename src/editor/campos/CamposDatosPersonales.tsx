@@ -98,7 +98,7 @@ export function CamposDatosPersonales() {
         onChange={(e) => set({ nombreCompleto: e.target.value })}
       />
       <Input
-        label="Titulo profesional"
+        label="Título profesional"
         placeholder="Ingeniera de Software"
         value={datos.titulo}
         onChange={(e) => set({ titulo: e.target.value })}
@@ -112,7 +112,7 @@ export function CamposDatosPersonales() {
           onChange={(e) => set({ email: e.target.value })}
         />
         <Input
-          label="Telefono"
+          label="Teléfono"
           type="tel"
           placeholder="+56 9 0000 0000"
           value={datos.telefono}
@@ -121,7 +121,7 @@ export function CamposDatosPersonales() {
       </div>
       <div className="grid grid-cols-2 gap-3">
         <Input
-          label="Ubicacion"
+          label="Ubicación"
           placeholder="Santiago, Chile"
           value={datos.ubicacion}
           onChange={(e) => set({ ubicacion: e.target.value })}

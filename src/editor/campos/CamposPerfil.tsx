@@ -76,18 +76,18 @@ export function CamposPerfil() {
           className="w-fit"
         >
           {generando ? <SpinnerIcon size={16} className="animate-spin" /> : <SparkleIcon size={16} />}
-          {generando ? "Mejorando..." : "Mejorar redaccion con IA"}
+          {generando ? "Mejorando..." : "Mejorar redacción con IA"}
         </Button>
         <Text variant="caption">
-          Opcional: envia este perfil a Gemini para reescribirlo. Antes de aplicar una sugerencia se guarda una copia local.
+          Opcional: envía este perfil a Gemini para reescribirlo. Antes de aplicar una sugerencia se guarda una copia local.
         </Text>
         {usage && (
           <Text variant="caption" className="font-semibold text-action-strong">
             {usage.limits.aiProfile.remaining > 0
               ? `Te quedan ${usage.limits.aiProfile.remaining} de ${usage.limits.aiProfile.limit} usos de IA hoy${usage.tier === "free" ? " en tu cuenta Free" : " sin cuenta"}.`
               : usage.tier === "anonymous"
-                ? "Se acabaron tus usos sin cuenta. Inicia sesion gratis para mas usos de IA hoy."
-                : "Alcanzaste tu limite diario Free. Vuelve manana para mas usos de IA."}
+                ? "Se acabaron tus usos sin cuenta. Inicia sesión gratis para más usos de IA hoy."
+                : "Alcanzaste tu límite diario Free. Vuelve mañana para más usos de IA."}
           </Text>
         )}
       </div>

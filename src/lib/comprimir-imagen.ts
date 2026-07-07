@@ -26,6 +26,10 @@ export async function comprimirFoto(archivo: File): Promise<string> {
     if (!contexto) {
       throw new Error("No se pudo procesar la imagen en este navegador.")
     }
+    // Fondo blanco: el JPEG no tiene canal alfa, sin esto un PNG transparente
+    // queda con fondo negro.
+    contexto.fillStyle = "#ffffff"
+    contexto.fillRect(0, 0, anchoDestino, altoDestino)
     contexto.drawImage(imagen, 0, 0, anchoDestino, altoDestino)
 
     return canvas.toDataURL("image/jpeg", CALIDAD_JPEG)

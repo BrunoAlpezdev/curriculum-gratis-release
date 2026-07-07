@@ -29,8 +29,8 @@ export async function POST(request: Request) {
     limit: userId ? USAGE_LIMITS.free.aiCoverLetter : USAGE_LIMITS.anonymous.aiCoverLetter,
     windowSeconds: USAGE_WINDOW_SECONDS,
     message: userId
-      ? "Alcanzaste tu limite diario de cartas con IA. Intenta nuevamente manana."
-      : "Alcanzaste el limite anonimo de cartas con IA. Inicia sesion gratis para mas usos diarios.",
+      ? "Alcanzaste tu límite diario de cartas con IA. Intenta nuevamente mañana."
+      : "Alcanzaste el límite anónimo de cartas con IA. Inicia sesión gratis para más usos diarios.",
     identity: userId ? { type: "user", id: userId } : undefined,
   })
   if (rateLimit) return rateLimit
@@ -39,11 +39,11 @@ export async function POST(request: Request) {
   try {
     body = await request.json()
   } catch {
-    return Response.json({ error: "Payload invalido." }, { status: 400 })
+    return Response.json({ error: "Payload inválido." }, { status: 400 })
   }
 
   if (!body || typeof body !== "object") {
-    return Response.json({ error: "Payload invalido." }, { status: 400 })
+    return Response.json({ error: "Payload inválido." }, { status: 400 })
   }
 
   const payload = body as Record<string, unknown>
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "Indica empresa y cargo antes de generar la carta." }, { status: 400 })
   }
   if (resumenCv.length < 80) {
-    return Response.json({ error: "Completa mas datos del CV antes de generar la carta." }, { status: 400 })
+    return Response.json({ error: "Completa más datos del CV antes de generar la carta." }, { status: 400 })
   }
   if (`${resumenCv}\n${oferta}`.length > MAX_INPUT_CHARS) {
     return Response.json({ error: "El CV u oferta son demasiado largos para generar la carta." }, { status: 413 })

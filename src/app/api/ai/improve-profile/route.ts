@@ -29,8 +29,8 @@ export async function POST(request: Request) {
     limit: userId ? USAGE_LIMITS.free.aiProfile : USAGE_LIMITS.anonymous.aiProfile,
     windowSeconds: USAGE_WINDOW_SECONDS,
     message: userId
-      ? "Alcanzaste tu limite diario de IA. Intenta nuevamente manana."
-      : "Alcanzaste el limite anonimo de IA. Inicia sesion gratis para mas usos diarios.",
+      ? "Alcanzaste tu límite diario de IA. Intenta nuevamente mañana."
+      : "Alcanzaste el límite anónimo de IA. Inicia sesión gratis para más usos diarios.",
     identity: userId ? { type: "user", id: userId } : undefined,
   })
   if (rateLimit) return rateLimit
@@ -39,11 +39,11 @@ export async function POST(request: Request) {
   try {
     body = await request.json()
   } catch {
-    return Response.json({ error: "Payload invalido." }, { status: 400 })
+    return Response.json({ error: "Payload inválido." }, { status: 400 })
   }
 
   if (!body || typeof body !== "object") {
-    return Response.json({ error: "Payload invalido." }, { status: 400 })
+    return Response.json({ error: "Payload inválido." }, { status: 400 })
   }
 
   const payload = body as Record<string, unknown>

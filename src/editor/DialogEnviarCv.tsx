@@ -33,9 +33,13 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
   const [enviado, setEnviado] = useState(false)
   const { usage, refresh: refreshUsage } = useUsageLimits()
   const cerrarDialogo = useEffectEvent(onCerrar)
+  const prellenarEmail = useEffectEvent(() => {
+    if (!email.trim()) setEmail(datos.datosPersonales.email)
+  })
 
   useEffect(() => {
     if (!abierto) return
+    prellenarEmail()
     function handleEscape(e: KeyboardEvent) {
       if (e.key === "Escape") cerrarDialogo()
     }
@@ -105,10 +109,10 @@ export function DialogEnviarCv({ abierto, datos, personalizacion, onCerrar }: Pr
             {usage && (
               <Text variant="caption" className="mt-1 font-semibold text-action-strong">
                 {usage.limits.email.remaining > 0
-                  ? `Te quedan ${usage.limits.email.remaining} de ${usage.limits.email.limit} envios hoy${usage.tier === "free" ? " en tu cuenta Free" : " sin cuenta"}.`
+                  ? `Te quedan ${usage.limits.email.remaining} de ${usage.limits.email.limit} envíos hoy${usage.tier === "free" ? " en tu cuenta Free" : " sin cuenta"}.`
                   : usage.tier === "anonymous"
-                    ? "Se acabaron tus envios sin cuenta. Inicia sesion gratis para mas envios hoy."
-                    : "Alcanzaste tu limite diario Free de envios. Vuelve manana."}
+                    ? "Se acabaron tus envíos sin cuenta. Inicia sesión gratis para más envíos hoy."
+                    : "Alcanzaste tu límite diario Free de envíos. Vuelve mañana."}
               </Text>
             )}
           </div>

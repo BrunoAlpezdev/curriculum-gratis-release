@@ -14,42 +14,42 @@ import { useCurriculumStore } from "@/lib/store"
 import { useUsageLimits } from "@/lib/use-usage-limits"
 
 export const CONSEJOS_CARTA = [
-  "Corta, concreta y personalizada. 3 parrafos es lo ideal — si no lees tu carta completa sin distraerte, el reclutador tampoco lo hara.",
-  "Siempre menciona la empresa y el cargo explicitamente. Una carta genérica se nota y resta puntos.",
+  "Corta, concreta y personalizada. 3 párrafos es lo ideal — si no lees tu carta completa sin distraerte, el reclutador tampoco lo hará.",
+  "Siempre menciona la empresa y el cargo explícitamente. Una carta genérica se nota y resta puntos.",
   "No repitas tu CV. La carta es para contar el 'por qué yo' y 'por qué ustedes', no para listar logros.",
-  "Destinatario: si conoces el nombre (Sra./Sr. Apellido), mejor que un 'A quien corresponda'.",
+  "Destinatario: si conoces el nombre (Sra./Sr. Apellido), mejor que un 'A quién corresponda'.",
 ]
 
 const PLANTILLAS_CUERPO = [
   {
-    nombre: "Postulacion directa",
+    nombre: "Postulación directa",
     texto: `Estimado/a [Destinatario]:
 
-Me dirijo a usted con el objetivo de postular al cargo de [Cargo] en [Empresa], posicion que me interesa profundamente por su alineacion con mi trayectoria profesional y objetivos de desarrollo.
+Me dirijo a usted con el objetivo de postular al cargo de [Cargo] en [Empresa], posición que me interesa profundamente por su alineación con mi trayectoria profesional y objetivos de desarrollo.
 
-A lo largo de mi experiencia he desarrollado [breve resumen de fortalezas clave]. Considero que podria aportar valor al equipo de [Empresa] gracias a [razon especifica y concreta].
+A lo largo de mi experiencia he desarrollado [breve resumen de fortalezas clave]. Considero que podría aportar valor al equipo de [Empresa] gracias a [razón específica y concreta].
 
-Quedo atento/a a la posibilidad de coordinar una entrevista en la que pueda ampliar la informacion de mi CV y conocer mas sobre el rol.`,
+Quedo atento/a a la posibilidad de coordinar una entrevista en la que pueda ampliar la información de mi CV y conocer más sobre el rol.`,
   },
   {
     nombre: "Cambio de rubro",
     texto: `Estimado/a [Destinatario]:
 
-Escribo para postular al cargo de [Cargo] en [Empresa]. Aunque mi experiencia previa se ha desarrollado en un ambito distinto, he estado capacitandome activamente para dar el paso a [area objetivo], y considero que las habilidades transversales que traigo pueden aportar una perspectiva fresca al equipo.
+Escribo para postular al cargo de [Cargo] en [Empresa]. Aunque mi experiencia previa se ha desarrollado en un ámbito distinto, he estado capacitándome activamente para dar el paso a [área objetivo], y considero que las habilidades transversales que traigo pueden aportar una perspectiva fresca al equipo.
 
-En particular, [menciona 1-2 experiencias puntuales que respalden el cambio]. Estoy convencido/a de que la combinacion de mi background y mi entusiasmo por aprender seria un buen complemento para el equipo.
+En particular, [menciona 1-2 experiencias puntuales que respalden el cambio]. Estoy convencido/a de que la combinación de mi background y mi entusiasmo por aprender sería un buen complemento para el equipo.
 
-Agradezco la oportunidad de ser considerado/a y quedo disponible para una conversacion.`,
+Agradezco la oportunidad de ser considerado/a y quedo disponible para una conversación.`,
   },
   {
     nombre: "Primer empleo",
     texto: `Estimado/a [Destinatario]:
 
-Me presento como postulante al cargo de [Cargo] en [Empresa]. Aunque me encuentro iniciando mi carrera profesional, mi formacion en [Carrera/Titulo] y los proyectos desarrollados durante mi proceso educativo me han permitido adquirir las bases tecnicas y la actitud necesaria para aportar desde el primer dia.
+Me presento como postulante al cargo de [Cargo] en [Empresa]. Aunque me encuentro iniciando mi carrera profesional, mi formación en [Carrera/Título] y los proyectos desarrollados durante mi proceso educativo me han permitido adquirir las bases técnicas y la actitud necesaria para aportar desde el primer día.
 
-Destaco de mi perfil [cualidades clave: responsabilidad, capacidad de aprendizaje, trabajo en equipo]. Tengo gran interes en sumarme a [Empresa] por [razon concreta] y aprovechar la oportunidad para crecer junto a un equipo con experiencia.
+Destaco de mi perfil [cualidades clave: responsabilidad, capacidad de aprendizaje, trabajo en equipo]. Tengo gran interés en sumarme a [Empresa] por [razón concreta] y aprovechar la oportunidad para crecer junto a un equipo con experiencia.
 
-Agradezco de antemano su consideracion.`,
+Agradezco de antemano su consideración.`,
   },
 ]
 
@@ -101,7 +101,7 @@ export function CamposCarta() {
     <>
       <Input
         label="Destinatario"
-          placeholder="Nombre del destinatario o 'A quien corresponda'"
+          placeholder="Nombre del destinatario o 'A quién corresponda'"
         value={carta.destinatario}
         onChange={(e) => set({ destinatario: e.target.value })}
       />
@@ -147,7 +147,7 @@ export function CamposCarta() {
 
       <Textarea
         label="Oferta laboral para IA (opcional)"
-        placeholder="Pega aqui la descripcion del cargo para personalizar la carta..."
+        placeholder="Pega aquí la descripción del cargo para personalizar la carta..."
         value={oferta}
         onChange={(e) => setOferta(e.target.value)}
         rows={4}
@@ -166,15 +166,15 @@ export function CamposCarta() {
           {generando ? "Generando..." : "Generar cuerpo con IA"}
         </Button>
         <Text variant="caption">
-          Opcional: envia datos resumidos de tu CV y la oferta a Gemini. Antes de aplicar una sugerencia se guarda una copia local.
+          Opcional: envía datos resumidos de tu CV y la oferta a Gemini. Antes de aplicar una sugerencia se guarda una copia local.
         </Text>
         {usage && (
           <Text variant="caption" className="font-semibold text-action-strong">
             {usage.limits.aiCoverLetter.remaining > 0
               ? `Te quedan ${usage.limits.aiCoverLetter.remaining} de ${usage.limits.aiCoverLetter.limit} cartas con IA hoy${usage.tier === "free" ? " en tu cuenta Free" : " sin cuenta"}.`
               : usage.tier === "anonymous"
-                ? "Se acabaron tus cartas con IA sin cuenta. Inicia sesion gratis para mas usos hoy."
-                : "Alcanzaste tu limite diario Free de cartas con IA. Vuelve manana."}
+                ? "Se acabaron tus cartas con IA sin cuenta. Inicia sesión gratis para más usos hoy."
+                : "Alcanzaste tu límite diario Free de cartas con IA. Vuelve mañana."}
           </Text>
         )}
       </div>

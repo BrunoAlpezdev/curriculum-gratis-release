@@ -7,7 +7,7 @@ import { CamposCarta, CONSEJOS_CARTA } from "@/editor/campos/CamposCarta"
 export function FormCarta() {
   return (
     <SeccionFormulario
-      titulo="Carta de Presentacion"
+      titulo="Carta de Presentación"
       icono={<EnvelopeIcon size={18} />}
       tip={CONSEJOS_CARTA}
     >

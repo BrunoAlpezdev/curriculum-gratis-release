@@ -45,7 +45,7 @@ export function CamposExperiencia() {
             />
           </div>
           <Input
-            label="Ubicacion"
+            label="Ubicación"
             placeholder="Santiago, Chile"
             value={exp.ubicacion}
             onChange={(e) =>
@@ -68,7 +68,7 @@ export function CamposExperiencia() {
             />
           </div>
           <Textarea
-            label="Descripcion"
+            label="Descripción"
             placeholder="Responsabilidades principales..."
             value={exp.descripcion}
             onChange={(e) =>
@@ -78,7 +78,7 @@ export function CamposExperiencia() {
           />
           <Textarea
             label="Logros"
-            placeholder="Reduccion de costos en un 15%..."
+            placeholder="Reducción de costos en un 15%..."
             value={exp.logros}
             onChange={(e) =>
               actualizar(exp.id, { logros: e.target.value })

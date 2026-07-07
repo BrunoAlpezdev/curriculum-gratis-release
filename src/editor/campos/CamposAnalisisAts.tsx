@@ -35,8 +35,8 @@ export function CamposAnalisisAts() {
   return (
     <>
       <Textarea
-        label="Descripcion del puesto (Job Description)"
-        placeholder="Pega aqui el texto del aviso de trabajo..."
+        label="Descripción del puesto (Job Description)"
+        placeholder="Pega aquí el texto del aviso de trabajo..."
         value={jd}
         onChange={(e) => setJd(e.target.value)}
         rows={5}
