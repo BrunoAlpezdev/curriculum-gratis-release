@@ -92,7 +92,7 @@ export type ColorTema =
   | "naranja"
   | "gris"
 
-export type PlantillaId = "clasico" | "moderno" | "colorido" | "minimalista" | "ejecutivo"
+export type PlantillaId = "clasico" | "moderno" | "colorido" | "minimalista" | "ejecutivo" | "compacto"
 
 export type FuenteId = "inter" | "roboto" | "lato" | "merriweather" | "libre-baskerville"
 

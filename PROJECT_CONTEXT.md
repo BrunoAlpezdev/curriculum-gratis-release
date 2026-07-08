@@ -116,6 +116,7 @@ Nota dev: el socket `.codegraph/daemon.sock` dentro del repo hace panic a Turbop
 - `src/cv/PlantillaModerno.tsx`: plantilla visual con sidebar.
 - `src/cv/PlantillaColorido.tsx`: plantilla visual con header/formas.
 - `src/cv/PlantillaEjecutivo.tsx`: plantilla visual editorial (una columna, encabezado centrado, fechas al margen, sin iconos).
+- `src/cv/PlantillaCompacto.tsx`: plantilla visual densa de dos columnas (rail derecho con cursos/competencias/idiomas con medidor de puntos), sin barra fullbleed.
 
 ## PDF
 

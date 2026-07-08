@@ -65,6 +65,7 @@ export const PLANTILLAS: { valor: PlantillaId; etiqueta: string; descripcion: st
   { valor: "moderno", etiqueta: "Barra a un lado", descripcion: "Barra lateral con iconos y color", ats: false },
   { valor: "colorido", etiqueta: "Barra superior", descripcion: "Encabezado grande con formas decorativas", ats: false },
   { valor: "ejecutivo", etiqueta: "Ejecutivo", descripcion: "Encabezado centrado y fechas al margen, sobrio y elegante", ats: false },
+  { valor: "compacto", etiqueta: "Compacto", descripcion: "Dos columnas densas para aprovechar cada centimetro", ats: false },
 ]
 
 export const FUENTES: { valor: FuenteId; etiqueta: string; tipo: string; jsPdf: string }[] = [

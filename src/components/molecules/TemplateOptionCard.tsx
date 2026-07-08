@@ -13,7 +13,7 @@ const TEMPLATE_DETAILS: Record<
     uso: string
     tono: string
     lineas: string[]
-    preview: "classic" | "minimal" | "modern" | "color" | "exec"
+    preview: "classic" | "minimal" | "modern" | "color" | "exec" | "compact"
   }
 > = {
   clasico: {
@@ -46,9 +46,15 @@ const TEMPLATE_DETAILS: Record<
     lineas: ["Encabezado centrado", "Fechas al margen", "Tipografia elegante"],
     preview: "exec",
   },
+  compacto: {
+    uso: "Trayectorias largas que necesitan caber en una sola pagina sin sacrificar contenido.",
+    tono: "Densa y eficiente",
+    lineas: ["Dos columnas", "Maximo contenido", "Una pagina"],
+    preview: "compact",
+  },
 }
 
-function TemplatePreview({ variant }: { variant: "classic" | "minimal" | "modern" | "color" | "exec" }) {
+function TemplatePreview({ variant }: { variant: "classic" | "minimal" | "modern" | "color" | "exec" | "compact" }) {
   if (variant === "modern") {
     return (
       <div className="flex h-44 overflow-hidden border-2 border-border-strong bg-white">
@@ -67,6 +73,30 @@ function TemplatePreview({ variant }: { variant: "classic" | "minimal" | "modern
             <div className="h-2 w-full bg-zinc-200" />
             <div className="h-2 w-10/12 bg-zinc-200" />
             <div className="h-2 w-11/12 bg-zinc-200" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (variant === "compact") {
+    return (
+      <div className="h-44 overflow-hidden border-2 border-border-strong bg-white p-4">
+        <div className="h-3 w-28 bg-zinc-800" />
+        <div className="mt-1.5 h-1.5 w-20 bg-action-primary/70" />
+        <div className="mt-3 border-t-2 border-action-primary" />
+        <div className="mt-3 grid grid-cols-[1fr_44px] gap-3">
+          <div className="space-y-1.5">
+            <div className="h-1.5 w-14 bg-action-primary/60" />
+            <div className="h-2 w-full bg-zinc-200" />
+            <div className="h-2 w-11/12 bg-zinc-200" />
+            <div className="h-2 w-full bg-zinc-200" />
+            <div className="h-2 w-9/12 bg-zinc-200" />
+          </div>
+          <div className="space-y-1.5">
+            <div className="h-1.5 w-full bg-action-primary/60" />
+            <div className="h-2 w-full bg-zinc-200" />
+            <div className="h-2 w-3/4 bg-zinc-200" />
           </div>
         </div>
       </div>
