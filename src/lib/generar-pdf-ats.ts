@@ -6,6 +6,7 @@ import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { registrarFuentePdf } from "@/lib/fuentes-pdf"
 import { esTextoSimple } from "@/lib/texto-rico"
+import { sinEntradasVacias } from "@/lib/entradas-vacias"
 import {
   CONTENT_WIDTH,
   MARGIN,
@@ -27,9 +28,10 @@ export async function generarPdfAts(
 }
 
 export async function crearPdfAts(
-  datos: DatosCurriculum,
+  datosCrudos: DatosCurriculum,
   personalizacion: Personalizacion,
 ) {
+  const datos = sinEntradasVacias(datosCrudos)
   const color = hexToRgb(getColorHex(personalizacion.color))
   const e = etiquetasCv(personalizacion.idiomaCv)
   const pdf = new jsPDF("p", "mm", "a4")

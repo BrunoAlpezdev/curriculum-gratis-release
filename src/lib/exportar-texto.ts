@@ -1,6 +1,7 @@
 import type { Carta, DatosCurriculum, Personalizacion, SeccionOrdenable } from "@/types"
 import { etiquetaNivelIdioma, etiquetasCv, type EtiquetasCv } from "@/lib/etiquetas-cv"
 import { formatearFecha, formatearRangoFechas } from "@/lib/formato"
+import { sinEntradasVacias } from "@/lib/entradas-vacias"
 
 function tituloSeccion(seccion: SeccionOrdenable, et: EtiquetasCv): string {
   switch (seccion) {
@@ -261,9 +262,10 @@ export function exportarTexto(
   personalizacion: Personalizacion,
   carta: Carta,
 ) {
+  const datosCv = sinEntradasVacias(datos)
   const contenido = documento === "carta"
     ? (formato === "md" ? cartaMd(datos, carta, personalizacion) : cartaTxt(datos, carta))
-    : (formato === "md" ? cvMd(datos, personalizacion) : cvTxt(datos, personalizacion))
+    : (formato === "md" ? cvMd(datosCv, personalizacion) : cvTxt(datosCv, personalizacion))
 
   descargarArchivo(
     `${nombreArchivoBase(datos, documento)}.${formato}`,

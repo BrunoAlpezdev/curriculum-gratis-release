@@ -4,6 +4,7 @@ import { PlantillaModerno } from "@/cv/PlantillaModerno"
 import { PlantillaColorido } from "@/cv/PlantillaColorido"
 import { PlantillaMinimalista } from "@/cv/PlantillaMinimalista"
 import { FUENTE_CSS } from "@/lib/constantes"
+import { sinEntradasVacias } from "@/lib/entradas-vacias"
 
 const PLANTILLAS_MAP: Record<
   PlantillaId,
@@ -26,6 +27,7 @@ interface Props {
 
 export function CurriculumVista({ datos, personalizacion }: Props) {
   const Plantilla = PLANTILLAS_MAP[personalizacion.plantilla]
+  const datosLimpios = sinEntradasVacias(datos)
 
   return (
     <div
@@ -37,7 +39,7 @@ export function CurriculumVista({ datos, personalizacion }: Props) {
         fontFamily: FUENTE_CSS[personalizacion.fuente ?? "inter"],
       }}
     >
-      <Plantilla datos={datos} personalizacion={personalizacion} />
+      <Plantilla datos={datosLimpios} personalizacion={personalizacion} />
     </div>
   )
 }

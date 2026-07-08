@@ -109,6 +109,7 @@ Nota dev: el socket `.codegraph/daemon.sock` dentro del repo hace panic a Turbop
 - `src/editor/PanelVistaPrevia.tsx`: preview responsive del CV. Escala A4 segun ancho disponible y advierte si el CV supera una pagina.
 - `src/editor/PanelVistaCarta.tsx`: preview responsive de carta.
 - `src/cv/CurriculumVista.tsx`: selecciona plantilla segun `personalizacion.plantilla` y define dimensiones A4 en pixeles.
+- `src/lib/entradas-vacias.ts`: `sinEntradasVacias(datos)` quita entradas repetibles totalmente vacias antes de renderizar/exportar (preview, PDF ATS, TXT/MD), para que una entrada abandonada no imprima su placeholder. Aplicado en `CurriculumVista`, `crearPdfAts` y `exportarTexto`.
 - `src/cv/VistaCarta.tsx`: render de carta.
 - `src/cv/PlantillaClasico.tsx`: plantilla ATS sobria tipo Harvard.
 - `src/cv/PlantillaMinimalista.tsx`: plantilla ATS plana/elegante.
