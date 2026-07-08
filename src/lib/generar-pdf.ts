@@ -89,15 +89,27 @@ async function crearPdfVisual(
     width: A4_WIDTH_PX,
     height: alturaContenido,
     onclone: (_doc: Document, elClonado: HTMLElement) => {
+      /* html2canvas clona con windowWidth = A4_WIDTH_PX (794) >= breakpoint md
+         (768), asi que dentro del clon las media queries md:* se activan: un
+         ancestro con `md:hidden` (PreviewOverlay/WizardMobile en mobile) computa
+         display:none y colapsa el render. Removemos todas las variantes de
+         ocultamiento, incluidas las responsive (`md:hidden`, `lg:hidden`, ...). */
+      const desocultar = (elem: HTMLElement) => {
+        const ocultas = [...elem.classList].filter(
+          (c) => c === "hidden" || c === "invisible" || /^(?:sm|md|lg|xl|2xl):hidden$/.test(c),
+        )
+        elem.classList.remove(...ocultas)
+      }
+
       /* No forzamos height — dejamos que el clon crezca con su contenido.
          Forzar height + position absolute colapsaba el rendering a 1 pagina. */
       elClonado.style.cssText += `width:${A4_WIDTH_PX}px;min-width:${A4_WIDTH_PX}px;max-width:${A4_WIDTH_PX}px;min-height:${A4_HEIGHT_PX}px;transform:none;visibility:visible;`
-      elClonado.classList.remove("invisible")
+      desocultar(elClonado)
 
       let ancestro: HTMLElement | null = elClonado.parentElement
       while (ancestro) {
         ancestro.style.cssText += "transform:none;overflow:visible;visibility:visible;"
-        ancestro.classList.remove("hidden", "invisible")
+        desocultar(ancestro)
         ancestro = ancestro.parentElement
       }
     },
