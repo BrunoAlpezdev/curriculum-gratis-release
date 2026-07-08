@@ -1,5 +1,7 @@
 import type { jsPDF } from "jspdf"
+import type { DatosPersonales, PlantillaId } from "@/types"
 import { parsearTextoRico } from "@/lib/texto-rico"
+import { limpiarParaPdf, urlAbsoluta } from "@/lib/formato"
 
 export const MARGIN = 20
 export const PAGE_WIDTH = 210
@@ -12,12 +14,51 @@ export interface PdfColor {
   b: number
 }
 
+/* Estilo del PDF ATS por plantilla: ambas plantillas ATS comparten el pipeline
+   (fuentes, paginacion, secciones) pero difieren en el encabezado y algunos
+   detalles para que el PDF descargado coincida con el preview elegido. */
+export interface EstiloAts {
+  header: "centro" | "izquierda"
+  nombreBold: boolean
+  tituloAcento: boolean
+  separadorTitulo: string
+  mostrarUbicacion: boolean
+  etiquetaLogros: boolean
+  seccionConLinea: boolean
+}
+
+export function estiloPdfAts(plantilla: PlantillaId): EstiloAts {
+  if (plantilla === "minimalista") {
+    return {
+      header: "izquierda",
+      nombreBold: false,
+      tituloAcento: true,
+      separadorTitulo: " — ",
+      mostrarUbicacion: false,
+      etiquetaLogros: false,
+      seccionConLinea: false,
+    }
+  }
+  return {
+    header: "centro",
+    nombreBold: true,
+    tituloAcento: false,
+    separadorTitulo: ", ",
+    mostrarUbicacion: true,
+    etiquetaLogros: true,
+    seccionConLinea: true,
+  }
+}
+
+const GRIS_TITULO: PdfColor = { r: 161, g: 161, b: 170 }
+
 export function renderSeccion(
   pdf: jsPDF,
   titulo: string,
   y: number,
   color: PdfColor,
   fuenteBase: string,
+  conLinea = true,
 ): number {
   if (y + 10 > PAGE_HEIGHT - MARGIN) {
     pdf.addPage()
@@ -28,13 +69,84 @@ export function renderSeccion(
   pdf.setFontSize(10)
   pdf.setTextColor(color.r, color.g, color.b)
   pdf.text(titulo, MARGIN, y)
-  y += 1
-  pdf.setDrawColor(color.r, color.g, color.b)
-  pdf.setLineWidth(0.3)
-  pdf.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
-  y += 5
+  if (conLinea) {
+    y += 1
+    pdf.setDrawColor(color.r, color.g, color.b)
+    pdf.setLineWidth(0.3)
+    pdf.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
+    y += 5
+  } else {
+    y += 5
+  }
   return y
 }
+
+/* Encabezado del PDF ATS (nombre, titulo, contactos, filete). Devuelve la nueva
+   y. Harvard: centrado, nombre bold, filete de acento. Minimalista: alineado a
+   la izquierda, nombre liviano, titulo en color de acento, filete gris fino. */
+export function escribirEncabezadoAts(
+  pdf: jsPDF,
+  dp: DatosPersonales,
+  tuNombre: string,
+  fuenteBase: string,
+  color: PdfColor,
+  estilo: EstiloAts,
+): number {
+  let y = MARGIN
+  const centrado = estilo.header === "centro"
+  const x = centrado ? PAGE_WIDTH / 2 : MARGIN
+  const opts = centrado ? ({ align: "center" } as const) : undefined
+
+  pdf.setFont(fuenteBase, estilo.nombreBold ? "bold" : "normal")
+  pdf.setFontSize(estilo.nombreBold ? 20 : 22)
+  pdf.setTextColor(24, 24, 27)
+  pdf.text(limpiarParaPdf(dp.nombreCompleto) || tuNombre, x, y, opts)
+  y += 7
+
+  if (dp.titulo) {
+    pdf.setFont(fuenteBase, "normal")
+    pdf.setFontSize(11)
+    if (estilo.tituloAcento) pdf.setTextColor(color.r, color.g, color.b)
+    else pdf.setTextColor(82, 82, 91)
+    pdf.text(limpiarParaPdf(dp.titulo), x, y, opts)
+    y += 5
+  }
+
+  const contacto = [
+    { texto: limpiarParaPdf(dp.email), url: dp.email ? urlAbsoluta(dp.email) : undefined },
+    { texto: limpiarParaPdf(dp.telefono) },
+    { texto: dp.rut ? `RUT ${limpiarParaPdf(dp.rut)}` : "" },
+    { texto: limpiarParaPdf(dp.ubicacion) },
+  ]
+  const enlaces = [dp.linkedin, dp.github, dp.sitioWeb]
+    .filter(Boolean)
+    .map((v) => ({ texto: limpiarParaPdf(v), url: urlAbsoluta(v) }))
+
+  pdf.setFont(fuenteBase, "normal")
+  pdf.setFontSize(9)
+  pdf.setTextColor(113, 113, 122)
+  if (centrado) {
+    y = escribirLineaEnlacesCentrada(pdf, contacto, y)
+    if (enlaces.length > 0) y = escribirLineaEnlacesCentrada(pdf, enlaces, y)
+  } else {
+    y = escribirLineaEnlacesCentrada(pdf, [...contacto, ...enlaces], y, 4, "izquierda")
+  }
+
+  if (centrado) {
+    pdf.setDrawColor(color.r, color.g, color.b)
+    pdf.setLineWidth(0.5)
+    pdf.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
+    y += 6
+  } else {
+    pdf.setDrawColor(228, 228, 231)
+    pdf.setLineWidth(0.2)
+    pdf.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
+    y += 5
+  }
+  return y
+}
+
+export { GRIS_TITULO }
 
 /* Escribe un título (bold 10) con una fecha opcional alineada a la derecha,
    envolviendo el título en varias líneas cuando es largo para que nunca cruce
@@ -91,6 +203,7 @@ export function escribirLineaEnlacesCentrada(
   segmentos: { texto: string; url?: string }[],
   y: number,
   altoLinea = 4,
+  alinear: "centro" | "izquierda" = "centro",
 ): number {
   const visibles = segmentos.filter((s) => s.texto)
   if (visibles.length === 0) return y
@@ -125,7 +238,7 @@ export function escribirLineaEnlacesCentrada(
   for (const fila of filas) {
     const anchoFila =
       fila.reduce((a, f) => a + f.ancho, 0) + anchoSep * (fila.length - 1)
-    let x = PAGE_WIDTH / 2 - anchoFila / 2
+    let x = alinear === "izquierda" ? MARGIN : PAGE_WIDTH / 2 - anchoFila / 2
     fila.forEach(({ seg, ancho }, i) => {
       if (seg.url) {
         pdf.textWithLink(seg.texto, x, y, { url: seg.url })

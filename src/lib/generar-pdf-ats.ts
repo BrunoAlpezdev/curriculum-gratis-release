@@ -15,8 +15,10 @@ import {
   hexToRgb,
   renderSeccion,
   escribirTituloConFecha,
-  escribirLineaEnlacesCentrada,
   escribirTextoRico,
+  estiloPdfAts,
+  escribirEncabezadoAts,
+  GRIS_TITULO,
 } from "@/lib/generar-pdf-ats-helpers"
 
 export async function generarPdfAts(
@@ -80,52 +82,16 @@ export async function crearPdfAts(
   }
 
   const dp = datos.datosPersonales
-
-  pdf.setFont(fuenteBase, "bold")
-  pdf.setFontSize(20)
-  setBlack()
-  pdf.text(limpiarParaPdf(dp.nombreCompleto) || e.tuNombre, PAGE_WIDTH / 2, y, { align: "center" })
-  y += 7
-
-  if (dp.titulo) {
-    pdf.setFont(fuenteBase, "normal")
-    pdf.setFontSize(11)
-    setColor(82, 82, 91)
-    pdf.text(limpiarParaPdf(dp.titulo), PAGE_WIDTH / 2, y, { align: "center" })
-    y += 5
+  const estilo = estiloPdfAts(personalizacion.plantilla)
+  const colorTitulo = estilo.seccionConLinea ? color : GRIS_TITULO
+  const seccion = (titulo: string) => {
+    y = renderSeccion(pdf, titulo, y, colorTitulo, fuenteBase, estilo.seccionConLinea)
   }
 
-  const contacto = [
-    { texto: limpiarParaPdf(dp.email), url: dp.email ? urlAbsoluta(dp.email) : undefined },
-    { texto: limpiarParaPdf(dp.telefono) },
-    { texto: dp.rut ? `RUT ${limpiarParaPdf(dp.rut)}` : "" },
-    { texto: limpiarParaPdf(dp.ubicacion) },
-  ].filter((s) => s.texto)
-  if (contacto.length > 0) {
-    pdf.setFont(fuenteBase, "normal")
-    pdf.setFontSize(9)
-    setMuted()
-    y = escribirLineaEnlacesCentrada(pdf, contacto, y)
-  }
-
-  const enlaces = [dp.linkedin, dp.github, dp.sitioWeb]
-    .filter(Boolean)
-    .map((v) => ({ texto: limpiarParaPdf(v), url: urlAbsoluta(v) }))
-  if (enlaces.length > 0) {
-    pdf.setFont(fuenteBase, "normal")
-    pdf.setFontSize(9)
-    setMuted()
-    y = escribirLineaEnlacesCentrada(pdf, enlaces, y)
-  }
-
-  setAccent()
-  pdf.setLineWidth(0.5)
-  pdf.setDrawColor(color.r, color.g, color.b)
-  pdf.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
-  y += 6
+  y = escribirEncabezadoAts(pdf, dp, e.tuNombre, fuenteBase, color, estilo)
 
   if (datos.perfil) {
-    y = renderSeccion(pdf, e.perfilProfesional.toUpperCase(), y, color, fuenteBase)
+    seccion(e.perfilProfesional.toUpperCase())
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(10)
     setMuted()
@@ -136,17 +102,17 @@ export async function crearPdfAts(
   const renderers: Record<SeccionOrdenable, () => void> = {
     experiencia: () => {
       if (datos.experiencia.length === 0) return
-      y = renderSeccion(pdf, e.experienciaLaboral.toUpperCase(), y, color, fuenteBase)
+      seccion(e.experienciaLaboral.toUpperCase())
       for (const exp of datos.experiencia) {
         checkPage(20)
 
         const cargo = limpiarParaPdf(exp.cargo) || e.cargo
         const empresa = limpiarParaPdf(exp.empresa)
-        const tituloLinea = empresa ? `${cargo}, ${empresa}` : cargo
+        const tituloLinea = empresa ? `${cargo}${estilo.separadorTitulo}${empresa}` : cargo
         const fecha = formatearRangoFechas(exp.fechaInicio, exp.fechaFin, personalizacion.idiomaCv)
         y = escribirTituloConFecha(pdf, tituloLinea, fecha, y, fuenteBase)
 
-        if (exp.ubicacion) {
+        if (exp.ubicacion && estilo.mostrarUbicacion) {
           pdf.setFont(fuenteBase, "italic")
           pdf.setFontSize(9)
           setMuted()
@@ -164,18 +130,24 @@ export async function crearPdfAts(
 
         if (exp.logros) {
           pdf.setFontSize(9)
-          setColor(63, 63, 70)
-          if (esTextoSimple(exp.logros)) {
-            pdf.setFont(fuenteBase, "italic")
-            const lines = pdf.splitTextToSize(`${e.logros}: ${limpiarParaPdf(exp.logros)}`, CONTENT_WIDTH)
-            escribirLineas(lines, 3.5)
-          } else {
-            pdf.setFont(fuenteBase, "bold")
-            y = checkPagePura(y, 3.5)
-            pdf.text(`${e.logros}:`, MARGIN, y)
-            y += 3.5
-            pdf.setFont(fuenteBase, "italic")
+          if (!estilo.etiquetaLogros) {
+            pdf.setFont(fuenteBase, "normal")
+            setColor(82, 82, 91)
             y = escribirTextoRico(pdf, limpiarParaPdf(exp.logros), y, 3.5, checkPagePura)
+          } else {
+            setColor(63, 63, 70)
+            if (esTextoSimple(exp.logros)) {
+              pdf.setFont(fuenteBase, "italic")
+              const lines = pdf.splitTextToSize(`${e.logros}: ${limpiarParaPdf(exp.logros)}`, CONTENT_WIDTH)
+              escribirLineas(lines, 3.5)
+            } else {
+              pdf.setFont(fuenteBase, "bold")
+              y = checkPagePura(y, 3.5)
+              pdf.text(`${e.logros}:`, MARGIN, y)
+              y += 3.5
+              pdf.setFont(fuenteBase, "italic")
+              y = escribirTextoRico(pdf, limpiarParaPdf(exp.logros), y, 3.5, checkPagePura)
+            }
           }
           y += 1
         }
@@ -185,13 +157,13 @@ export async function crearPdfAts(
     },
     educacion: () => {
       if (datos.educacion.length === 0) return
-      y = renderSeccion(pdf, e.educacion.toUpperCase(), y, color, fuenteBase)
+      seccion(e.educacion.toUpperCase())
       for (const edu of datos.educacion) {
         checkPage(12)
 
         const titulo = limpiarParaPdf(edu.titulo) || e.titulo
         const institucion = limpiarParaPdf(edu.institucion)
-        const tituloLinea = institucion ? `${titulo}, ${institucion}` : titulo
+        const tituloLinea = institucion ? `${titulo}${estilo.separadorTitulo}${institucion}` : titulo
         const fecha = formatearFechaEducacion(edu.fechaInicio, edu.fechaFin, personalizacion.idiomaCv)
         y = escribirTituloConFecha(pdf, tituloLinea, fecha, y, fuenteBase)
 
@@ -208,13 +180,13 @@ export async function crearPdfAts(
     },
     cursos: () => {
       if (datos.cursos.length === 0) return
-      y = renderSeccion(pdf, e.cursosCertificaciones.toUpperCase(), y, color, fuenteBase)
+      seccion(e.cursosCertificaciones.toUpperCase())
       for (const curso of datos.cursos) {
         checkPage(10)
 
         const nombre = limpiarParaPdf(curso.nombre) || e.curso
         const institucionCurso = limpiarParaPdf(curso.institucion)
-        const tituloCurso = institucionCurso ? `${nombre}, ${institucionCurso}` : nombre
+        const tituloCurso = institucionCurso ? `${nombre}${estilo.separadorTitulo}${institucionCurso}` : nombre
         const fecha = curso.fecha ? formatearFecha(curso.fecha, personalizacion.idiomaCv) : ""
         y = escribirTituloConFecha(pdf, tituloCurso, fecha, y, fuenteBase)
 
@@ -232,7 +204,7 @@ export async function crearPdfAts(
     },
     proyectos: () => {
       if (datos.proyectos.length === 0) return
-      y = renderSeccion(pdf, e.proyectos.toUpperCase(), y, color, fuenteBase)
+      seccion(e.proyectos.toUpperCase())
       for (const p of datos.proyectos) {
         checkPage(14)
 
@@ -266,7 +238,7 @@ export async function crearPdfAts(
     },
     habilidades: () => {
       if (datos.habilidades.length === 0) return
-      y = renderSeccion(pdf, e.competencias.toUpperCase(), y, color, fuenteBase)
+      seccion(e.competencias.toUpperCase())
       /* Chips con borde redondeado para imitar el preview.
          Medimos cada texto, dibujamos un rect con padding y wrappeamos
          a la siguiente fila si no cabe. */
@@ -297,7 +269,7 @@ export async function crearPdfAts(
     },
     idiomas: () => {
       if (datos.idiomas.length === 0) return
-      y = renderSeccion(pdf, e.idiomas.toUpperCase(), y, color, fuenteBase)
+      seccion(e.idiomas.toUpperCase())
       pdf.setFont(fuenteBase, "normal")
       pdf.setFontSize(10)
       setColor(63, 63, 70)
@@ -310,7 +282,7 @@ export async function crearPdfAts(
     },
     referencias: () => {
       if (datos.referencias.length === 0) return
-      y = renderSeccion(pdf, e.referencias.toUpperCase(), y, color, fuenteBase)
+      seccion(e.referencias.toUpperCase())
       for (const ref of datos.referencias) {
         checkPage(16)
 
