@@ -64,6 +64,7 @@ export const PLANTILLAS: { valor: PlantillaId; etiqueta: string; descripcion: st
   { valor: "minimalista", etiqueta: "Minimalista", descripcion: "Plano y elegante — legible por sistemas ATS", ats: true },
   { valor: "moderno", etiqueta: "Barra a un lado", descripcion: "Barra lateral con iconos y color", ats: false },
   { valor: "colorido", etiqueta: "Barra superior", descripcion: "Encabezado grande con formas decorativas", ats: false },
+  { valor: "ejecutivo", etiqueta: "Ejecutivo", descripcion: "Encabezado centrado y fechas al margen, sobrio y elegante", ats: false },
 ]
 
 export const FUENTES: { valor: FuenteId; etiqueta: string; tipo: string; jsPdf: string }[] = [

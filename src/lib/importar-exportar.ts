@@ -15,7 +15,7 @@ import type {
   Referencia,
   SeccionOrdenable,
 } from "@/types"
-import { CARTA_INICIAL, DATOS_INICIALES, ORDEN_SECCIONES_INICIAL, PERSONALIZACION_INICIAL } from "@/lib/constantes"
+import { CARTA_INICIAL, DATOS_INICIALES, ORDEN_SECCIONES_INICIAL, PERSONALIZACION_INICIAL, PLANTILLAS } from "@/lib/constantes"
 
 const VERSION_FORMATO = 1
 
@@ -28,7 +28,7 @@ interface ArchivoCurriculum {
 }
 
 const COLORES_VALIDOS = new Set<ColorTema>(["azul", "verde", "rojo", "morado", "teal", "naranja", "gris"])
-const PLANTILLAS_VALIDAS = new Set<PlantillaId>(["clasico", "moderno", "colorido", "minimalista"])
+const PLANTILLAS_VALIDAS = new Set<PlantillaId>(PLANTILLAS.map((p) => p.valor))
 const FUENTES_VALIDAS = new Set<FuenteId>(["inter", "roboto", "lato", "merriweather", "libre-baskerville"])
 const IDIOMAS_CV_VALIDOS = new Set<IdiomaCv>(["es", "en"])
 const NIVELES_IDIOMA_VALIDOS = new Set<NivelIdioma>(["basico", "intermedio", "avanzado", "nativo"])

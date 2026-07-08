@@ -13,7 +13,7 @@ const TEMPLATE_DETAILS: Record<
     uso: string
     tono: string
     lineas: string[]
-    preview: "classic" | "minimal" | "modern" | "color"
+    preview: "classic" | "minimal" | "modern" | "color" | "exec"
   }
 > = {
   clasico: {
@@ -40,9 +40,15 @@ const TEMPLATE_DETAILS: Record<
     lineas: ["Header fuerte", "Formas visuales", "Impacto rapido"],
     preview: "color",
   },
+  ejecutivo: {
+    uso: "Perfiles senior, gerencia y postulaciones formales donde pesa la trayectoria.",
+    tono: "Sobria y ejecutiva",
+    lineas: ["Encabezado centrado", "Fechas al margen", "Tipografia elegante"],
+    preview: "exec",
+  },
 }
 
-function TemplatePreview({ variant }: { variant: "classic" | "minimal" | "modern" | "color" }) {
+function TemplatePreview({ variant }: { variant: "classic" | "minimal" | "modern" | "color" | "exec" }) {
   if (variant === "modern") {
     return (
       <div className="flex h-44 overflow-hidden border-2 border-border-strong bg-white">
@@ -62,6 +68,27 @@ function TemplatePreview({ variant }: { variant: "classic" | "minimal" | "modern
             <div className="h-2 w-10/12 bg-zinc-200" />
             <div className="h-2 w-11/12 bg-zinc-200" />
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (variant === "exec") {
+    return (
+      <div className="h-44 overflow-hidden border-2 border-border-strong bg-white p-4">
+        <div className="mx-auto h-3 w-28 bg-zinc-800" />
+        <div className="mx-auto mt-2 h-0.5 w-8 bg-action-primary" />
+        <div className="mx-auto mt-2 h-1.5 w-20 bg-zinc-300" />
+        <div className="mt-5 space-y-3">
+          {[0, 1].map((r) => (
+            <div key={r} className="grid grid-cols-[36px_1fr] gap-2">
+              <div className="h-1.5 w-full bg-action-primary/60" />
+              <div className="space-y-1.5">
+                <div className="h-2 w-3/4 bg-zinc-300" />
+                <div className="h-1.5 w-full bg-zinc-200" />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     )

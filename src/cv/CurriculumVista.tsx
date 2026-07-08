@@ -3,6 +3,7 @@ import { PlantillaClasico } from "@/cv/PlantillaClasico"
 import { PlantillaModerno } from "@/cv/PlantillaModerno"
 import { PlantillaColorido } from "@/cv/PlantillaColorido"
 import { PlantillaMinimalista } from "@/cv/PlantillaMinimalista"
+import { PlantillaEjecutivo } from "@/cv/PlantillaEjecutivo"
 import { FUENTE_CSS } from "@/lib/constantes"
 import { sinEntradasVacias } from "@/lib/entradas-vacias"
 
@@ -14,6 +15,7 @@ const PLANTILLAS_MAP: Record<
   moderno: PlantillaModerno,
   colorido: PlantillaColorido,
   minimalista: PlantillaMinimalista,
+  ejecutivo: PlantillaEjecutivo,
 }
 
 /** A4 a 96 DPI */
