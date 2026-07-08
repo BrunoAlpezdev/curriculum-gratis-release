@@ -36,7 +36,7 @@ export function CurriculumVista({ datos, personalizacion }: Props) {
   return (
     <div
       id="curriculum-pdf"
-      className="bg-white flex flex-col"
+      className="bg-white flex flex-col [overflow-wrap:anywhere]"
       style={{
         width: A4_WIDTH_PX,
         minHeight: A4_HEIGHT_PX,
