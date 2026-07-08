@@ -112,6 +112,15 @@ async function crearPdfVisual(
         desocultar(ancestro)
         ancestro = ancestro.parentElement
       }
+
+      /* html2canvas-pro copia los estilos computados del DOM ORIGINAL como inline
+         sobre cada nodo SVG del clon (copyCSSStyles en DocumentCloner). Con el
+         overlay mobile cerrado (`invisible`) eso hornea visibility:hidden en cada
+         icono Phosphor; desocultar los ancestros no vence un inline en el propio
+         svg. Lo revertimos en el clon (no-op en desktop, ya visible). */
+      elClonado.querySelectorAll("svg, svg *").forEach((nodo) => {
+        if (nodo instanceof SVGElement) nodo.style.visibility = "visible"
+      })
     },
   })
 
