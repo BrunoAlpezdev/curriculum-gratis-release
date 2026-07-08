@@ -170,7 +170,7 @@ export function CamposPersonalizacion({ modo = "cv" }: { modo?: "cv" | "carta" }
           Orden de secciones
         </Text>
         <Text variant="caption" className="-mt-1">
-          Arrastra o usa las flechas. En Moderno, competencias e idiomas se muestran en el sidebar.
+          Arrastra o usa las flechas. En Barra a un lado, competencias e idiomas se muestran en la barra lateral.
         </Text>
         <div className="flex flex-col gap-1.5 mt-1" role="list">
           {ordenSecciones.map((id, i) => (
