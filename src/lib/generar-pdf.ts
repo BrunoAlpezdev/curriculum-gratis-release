@@ -173,8 +173,14 @@ async function crearPdfVisual(
       return posicion > 0 ? [posicion] : []
     })
 
+    /* Solo Moderno tiene sidebar de color fullbleed a la izquierda; ahi medimos
+       blancos desde el 35% para no contar el sidebar. En el resto (incluidas las
+       plantillas de dos columnas como Compacto) medimos el ancho completo para
+       que "fila blanca" signifique blanca en AMBAS columnas. */
+    const colInicioBlanco = tieneSidebar ? Math.floor(canvas.width * 0.35) : 0
+    const anchoMedido = canvas.width - colInicioBlanco
     const ctxOrig = canvas.getContext("2d", { willReadFrequently: true })
-    const scoresBlanco = ctxOrig ? calcularBlancosPorFila(ctxOrig, canvas) : null
+    const scoresBlanco = ctxOrig ? calcularBlancosPorFila(ctxOrig, canvas, colInicioBlanco) : null
 
     let offsetPx = 0
     let paginaIdx = 0
@@ -194,12 +200,19 @@ async function crearPdfVisual(
           (p) => p >= corteMinimo && p <= corteIdeal,
         )
         let corteElegido: number
-        if (candidatosH2.length > 0) {
-          /* El h2 mas grande (mas cerca del final de la pagina),
-             asi maximizamos el contenido que queda en esta pagina */
+        /* Un corte por h2 solo es limpio si a esa altura NINGUNA columna tiene
+           texto (el h2 es punto limpio para su columna, pero en dos columnas la
+           otra puede tener texto y el slice lo amputaria). Lo validamos exigiendo
+           una fila casi-blanca en todo el ancho medido cerca del h2; si no la hay,
+           caemos al mejor gap full-width. */
+        const h2Valido =
+          candidatosH2.length > 0 &&
+          scoresBlanco != null &&
+          hayFilaBlancaCerca(scoresBlanco, Math.max(...candidatosH2), anchoMedido)
+        if (h2Valido) {
           corteElegido = Math.max(...candidatosH2)
         } else if (scoresBlanco) {
-          /* 2. Fallback a la fila con mas blancos, siempre dentro de [minimo, ideal] */
+          /* 2. Fallback a la fila con mas blancos (ambas columnas), en [minimo, ideal] */
           corteElegido = mejorCorte(scoresBlanco, corteIdeal, corteMinimo)
         } else {
           corteElegido = corteIdeal
@@ -243,13 +256,10 @@ async function crearPdfVisual(
 function calcularBlancosPorFila(
   ctx: CanvasRenderingContext2D,
   canvas: HTMLCanvasElement,
+  colInicio: number,
 ): Uint32Array {
   const { width, height } = canvas
   const scores = new Uint32Array(height)
-  /* Arrancar al 35% para saltar el sidebar de Moderno.
-     En plantillas sin sidebar (Colorido) igual funciona: solo mira
-     la parte central/derecha del body, donde esta el grueso del texto. */
-  const colInicio = Math.floor(width * 0.35)
   const CHUNK_FILAS = 512
   for (let yInicio = 0; yInicio < height; yInicio += CHUNK_FILAS) {
     const altoChunk = Math.min(CHUNK_FILAS, height - yInicio)
@@ -268,6 +278,22 @@ function calcularBlancosPorFila(
     }
   }
   return scores
+}
+
+/* True si hay una fila casi-blanca (>=98% del ancho medido) en una ventana
+   pequena alrededor de `pos`. Tolera antialias/padding del h2 con ±4/+2 px. */
+function hayFilaBlancaCerca(
+  scoresBlanco: Uint32Array,
+  pos: number,
+  anchoMedido: number,
+): boolean {
+  const umbral = anchoMedido * 0.98
+  const desde = Math.max(0, Math.floor(pos) - 4)
+  const hasta = Math.min(scoresBlanco.length - 1, Math.floor(pos) + 2)
+  for (let i = desde; i <= hasta; i++) {
+    if ((scoresBlanco[i] ?? 0) >= umbral) return true
+  }
+  return false
 }
 
 /* Encuentra la fila con mas pixeles blancos en [minimo, ideal].
