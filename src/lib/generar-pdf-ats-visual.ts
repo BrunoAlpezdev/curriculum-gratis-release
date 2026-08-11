@@ -56,6 +56,37 @@ function renderSeccionVisual(
   return y + 3.5
 }
 
+function agruparContactos(pdf: jsPDF, contactos: string[], anchoDisponible: number): string[][] {
+  const gap = 7
+  const filas: string[][] = []
+  let fila: string[] = []
+  let anchoFila = 0
+
+  const guardarFila = () => {
+    if (fila.length > 0) filas.push(fila)
+    fila = []
+    anchoFila = 0
+  }
+
+  for (const contacto of contactos) {
+    const partes = pdf.splitTextToSize(contacto, anchoDisponible)
+    if (partes.length > 1) {
+      guardarFila()
+      for (const parte of partes) filas.push([parte])
+      continue
+    }
+
+    const ancho = pdf.getTextWidth(contacto)
+    const anchoConGap = fila.length > 0 ? gap + ancho : ancho
+    if (fila.length > 0 && anchoFila + anchoConGap > anchoDisponible) guardarFila()
+    fila.push(contacto)
+    anchoFila += fila.length > 1 ? gap + ancho : ancho
+  }
+
+  guardarFila()
+  return filas
+}
+
 function escribirEncabezadoVisual(
   pdf: jsPDF,
   datos: DatosCurriculum,
@@ -80,8 +111,8 @@ function escribirEncabezadoVisual(
     dp.sitioWeb,
   ].filter(Boolean).map(limpiarParaPdf)
   pdf.setFontSize(8.5)
-  const lineasContacto = contactos.flatMap((contacto) => pdf.splitTextToSize(contacto, CONTENT_WIDTH))
-  const altura = Math.max(38, 10 + nombre.length * 8 + titulo.length * 5 + lineasContacto.length * 3.8 + 6)
+  const filasContacto = agruparContactos(pdf, contactos, CONTENT_WIDTH)
+  const altura = Math.max(38, 10 + nombre.length * 8 + titulo.length * 5 + filasContacto.length * 3.8 + 6)
 
   pdf.setFillColor(color.r, color.g, color.b)
   pdf.rect(0, 0, PAGE_WIDTH, 3, "F")
@@ -103,10 +134,14 @@ function escribirEncabezadoVisual(
       y += 5
     }
   }
-  if (lineasContacto.length > 0) {
+  if (filasContacto.length > 0) {
     pdf.setFontSize(8.5)
-    for (const linea of lineasContacto) {
-      pdf.text(linea, MARGIN, y)
+    for (const fila of filasContacto) {
+      let x = MARGIN
+      for (const contacto of fila) {
+        pdf.text(contacto, x, y)
+        x += pdf.getTextWidth(contacto) + 7
+      }
       y += 3.8
     }
   }
@@ -163,7 +198,7 @@ export async function crearPdfAtsVisual(
 
   function seccion(titulo: string) {
     if (seccionesRenderizadas > 0) y += 4
-    y = renderSeccionVisual(pdf, limpiarParaPdf(titulo), y, color, fuenteBase)
+    y = renderSeccionVisual(pdf, limpiarParaPdf(titulo).toUpperCase(), y, color, fuenteBase)
     seccionesRenderizadas += 1
   }
 
