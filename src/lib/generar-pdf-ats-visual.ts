@@ -77,6 +77,7 @@ export async function crearPdfAtsVisual(
   personalizacion: Personalizacion,
 ) {
   const datos = sinEntradasVacias(datosCrudos)
+  const dp = datos.datosPersonales
   const color = hexToRgb(getColorHex(personalizacion.color))
   const e = etiquetasCv(personalizacion.idiomaCv)
   const pdf = new jsPDF("p", "mm", "a4")
