@@ -98,11 +98,11 @@ export function renderSeccion(
     y += 4
   }
   if (conLinea) {
-    y += 1
+    const lineaY = y - 3
     pdf.setDrawColor(color.r, color.g, color.b)
-    pdf.setLineWidth(0.3)
-    pdf.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
-    y += gapAfter
+    pdf.setLineWidth(0.25)
+    pdf.line(MARGIN, lineaY, PAGE_WIDTH - MARGIN, lineaY)
+    y = lineaY + gapAfter
   } else {
     y += gapAfter
   }
