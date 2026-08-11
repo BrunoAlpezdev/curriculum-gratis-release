@@ -89,8 +89,20 @@ export async function crearPdfAts(
   const dp = datos.datosPersonales
   const estilo = estiloPdfAts(personalizacion.plantilla)
   const colorTitulo = estilo.seccionConLinea ? color : GRIS_TITULO
+  let seccionesRenderizadas = 0
   const seccion = (titulo: string) => {
-    y = renderSeccion(pdf, titulo, y, colorTitulo, fuenteBase, estilo.seccionConLinea)
+    if (seccionesRenderizadas > 0) y += estilo.seccionGapBefore
+    y = renderSeccion(
+      pdf,
+      titulo,
+      y,
+      colorTitulo,
+      fuenteBase,
+      estilo.seccionConLinea,
+      estilo.seccionSize,
+      estilo.seccionGapAfter,
+    )
+    seccionesRenderizadas += 1
   }
 
   y = escribirEncabezadoAts(pdf, dp, e.tuNombre, fuenteBase, color, estilo)

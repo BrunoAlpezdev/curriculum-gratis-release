@@ -20,6 +20,12 @@ export interface PdfColor {
 export interface EstiloAts {
   header: "centro" | "izquierda"
   nombreBold: boolean
+  nombreSize: number
+  tituloSize: number
+  contactoSize: number
+  seccionSize: number
+  seccionGapBefore: number
+  seccionGapAfter: number
   tituloAcento: boolean
   separadorTitulo: string
   mostrarUbicacion: boolean
@@ -32,6 +38,12 @@ export function estiloPdfAts(plantilla: PlantillaId): EstiloAts {
     return {
       header: "izquierda",
       nombreBold: false,
+      nombreSize: 22,
+      tituloSize: 11,
+      contactoSize: 9,
+      seccionSize: 10,
+      seccionGapBefore: 0,
+      seccionGapAfter: 5,
       tituloAcento: true,
       separadorTitulo: " — ",
       mostrarUbicacion: false,
@@ -42,6 +54,12 @@ export function estiloPdfAts(plantilla: PlantillaId): EstiloAts {
   return {
     header: "centro",
     nombreBold: true,
+    nombreSize: 22,
+    tituloSize: 13,
+    contactoSize: 11,
+    seccionSize: 11,
+    seccionGapBefore: 2,
+    seccionGapAfter: 4,
     tituloAcento: false,
     separadorTitulo: ", ",
     mostrarUbicacion: true,
@@ -59,6 +77,8 @@ export function renderSeccion(
   color: PdfColor,
   fuenteBase: string,
   conLinea = true,
+  fontSize = 10,
+  gapAfter = 5,
 ): number {
   if (y + 10 > PAGE_HEIGHT - MARGIN) {
     pdf.addPage()
@@ -66,7 +86,7 @@ export function renderSeccion(
   }
 
   pdf.setFont(fuenteBase, "bold")
-  pdf.setFontSize(10)
+  pdf.setFontSize(fontSize)
   pdf.setTextColor(color.r, color.g, color.b)
   const lineasTitulo = pdf.splitTextToSize(titulo, CONTENT_WIDTH)
   for (const linea of lineasTitulo) {
@@ -82,9 +102,9 @@ export function renderSeccion(
     pdf.setDrawColor(color.r, color.g, color.b)
     pdf.setLineWidth(0.3)
     pdf.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
-    y += 5
+    y += gapAfter
   } else {
-    y += 5
+    y += gapAfter
   }
   return y
 }
@@ -106,23 +126,23 @@ export function escribirEncabezadoAts(
   const opts = centrado ? ({ align: "center" } as const) : undefined
 
   pdf.setFont(fuenteBase, estilo.nombreBold ? "bold" : "normal")
-  pdf.setFontSize(estilo.nombreBold ? 20 : 22)
+  pdf.setFontSize(estilo.nombreSize)
   pdf.setTextColor(24, 24, 27)
   const lineasNombre = pdf.splitTextToSize(limpiarParaPdf(dp.nombreCompleto) || tuNombre, CONTENT_WIDTH)
   for (const linea of lineasNombre) {
     pdf.text(linea, x, y, opts)
-    y += 7
+    y += centrado ? 7.5 : 7
   }
 
   if (dp.titulo) {
     pdf.setFont(fuenteBase, "normal")
-    pdf.setFontSize(11)
+    pdf.setFontSize(estilo.tituloSize)
     if (estilo.tituloAcento) pdf.setTextColor(color.r, color.g, color.b)
     else pdf.setTextColor(82, 82, 91)
     const lineasTitulo = pdf.splitTextToSize(limpiarParaPdf(dp.titulo), CONTENT_WIDTH)
     for (const linea of lineasTitulo) {
       pdf.text(linea, x, y, opts)
-      y += 5
+      y += centrado ? 5.5 : 5
     }
   }
 
@@ -137,11 +157,11 @@ export function escribirEncabezadoAts(
     .map((v) => ({ texto: limpiarParaPdf(v), url: urlAbsoluta(v) }))
 
   pdf.setFont(fuenteBase, "normal")
-  pdf.setFontSize(9)
+  pdf.setFontSize(estilo.contactoSize)
   pdf.setTextColor(113, 113, 122)
   if (centrado) {
-    y = escribirLineaEnlacesCentrada(pdf, contacto, y)
-    if (enlaces.length > 0) y = escribirLineaEnlacesCentrada(pdf, enlaces, y)
+    y = escribirLineaEnlacesCentrada(pdf, contacto, y, 4.5)
+    if (enlaces.length > 0) y = escribirLineaEnlacesCentrada(pdf, enlaces, y, 4.5)
   } else {
     y = escribirLineaEnlacesCentrada(pdf, [...contacto, ...enlaces], y, 4, "izquierda")
   }
