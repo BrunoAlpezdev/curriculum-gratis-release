@@ -14,8 +14,9 @@ import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 import { esTextoSimple } from "@/lib/texto-rico"
 import { TextoRico } from "@/cv/TextoRico"
+import { SeccionesDestacadas } from "@/cv/SeccionesDestacadas"
 
-const SECCIONES_MAIN: SeccionOrdenable[] = ["experiencia", "educacion", "proyectos", "referencias"]
+const SECCIONES_MAIN: SeccionOrdenable[] = ["experiencia", "educacion", "proyectos", "referencias", "destacadas"]
 const SECCIONES_RAIL: SeccionOrdenable[] = ["cursos", "habilidades", "idiomas"]
 const NIVEL_PUNTOS: Record<NivelIdioma, number> = { basico: 1, intermedio: 2, avanzado: 3, nativo: 4 }
 
@@ -197,6 +198,7 @@ export function PlantillaCompacto({ datos, personalizacion }: Props) {
         </div>
       </div>
     ),
+    destacadas: <SeccionesDestacadas datos={datos} color={color} estilo="compacto" />,
   }
 
   const contactos: { icono: React.ReactNode; texto: string; url?: string }[] = []

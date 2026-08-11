@@ -63,15 +63,21 @@ Promesa actual del producto:
 ## Estado y Datos
 
 - `src/lib/store.ts`: store central Zustand persistido con clave `curriculum-gratis`.
-- `src/types/index.ts`: tipos compartidos del dominio: `DatosCurriculum`, `DatosPersonales`, `Experiencia`, `Educacion`, `Curso`, `Proyecto`, `Idioma`, `Referencia`, `Carta`, `Personalizacion`, `PlantillaId`, `SeccionOrdenable`, etc.
+- `src/types/index.ts`: tipos compartidos del dominio: `DatosCurriculum`, `DatosPersonales`, `Experiencia`, `Educacion`, `Curso`, `Proyecto`, `Idioma`, `Referencia`, `SeccionDestacada`, `Carta`, `Personalizacion`, `PlantillaId`, `SeccionOrdenable`, etc.
 - `src/lib/constantes.ts`: datos iniciales, carta inicial, orden inicial de secciones, etiquetas, colores, plantillas, fuentes e idioma.
 - `src/lib/importar-exportar.ts`: normaliza datos al importar, completa campos faltantes, valida enums y exporta/importa JSON.
 
 Estado persistido actual:
 
 - `datos`: contenido del CV.
+- `datos.seccionesDestacadas`: colección ordenada de bloques genéricos con `id`, `titulo` obligatorio e `items` por línea; sirve para licencias, maquinaria, certificaciones, logros u otros contenidos sin hardcodear un rubro.
 - `personalizacion`: plantilla, color, fuente, idioma y orden de secciones.
 - `carta`: contenido de carta de presentacion.
+
+Compatibilidad de datos:
+
+- `normalizarDatosCurriculum` convierte CVs persistidos/importados sin `seccionesDestacadas` a `[]`, conserva IDs válidos de los bloques y limpia títulos/ítems inválidos.
+- `normalizarPersonalizacion` conserva las entradas válidas de `ordenSecciones` en el orden recibido y anexa las faltantes, incluyendo `destacadas`; no altera campos legacy como RUT.
 
 ## Formularios del Editor
 
@@ -88,6 +94,7 @@ Estado persistido actual:
 - `src/editor/FormIdiomas.tsx`: idiomas repetibles con nivel.
 - `src/editor/FormReferencias.tsx`: referencias repetibles.
 - `src/editor/FormInfoAdicional.tsx`: disponibilidad y pretensiones de renta.
+- `src/editor/FormSeccionesDestacadas.tsx` + `src/editor/campos/CamposSeccionesDestacadas.tsx`: formulario reutilizable para el editor legacy y el wizard; incluye estado vacío, agregar/eliminar, título obligatorio con error accesible y textarea de un ítem por línea.
 - `src/editor/FormAnalisisAts.tsx`: pega una oferta laboral y calcula coincidencia local de keywords contra el CV.
 - `src/editor/PanelFormularioCarta.tsx` y `src/editor/FormCarta.tsx`: formulario de carta de presentacion y generacion IA del cuerpo.
 - `src/editor/campos/Campos*.tsx`: cuerpo de campos de cada seccion, sin chrome de contenedor. Cada `Form*` ahora es un wrapper delgado que envuelve su `Campos*` en `SeccionFormulario` (editor clasico) y exporta tambien sus consejos (`CONSEJOS_*`). El wizard reusa los `Campos*` y los consejos directamente. Fuente unica: no duplicar JSX de campos.
@@ -101,6 +108,7 @@ Recorrido guiado en `src/editor/wizard/`, montado en `/editor` (default). Mobile
 - `src/editor/wizard/WizardMobile.tsx`: una pantalla por paso, barra de progreso, "Ir a un paso" (sheet) y "Ver CV/carta" (overlay full-screen), navegacion fija inferior.
 - `src/editor/wizard/WizardDesktop.tsx`: tres columnas (indice lateral / formulario + navegacion / preview en vivo reusando `PanelVistaPrevia`/`PanelVistaCarta`).
 - `src/editor/wizard/PasoLayout.tsx`, `Consejos.tsx`, `BarraProgreso.tsx`, `BarraNavegacionPasos.tsx`, `StepperIndice.tsx`, `SheetIndice.tsx`, `PreviewOverlay.tsx`, `PasosContenido.tsx` (pasos compuestos), `PasoRevision.tsx` (diseno + calidad + ATS + descarga), `BotonDescargar.tsx`, `useEsEscritorio.ts`.
+- `src/editor/wizard/PasosContenido.tsx`: el paso `Extras` reusa `CamposSeccionesDestacadas` junto a proyectos, referencias e información adicional.
 
 Nota dev: el socket `.codegraph/daemon.sock` dentro del repo hace panic a Turbopack al procesar `globals.css` (afecta a todo el editor). El build de produccion y `next start` funcionan; para `pnpm dev` hay que detener el daemon de codegraph o mover `.codegraph/` fuera del arbol del proyecto.
 
@@ -117,17 +125,20 @@ Nota dev: el socket `.codegraph/daemon.sock` dentro del repo hace panic a Turbop
 - `src/cv/PlantillaColorido.tsx`: plantilla visual con header/formas.
 - `src/cv/PlantillaEjecutivo.tsx`: plantilla visual editorial (una columna, encabezado centrado, fechas al margen, sin iconos).
 - `src/cv/PlantillaCompacto.tsx`: plantilla visual densa de dos columnas (rail derecho con cursos/competencias/idiomas con medidor de puntos), sin barra fullbleed.
+- `src/cv/SeccionesDestacadas.tsx`: renderer compartido de bloques destacados para las seis plantillas existentes; respeta el orden `destacadas` y usa `h2` + `ul/li` sin modificar la estructura visual base de las plantillas.
+- `src/cv/PlantillaAtsVisual.tsx`: plantilla adicional `ats-visual` / `ATS Visual`, con barra superior de color, header semántico, cuerpo de una columna y contenido legible por ATS. No usa sidebar.
 
 ## PDF
 
 - `src/lib/generar-pdf.ts`: orquesta descarga del CV. Usa camino ATS o captura visual segun plantilla.
-- `src/lib/generar-pdf-ats.ts`: genera PDF con texto nativo para plantillas ATS.
+- `src/lib/generar-pdf-ats.ts`: genera PDF con texto nativo para plantillas ATS existentes y deriva `ats-visual` al renderer dedicado.
+- `src/lib/generar-pdf-ats-visual.ts`: PDF nativo jsPDF de ATS Visual; conserva barra superior, envuelve encabezados/contactos/títulos largos y renderiza secciones destacadas como listas.
 - `src/lib/generar-pdf-ats-helpers.ts`: helpers para layout/texto del PDF ATS.
 - `src/lib/generar-pdf-carta.ts`: genera PDF de carta.
 
 Regla actual:
 
-- `clasico` y `minimalista` son ATS y deben priorizar texto nativo.
+- `clasico`, `minimalista` y `ats-visual` son ATS y deben priorizar texto nativo jsPDF; `ats-visual` es una opción adicional, no reemplaza las otras plantillas.
 - `moderno` y `colorido` son visuales y pueden depender de captura.
 
 Limitacion de glifos: las TTF embebidas solo traen glifos latinos, asi que `limpiarParaPdf` (en `src/lib/formato.ts`) elimina emoji/pictogramas del contenido del usuario antes de renderizar para evitar cajas (tofu).
@@ -143,14 +154,14 @@ El texto CJK (chino/japones/coreano) no esta soportado por la fuente y saldra co
 - `src/lib/useTema.ts`: tema claro/oscuro/sistema persistido en `localStorage` con clave `tema`.
 - `src/lib/useHidratado.ts`: evita render sensible a `localStorage` antes de hidratacion.
 - `src/lib/copias-locales.ts`: snapshots locales de CV/carta con clave `curriculum-gratis:copias-locales`.
-- `src/lib/exportar-texto.ts`: genera y descarga CV o carta en TXT/Markdown desde el documento activo del editor.
+- `src/lib/exportar-texto.ts`: genera y descarga CV o carta en TXT/Markdown desde el documento activo del editor; incluye títulos e ítems de `seccionesDestacadas`.
 - `src/lib/rate-limit.ts`: rate limit compartido para Route Handlers. Usa Redis REST persistente si existen `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN` o `KV_REST_API_URL`/`KV_REST_API_TOKEN`; si no, cae a memoria local para desarrollo.
 - `src/lib/usage-limits.ts`: fuente unica de limites por tier/feature para IA y correo.
 - `src/lib/use-usage-limits.ts`: hook client-side para consultar contadores restantes desde `/api/usage`.
 
 ## ATS Local
 
-- `src/lib/analisis-ats.ts`: tokeniza oferta laboral, elimina stopwords, calcula hasta 30 keywords frecuentes, marca si aparecen en el CV y genera recomendaciones locales por seccion.
+- `src/lib/analisis-ats.ts`: tokeniza oferta laboral, elimina stopwords, calcula hasta 30 keywords frecuentes, marca si aparecen en el CV (incluidas las secciones destacadas) y genera recomendaciones locales por seccion.
 - `src/lib/calidad-cv.ts`: reglas puras para evaluar calidad basica del CV sin backend ni IA.
 - No usa backend ni IA.
 - `FormAnalisisAts.tsx` lo presenta como porcentaje y badges de keywords presentes/faltantes.

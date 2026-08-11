@@ -68,7 +68,15 @@ export function renderSeccion(
   pdf.setFont(fuenteBase, "bold")
   pdf.setFontSize(10)
   pdf.setTextColor(color.r, color.g, color.b)
-  pdf.text(titulo, MARGIN, y)
+  const lineasTitulo = pdf.splitTextToSize(titulo, CONTENT_WIDTH)
+  for (const linea of lineasTitulo) {
+    if (y + 4 > PAGE_HEIGHT - MARGIN) {
+      pdf.addPage()
+      y = MARGIN
+    }
+    pdf.text(linea, MARGIN, y)
+    y += 4
+  }
   if (conLinea) {
     y += 1
     pdf.setDrawColor(color.r, color.g, color.b)
@@ -100,16 +108,22 @@ export function escribirEncabezadoAts(
   pdf.setFont(fuenteBase, estilo.nombreBold ? "bold" : "normal")
   pdf.setFontSize(estilo.nombreBold ? 20 : 22)
   pdf.setTextColor(24, 24, 27)
-  pdf.text(limpiarParaPdf(dp.nombreCompleto) || tuNombre, x, y, opts)
-  y += 7
+  const lineasNombre = pdf.splitTextToSize(limpiarParaPdf(dp.nombreCompleto) || tuNombre, CONTENT_WIDTH)
+  for (const linea of lineasNombre) {
+    pdf.text(linea, x, y, opts)
+    y += 7
+  }
 
   if (dp.titulo) {
     pdf.setFont(fuenteBase, "normal")
     pdf.setFontSize(11)
     if (estilo.tituloAcento) pdf.setTextColor(color.r, color.g, color.b)
     else pdf.setTextColor(82, 82, 91)
-    pdf.text(limpiarParaPdf(dp.titulo), x, y, opts)
-    y += 5
+    const lineasTitulo = pdf.splitTextToSize(limpiarParaPdf(dp.titulo), CONTENT_WIDTH)
+    for (const linea of lineasTitulo) {
+      pdf.text(linea, x, y, opts)
+      y += 5
+    }
   }
 
   const contacto = [
@@ -165,7 +179,7 @@ export function escribirTituloConFecha(
 
   pdf.setFont(fuenteBase, "bold")
   pdf.setFontSize(10)
-  const lineas: string[] = pdf.splitTextToSize(titulo, CONTENT_WIDTH - anchoFecha)
+  const lineas: string[] = pdf.splitTextToSize(titulo, Math.max(30, CONTENT_WIDTH - anchoFecha))
 
   lineas.forEach((linea, i) => {
     if (y + 4 > PAGE_HEIGHT - MARGIN) {
@@ -207,6 +221,20 @@ export function escribirLineaEnlacesCentrada(
 ): number {
   const visibles = segmentos.filter((s) => s.texto)
   if (visibles.length === 0) return y
+  if (visibles.some((segmento) => pdf.getTextWidth(segmento.texto) > CONTENT_WIDTH)) {
+    for (const segmento of visibles) {
+      const lineas = pdf.splitTextToSize(segmento.texto, CONTENT_WIDTH)
+      for (const linea of lineas) {
+        if (segmento.url && lineas.length === 1) {
+          pdf.textWithLink(linea, MARGIN, y, { url: segmento.url })
+        } else {
+          pdf.text(linea, MARGIN, y)
+        }
+        y += altoLinea
+      }
+    }
+    return y
+  }
   const SEP = "  |  "
   const anchoSep = pdf.getTextWidth(SEP)
   const anchos = visibles.map((s) => pdf.getTextWidth(s.texto))

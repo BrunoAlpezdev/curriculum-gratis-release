@@ -13,6 +13,7 @@ import type {
   PlantillaId,
   Proyecto,
   Referencia,
+  SeccionDestacada,
   SeccionOrdenable,
 } from "@/types"
 import { CARTA_INICIAL, DATOS_INICIALES, ORDEN_SECCIONES_INICIAL, PERSONALIZACION_INICIAL, PLANTILLAS } from "@/lib/constantes"
@@ -123,6 +124,23 @@ function normalizarReferencia(item: Record<string, unknown>): Referencia {
   }
 }
 
+function normalizarSeccionDestacada(item: Record<string, unknown>): SeccionDestacada {
+  const itemsCrudos = Array.isArray(item.items)
+    ? item.items
+    : typeof item.items === "string"
+      ? item.items.split("\n")
+      : []
+
+  return {
+    id: id(item.id),
+    titulo: texto(item.titulo).trim(),
+    items: itemsCrudos
+      .filter((item): item is string => typeof item === "string")
+      .map((item) => item.trim())
+      .filter(Boolean),
+  }
+}
+
 export function normalizarDatosCurriculum(valor: unknown): DatosCurriculum {
   const datosCrudo = esRegistro(valor) ? valor : {}
   const datosPersonales = esRegistro(datosCrudo.datosPersonales) ? datosCrudo.datosPersonales : {}
@@ -152,6 +170,7 @@ export function normalizarDatosCurriculum(valor: unknown): DatosCurriculum {
       : [],
     idiomas: lista(datosCrudo.idiomas).map(normalizarIdioma),
     referencias: lista(datosCrudo.referencias).map(normalizarReferencia),
+    seccionesDestacadas: lista(datosCrudo.seccionesDestacadas).map(normalizarSeccionDestacada),
     disponibilidad: texto(datosCrudo.disponibilidad),
     pretensionesRenta: texto(datosCrudo.pretensionesRenta),
   }

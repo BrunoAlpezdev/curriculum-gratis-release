@@ -19,6 +19,8 @@ function tituloSeccion(seccion: SeccionOrdenable, et: EtiquetasCv): string {
       return et.idiomas
     case "referencias":
       return et.referencias
+    case "destacadas":
+      return "Secciones destacadas"
   }
 }
 
@@ -128,6 +130,10 @@ function seccionTxt(seccion: SeccionOrdenable, datos: DatosCurriculum, personali
         ref.email,
         ref.telefono,
       ]).join(" | ")))
+    case "destacadas":
+      return datos.seccionesDestacadas.flatMap((destacada) =>
+        bloqueTxt(destacada.titulo, limpiar(destacada.items)),
+      )
   }
 }
 
@@ -183,6 +189,10 @@ function seccionMd(seccion: SeccionOrdenable, datos: DatosCurriculum, personaliz
         ref.email,
         ref.telefono,
       ]).join(" | ")}`))
+    case "destacadas":
+      return datos.seccionesDestacadas.flatMap((destacada) =>
+        bloqueMd(destacada.titulo, destacada.items.filter((item) => item.trim()).map((item) => `- ${item}`)),
+      )
   }
 }
 

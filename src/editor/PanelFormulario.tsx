@@ -12,6 +12,7 @@ import { FormHabilidades } from "@/editor/FormHabilidades"
 import { FormIdiomas } from "@/editor/FormIdiomas"
 import { FormReferencias } from "@/editor/FormReferencias"
 import { FormInfoAdicional } from "@/editor/FormInfoAdicional"
+import { FormSeccionesDestacadas } from "@/editor/FormSeccionesDestacadas"
 import { FormAnalisisAts } from "@/editor/FormAnalisisAts"
 import { GithubLogoIcon, ShieldCheckIcon, HeartIcon } from "@phosphor-icons/react"
 import { Surface } from "@/components/atoms/Surface"
@@ -32,6 +33,7 @@ export function PanelFormulario() {
       <FormIdiomas />
       <FormReferencias />
       <FormInfoAdicional />
+      <FormSeccionesDestacadas />
       <FormAnalisisAts />
 
       <Surface variant="panel" className="mt-8 p-4">

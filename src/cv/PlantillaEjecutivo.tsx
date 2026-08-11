@@ -5,6 +5,7 @@ import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 import { esTextoSimple } from "@/lib/texto-rico"
 import { TextoRico } from "@/cv/TextoRico"
+import { SeccionesDestacadas } from "@/cv/SeccionesDestacadas"
 
 // Plantilla deliberadamente tipografica: sin iconos, encabezado centrado, fechas
 // en un margen izquierdo y titulos de seccion entre filetes.
@@ -214,6 +215,7 @@ export function PlantillaEjecutivo({ datos, personalizacion }: Props) {
         </div>
       </div>
     ),
+    destacadas: <SeccionesDestacadas datos={datos} color={color} estilo="ejecutivo" />,
   }
 
   const contactos: { texto: string; url?: string }[] = [

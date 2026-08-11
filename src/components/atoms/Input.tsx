@@ -10,6 +10,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export function Input({ label, error, className, id, ...props }: InputProps) {
   const autoId = useId()
   const inputId = id ?? autoId
+  const errorId = `${inputId}-error`
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -24,8 +25,10 @@ export function Input({ label, error, className, id, ...props }: InputProps) {
           className,
         )}
         {...props}
+        aria-invalid={error ? true : props["aria-invalid"]}
+        aria-describedby={error ? errorId : props["aria-describedby"]}
       />
-      {error && <Text variant="caption" className="text-danger">{error}</Text>}
+      {error && <Text id={errorId} variant="caption" className="text-danger">{error}</Text>}
     </div>
   )
 }

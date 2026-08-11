@@ -14,6 +14,7 @@ describe("normalizarDatosCurriculum", () => {
     expect(datos.perfil).toBe("")
     expect(datos.experiencia).toEqual([])
     expect(datos.habilidades).toEqual([])
+    expect(datos.seccionesDestacadas).toEqual([])
     expect(datos.datosPersonales.nombreCompleto).toBe("")
   })
 
@@ -49,6 +50,19 @@ describe("normalizarDatosCurriculum", () => {
     })
     expect(datos.idiomas[0]!.nivel).toBe("basico")
   })
+
+  it("normaliza secciones destacadas y conserva sus ids", () => {
+    const datos = normalizarDatosCurriculum({
+      seccionesDestacadas: [
+        { id: "licencias-1", titulo: "  Licencias  ", items: ["Clase B", "", 42] },
+        { titulo: "Certificaciones", items: "ISO 9001\n Scrum" },
+      ],
+    })
+    expect(datos.seccionesDestacadas).toEqual([
+      { id: "licencias-1", titulo: "Licencias", items: ["Clase B"] },
+      expect.objectContaining({ titulo: "Certificaciones", items: ["ISO 9001", "Scrum"] }),
+    ])
+  })
 })
 
 describe("normalizarPersonalizacion", () => {
@@ -81,6 +95,12 @@ describe("normalizarPersonalizacion", () => {
     // sin duplicados: cada seccion aparece exactamente una vez
     expect(p.ordenSecciones.filter((s) => s === "experiencia")).toHaveLength(1)
     expect(p.ordenSecciones.slice(0, 2)).toEqual(["experiencia", "idiomas"])
+  })
+
+  it("agrega destacadas al final sin alterar el orden valido importado", () => {
+    const p = normalizarPersonalizacion({ ordenSecciones: ["idiomas", "destacadas", "experiencia"] })
+    expect(p.ordenSecciones.slice(0, 3)).toEqual(["idiomas", "destacadas", "experiencia"])
+    expect(p.ordenSecciones).toEqual(expect.arrayContaining(ORDEN_SECCIONES_INICIAL))
   })
 })
 

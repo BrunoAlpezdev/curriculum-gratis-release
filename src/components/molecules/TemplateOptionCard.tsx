@@ -13,7 +13,7 @@ const TEMPLATE_DETAILS: Record<
     uso: string
     tono: string
     lineas: string[]
-    preview: "classic" | "minimal" | "modern" | "color" | "exec" | "compact"
+    preview: "classic" | "minimal" | "modern" | "color" | "exec" | "compact" | "ats-visual"
   }
 > = {
   clasico: {
@@ -52,9 +52,31 @@ const TEMPLATE_DETAILS: Record<
     lineas: ["Dos columnas", "Maximo contenido", "Una pagina"],
     preview: "compact",
   },
+  "ats-visual": {
+    uso: "Postulaciones por portales laborales cuando quieres una jerarquía visual sobria sin sacrificar lectura ATS.",
+    tono: "Visual y compatible con ATS",
+    lineas: ["Barra superior", "Una columna", "Texto nativo en PDF"],
+    preview: "ats-visual",
+  },
 }
 
-function TemplatePreview({ variant }: { variant: "classic" | "minimal" | "modern" | "color" | "exec" | "compact" }) {
+function TemplatePreview({ variant }: { variant: "classic" | "minimal" | "modern" | "color" | "exec" | "compact" | "ats-visual" }) {
+  if (variant === "ats-visual") {
+    return (
+      <div className="h-44 overflow-hidden border-2 border-border-strong bg-white p-4">
+        <div className="-mx-4 -mt-4 h-8 bg-action-primary" />
+        <div className="mt-4 h-3 w-36 bg-zinc-800" />
+        <div className="mt-2 h-1.5 w-24 bg-zinc-300" />
+        <div className="mt-5 border-t-2 border-action-primary pt-3" />
+        <div className="space-y-2">
+          <div className="h-2 w-full bg-zinc-200" />
+          <div className="h-2 w-11/12 bg-zinc-200" />
+          <div className="h-2 w-9/12 bg-zinc-200" />
+        </div>
+      </div>
+    )
+  }
+
   if (variant === "modern") {
     return (
       <div className="flex h-44 overflow-hidden border-2 border-border-strong bg-white">

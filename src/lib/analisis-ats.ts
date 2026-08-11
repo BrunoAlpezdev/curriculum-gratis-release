@@ -94,6 +94,9 @@ export function textoCv(datos: DatosCurriculum): string {
   for (const r of datos.referencias) {
     partes.push(r.nombre, r.cargo, r.empresa, r.relacion)
   }
+  for (const seccion of datos.seccionesDestacadas) {
+    partes.push(seccion.titulo, ...seccion.items)
+  }
   partes.push(datos.disponibilidad, datos.pretensionesRenta)
 
   return partes.filter(Boolean).join(" ")

@@ -12,7 +12,7 @@ const A4_TOLERANCIA_MM = 2
 
 /**
  * Genera PDF con el metodo apropiado segun la plantilla:
- * - ATS (clasico, minimalista): texto nativo con jsPDF
+ * - ATS (clasico, minimalista, ats-visual): texto nativo con jsPDF
  * - Visual (moderno, colorido): captura con html2canvas
  */
 export async function generarPdf(

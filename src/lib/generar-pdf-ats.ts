@@ -20,6 +20,7 @@ import {
   escribirEncabezadoAts,
   GRIS_TITULO,
 } from "@/lib/generar-pdf-ats-helpers"
+import { crearPdfAtsVisual } from "@/lib/generar-pdf-ats-visual"
 
 export async function generarPdfAts(
   datos: DatosCurriculum,
@@ -33,6 +34,10 @@ export async function crearPdfAts(
   datosCrudos: DatosCurriculum,
   personalizacion: Personalizacion,
 ) {
+  if (personalizacion.plantilla === "ats-visual") {
+    return crearPdfAtsVisual(datosCrudos, personalizacion)
+  }
+
   const datos = sinEntradasVacias(datosCrudos)
   const color = hexToRgb(getColorHex(personalizacion.color))
   const e = etiquetasCv(personalizacion.idiomaCv)
@@ -318,6 +323,20 @@ export async function crearPdfAts(
           y += 4
         }
 
+        y += 2
+      }
+    },
+    destacadas: () => {
+      for (const destacada of datos.seccionesDestacadas) {
+        if (!destacada.titulo.trim() || !destacada.items.some((item) => item.trim())) continue
+        seccion(limpiarParaPdf(destacada.titulo).toUpperCase())
+        pdf.setFont(fuenteBase, "normal")
+        pdf.setFontSize(9)
+        setColor(63, 63, 70)
+        for (const item of destacada.items.filter((valor) => valor.trim())) {
+          const lineas = pdf.splitTextToSize(`• ${limpiarParaPdf(item)}`, CONTENT_WIDTH)
+          escribirLineas(lineas, 3.5)
+        }
         y += 2
       }
     },

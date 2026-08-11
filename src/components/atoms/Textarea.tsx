@@ -19,6 +19,7 @@ export function Textarea({
 }: TextareaProps) {
   const autoId = useId()
   const textareaId = id ?? autoId
+  const errorId = `${textareaId}-error`
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -37,9 +38,11 @@ export function Textarea({
           className,
         )}
         {...props}
+        aria-invalid={error ? true : props["aria-invalid"]}
+        aria-describedby={error ? errorId : props["aria-describedby"]}
       />
       {hint && !error && <Text variant="caption">{hint}</Text>}
-      {error && <Text variant="caption" className="text-danger">{error}</Text>}
+      {error && <Text id={errorId} variant="caption" className="text-danger">{error}</Text>}
     </div>
   )
 }

@@ -9,6 +9,7 @@ import { CamposProyectos } from "@/editor/campos/CamposProyectos"
 import { CamposReferencias } from "@/editor/campos/CamposReferencias"
 import { CamposInfoAdicional } from "@/editor/campos/CamposInfoAdicional"
 import { CamposPersonalizacion } from "@/editor/campos/CamposPersonalizacion"
+import { CamposSeccionesDestacadas } from "@/editor/campos/CamposSeccionesDestacadas"
 
 /**
  * Sub-bloque dentro de un paso que agrupa varias secciones. Mantiene una jerarquia
@@ -78,6 +79,9 @@ export function ContenidoExtras() {
       </SubSeccion>
       <SubSeccion titulo="Información adicional">
         <CamposInfoAdicional />
+      </SubSeccion>
+      <SubSeccion titulo="Secciones destacadas">
+        <CamposSeccionesDestacadas />
       </SubSeccion>
     </div>
   )

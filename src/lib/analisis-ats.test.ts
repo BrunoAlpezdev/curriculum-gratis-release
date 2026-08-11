@@ -30,6 +30,14 @@ describe("textoCv", () => {
     expect(texto).toContain("React")
     expect(texto).toContain("Acme")
   })
+
+  it("incluye títulos e ítems de secciones destacadas", () => {
+    const texto = textoCv(cvCon({
+      seccionesDestacadas: [{ id: "1", titulo: "Licencias", items: ["Clase B", "Grúa horquilla"] }],
+    }))
+    expect(texto).toContain("Licencias")
+    expect(texto).toContain("Grúa horquilla")
+  })
 })
 
 describe("analizar", () => {

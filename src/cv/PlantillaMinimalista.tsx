@@ -4,6 +4,7 @@ import { formatearRangoFechas, formatearFechaEducacion, formatearFecha, urlAbsol
 import { etiquetaNivelIdioma, etiquetasCv } from "@/lib/etiquetas-cv"
 import { ORDEN_SECCIONES_INICIAL } from "@/lib/constantes"
 import { TextoRico } from "@/cv/TextoRico"
+import { SeccionesDestacadas } from "@/cv/SeccionesDestacadas"
 
 interface Props {
   datos: DatosCurriculum
@@ -185,6 +186,7 @@ export function PlantillaMinimalista({ datos, personalizacion }: Props) {
         </div>
       </div>
     ),
+    destacadas: <SeccionesDestacadas datos={datos} color={color} estilo="minimalista" />,
   }
 
   return (

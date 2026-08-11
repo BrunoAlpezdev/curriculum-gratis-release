@@ -202,6 +202,13 @@ export function generarDatosMock(): DatosCurriculum {
         relacion: "Colega de equipo",
       },
     ],
+    seccionesDestacadas: [
+      {
+        id: crypto.randomUUID(),
+        titulo: "Certificaciones",
+        items: ["Scrum Fundamentals Certified"],
+      },
+    ],
     disponibilidad: "Inmediata",
     pretensionesRenta: "",
   }

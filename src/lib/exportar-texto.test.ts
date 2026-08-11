@@ -94,4 +94,19 @@ describe("exportarTexto (TXT)", () => {
 
     expect(nombreDescargado).toBe("José_Peña_curriculum.txt")
   })
+
+  it("exporta secciones destacadas en TXT y Markdown", () => {
+    const datos = cvCon({
+      datosPersonales: { ...DATOS_INICIALES.datosPersonales, nombreCompleto: "Ana" },
+      seccionesDestacadas: [{ id: "1", titulo: "Licencias", items: ["Clase B", "Grúa horquilla"] }],
+    })
+
+    exportarTexto("cv", "txt", datos, PERSONALIZACION_INICIAL, CARTA_INICIAL)
+    expect(contenidoDescargado).toContain("LICENCIAS")
+    expect(contenidoDescargado).toContain("Grúa horquilla")
+
+    exportarTexto("cv", "md", datos, PERSONALIZACION_INICIAL, CARTA_INICIAL)
+    expect(contenidoDescargado).toContain("## Licencias")
+    expect(contenidoDescargado).toContain("- Clase B")
+  })
 })

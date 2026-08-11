@@ -67,6 +67,12 @@ export interface Referencia {
   relacion: string
 }
 
+export interface SeccionDestacada {
+  id: string
+  titulo: string
+  items: string[]
+}
+
 export interface DatosCurriculum {
   datosPersonales: DatosPersonales
   perfil: string
@@ -77,6 +83,7 @@ export interface DatosCurriculum {
   habilidades: string[]
   idiomas: Idioma[]
   referencias: Referencia[]
+  seccionesDestacadas: SeccionDestacada[]
   disponibilidad: string
   pretensionesRenta: string
 }
@@ -92,7 +99,7 @@ export type ColorTema =
   | "naranja"
   | "gris"
 
-export type PlantillaId = "clasico" | "moderno" | "colorido" | "minimalista" | "ejecutivo" | "compacto"
+export type PlantillaId = "clasico" | "moderno" | "colorido" | "minimalista" | "ejecutivo" | "compacto" | "ats-visual"
 
 export type FuenteId = "inter" | "roboto" | "lato" | "merriweather" | "libre-baskerville"
 
@@ -115,6 +122,7 @@ export type SeccionOrdenable =
   | "habilidades"
   | "idiomas"
   | "referencias"
+  | "destacadas"
 
 export interface Personalizacion {
   color: ColorTema

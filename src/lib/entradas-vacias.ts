@@ -25,5 +25,8 @@ export function sinEntradasVacias(datos: DatosCurriculum): DatosCurriculum {
     referencias: datos.referencias.filter((r) =>
       tiene(r.nombre, r.cargo, r.empresa, r.email, r.telefono, r.relacion),
     ),
+    seccionesDestacadas: datos.seccionesDestacadas.filter((seccion) =>
+      tiene(seccion.titulo) && seccion.items.some((item) => item.trim() !== ""),
+    ),
   }
 }

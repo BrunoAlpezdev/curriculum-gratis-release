@@ -11,6 +11,7 @@ import type {
   Referencia,
   Personalizacion,
   Carta,
+  SeccionDestacada,
 } from "@/types"
 import { DATOS_INICIALES, PERSONALIZACION_INICIAL, CARTA_INICIAL } from "@/lib/constantes"
 import { normalizarCarta, normalizarDatosCurriculum, normalizarNombreDocumento, normalizarPersonalizacion } from "@/lib/importar-exportar"
@@ -31,6 +32,11 @@ interface CurriculumStore {
   setPerfil: (perfil: string) => void
   setDisponibilidad: (valor: string) => void
   setPretensionesRenta: (valor: string) => void
+
+  // Secciones destacadas
+  agregarSeccionDestacada: () => void
+  actualizarSeccionDestacada: (id: string, datos: Partial<SeccionDestacada>) => void
+  eliminarSeccionDestacada: (id: string) => void
 
   // Experiencia
   agregarExperiencia: () => void
@@ -81,7 +87,7 @@ export const useCurriculumStore = create<CurriculumStore>()(
       carta: CARTA_INICIAL,
       nombreDocumento: "",
 
-      setDatos: (nuevos) => set({ datos: nuevos }),
+      setDatos: (nuevos) => set({ datos: normalizarDatosCurriculum(nuevos) }),
       setCarta: (campos) =>
         set((s) => ({ carta: { ...s.carta, ...campos } })),
       setNombreDocumento: (nombre) => set({ nombreDocumento: nombre }),
@@ -102,6 +108,35 @@ export const useCurriculumStore = create<CurriculumStore>()(
 
       setPretensionesRenta: (valor) =>
         set((s) => ({ datos: { ...s.datos, pretensionesRenta: valor } })),
+
+      agregarSeccionDestacada: () =>
+        set((s) => ({
+          datos: {
+            ...s.datos,
+            seccionesDestacadas: [
+              ...s.datos.seccionesDestacadas,
+              { id: crypto.randomUUID(), titulo: "", items: [] },
+            ],
+          },
+        })),
+
+      actualizarSeccionDestacada: (id, nuevos) =>
+        set((s) => ({
+          datos: {
+            ...s.datos,
+            seccionesDestacadas: s.datos.seccionesDestacadas.map((seccion) =>
+              seccion.id === id ? { ...seccion, ...nuevos } : seccion,
+            ),
+          },
+        })),
+
+      eliminarSeccionDestacada: (id) =>
+        set((s) => ({
+          datos: {
+            ...s.datos,
+            seccionesDestacadas: s.datos.seccionesDestacadas.filter((seccion) => seccion.id !== id),
+          },
+        })),
 
       agregarExperiencia: () =>
         set((s) => ({

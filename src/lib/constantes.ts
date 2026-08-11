@@ -26,6 +26,7 @@ export const ORDEN_SECCIONES_INICIAL: SeccionOrdenable[] = [
   "habilidades",
   "idiomas",
   "referencias",
+  "destacadas",
 ]
 
 export const ETIQUETAS_SECCION_ORDENABLE: Record<SeccionOrdenable, string> = {
@@ -36,6 +37,7 @@ export const ETIQUETAS_SECCION_ORDENABLE: Record<SeccionOrdenable, string> = {
   habilidades: "Competencias",
   idiomas: "Idiomas",
   referencias: "Referencias",
+  destacadas: "Secciones destacadas",
 }
 
 export const NIVELES_IDIOMA: { valor: NivelIdioma; etiqueta: string }[] = [
@@ -66,6 +68,7 @@ export const PLANTILLAS: { valor: PlantillaId; etiqueta: string; descripcion: st
   { valor: "colorido", etiqueta: "Barra superior", descripcion: "Encabezado grande con formas decorativas", ats: false },
   { valor: "ejecutivo", etiqueta: "Ejecutivo", descripcion: "Encabezado centrado y fechas al margen, sobrio y elegante", ats: false },
   { valor: "compacto", etiqueta: "Compacto", descripcion: "Dos columnas densas para aprovechar cada centimetro", ats: false },
+  { valor: "ats-visual", etiqueta: "ATS Visual", descripcion: "Barra superior y lectura de una columna, compatible con ATS", ats: true },
 ]
 
 export const FUENTES: { valor: FuenteId; etiqueta: string; tipo: string; jsPdf: string }[] = [
@@ -113,6 +116,7 @@ export const DATOS_INICIALES: DatosCurriculum = {
   habilidades: [],
   idiomas: [],
   referencias: [],
+  seccionesDestacadas: [],
   disponibilidad: "",
   pretensionesRenta: "",
 }

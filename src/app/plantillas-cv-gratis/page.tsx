@@ -52,7 +52,7 @@ const FAQ_JSON_LD = {
       name: "¿Hay plantillas compatibles con ATS?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Si. Las plantillas Clasico y Minimalista estan pensadas para mejor lectura en procesos ATS.",
+        text: "Si. Las plantillas Clasico, Minimalista y ATS Visual estan pensadas para mejor lectura en procesos ATS.",
       },
     },
   ],
@@ -80,7 +80,7 @@ export default function PlantillasCvGratisPage() {
               </div>
               <Surface variant="heroCard" className="p-5">
                 <Text as="p" variant="metric">
-                  4
+                  7
                 </Text>
                 <Text as="h2" variant="strong" className="mt-2 text-lg font-extrabold">
                   plantillas listas
