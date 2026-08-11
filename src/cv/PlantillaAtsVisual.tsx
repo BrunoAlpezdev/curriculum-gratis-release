@@ -13,21 +13,30 @@ interface Props {
 
 function TituloSeccion({ children, color }: { children: React.ReactNode; color: string }) {
   return (
-    <h2
-      className="mb-2 border-b border-zinc-200 pb-1 text-[11px] font-bold uppercase tracking-[0.16em]"
-      style={{ color, borderColor: color }}
-    >
-      {children}
+    <h2 className="mb-3 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[#354052]">
+      <span className="h-5 w-1 shrink-0 rounded-sm" style={{ backgroundColor: color }} aria-hidden="true" />
+      <span>{children}</span>
+      <span className="h-px flex-1 bg-zinc-200" aria-hidden="true" />
     </h2>
   )
 }
 
-function ItemConFecha({ titulo, fecha, children }: { titulo: string; fecha?: string; children?: React.ReactNode }) {
+function ItemConFecha({
+  titulo,
+  fecha,
+  color,
+  children,
+}: {
+  titulo: string
+  fecha?: string
+  color: string
+  children?: React.ReactNode
+}) {
   return (
-    <article className="flex flex-col gap-0.5">
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4">
-        <h3 className="min-w-0 break-words font-bold text-zinc-900">{titulo}</h3>
-        {fecha && <time className="max-w-[35%] break-words text-right text-[11px] text-zinc-500">{fecha}</time>}
+    <article className="flex flex-col gap-0.5 border-l-2 pl-4" style={{ borderColor: color }}>
+      <div className="grid grid-cols-[minmax(0,1fr)_max-content] items-start gap-x-6">
+        <h3 className="min-w-0 break-words font-bold leading-tight text-zinc-900">{titulo}</h3>
+        {fecha && <time className="whitespace-nowrap pt-0.5 text-right text-[11px] tabular-nums text-zinc-500">{fecha}</time>}
       </div>
       {children}
     </article>
@@ -57,9 +66,11 @@ export function PlantillaAtsVisual({ datos, personalizacion }: Props) {
           {datos.experiencia.map((exp) => (
             <ItemConFecha
               key={exp.id}
-              titulo={`${exp.cargo || e.cargo}${exp.empresa ? ` — ${exp.empresa}` : ""}`}
+              titulo={exp.cargo || e.cargo}
               fecha={formatearRangoFechas(exp.fechaInicio, exp.fechaFin, personalizacion.idiomaCv)}
+              color={color}
             >
+              {exp.empresa && <p className="break-words text-[11px] font-semibold" style={{ color }}>{exp.empresa}</p>}
               {exp.ubicacion && <p className="break-words text-[11px] italic text-zinc-500">{exp.ubicacion}</p>}
               {exp.descripcion && <TextoRico texto={exp.descripcion} className="text-zinc-700" />}
               {exp.logros && <TextoRico texto={exp.logros} className="text-zinc-700" />}
@@ -75,9 +86,11 @@ export function PlantillaAtsVisual({ datos, personalizacion }: Props) {
           {datos.educacion.map((edu) => (
             <ItemConFecha
               key={edu.id}
-              titulo={`${edu.titulo || e.titulo}${edu.institucion ? ` — ${edu.institucion}` : ""}`}
+              titulo={edu.titulo || e.titulo}
               fecha={formatearFechaEducacion(edu.fechaInicio, edu.fechaFin, personalizacion.idiomaCv)}
+              color={color}
             >
+              {edu.institucion && <p className="break-words text-[11px] font-semibold" style={{ color }}>{edu.institucion}</p>}
               {edu.descripcion && <TextoRico texto={edu.descripcion} className="text-zinc-700" />}
             </ItemConFecha>
           ))}
@@ -91,9 +104,11 @@ export function PlantillaAtsVisual({ datos, personalizacion }: Props) {
           {datos.cursos.map((curso) => (
             <ItemConFecha
               key={curso.id}
-              titulo={`${curso.nombre || e.curso}${curso.institucion ? ` — ${curso.institucion}` : ""}`}
+              titulo={curso.nombre || e.curso}
               fecha={curso.fecha ? formatearFecha(curso.fecha, personalizacion.idiomaCv) : ""}
+              color={color}
             >
+              {curso.institucion && <p className="break-words text-[11px] font-semibold" style={{ color }}>{curso.institucion}</p>}
               {curso.url && <a className="break-all text-[11px] text-zinc-600 underline" href={urlAbsoluta(curso.url)}>{curso.url}</a>}
             </ItemConFecha>
           ))}
@@ -105,7 +120,7 @@ export function PlantillaAtsVisual({ datos, personalizacion }: Props) {
         <TituloSeccion color={color}>{e.proyectos}</TituloSeccion>
         <div className="flex flex-col gap-3">
           {datos.proyectos.map((proyecto) => (
-            <ItemConFecha key={proyecto.id} titulo={proyecto.nombre || e.proyecto}>
+            <ItemConFecha key={proyecto.id} titulo={proyecto.nombre || e.proyecto} color={color}>
               {proyecto.tecnologias && <p className="break-words text-[11px] italic text-zinc-500">{proyecto.tecnologias}</p>}
               {proyecto.url && <a className="break-all text-[11px] text-zinc-600 underline" href={urlAbsoluta(proyecto.url)}>{proyecto.url}</a>}
               {proyecto.descripcion && <TextoRico texto={proyecto.descripcion} className="text-zinc-700" />}
@@ -157,25 +172,28 @@ export function PlantillaAtsVisual({ datos, personalizacion }: Props) {
   }
 
   return (
-    <article className="flex flex-1 flex-col text-[12px] leading-snug text-zinc-700 [overflow-wrap:anywhere]">
-      <div className="h-3 shrink-0" style={{ backgroundColor: color }} aria-hidden="true" />
-      <header className="border-b-2 border-zinc-200 px-10 py-6">
-        <h1 className="break-words text-[25px] font-bold leading-tight text-zinc-950">
-          {dp.nombreCompleto || e.tuNombre}
-        </h1>
-        {dp.titulo && <p className="mt-1 break-words text-[14px] text-zinc-600">{dp.titulo}</p>}
+    <article className="flex flex-1 flex-col bg-white text-[12px] leading-[1.45] text-zinc-700 [overflow-wrap:anywhere]">
+      <div className="h-2 shrink-0" style={{ backgroundColor: color }} aria-hidden="true" />
+      <header className="relative overflow-hidden bg-[#354052] px-10 py-7 text-white">
+        <div className="pointer-events-none absolute -right-16 -top-24 h-56 w-56 rounded-full border border-white/10 bg-white/[0.06]" aria-hidden="true" />
+        <div className="relative">
+          <h1 className="break-words text-[26px] font-bold leading-tight tracking-[-0.02em] text-white">
+            {dp.nombreCompleto || e.tuNombre}
+          </h1>
+          {dp.titulo && <p className="mt-1 break-words text-[14px] text-white/80">{dp.titulo}</p>}
         {contactos.length > 0 && (
-          <address className="mt-3 flex flex-wrap gap-x-4 gap-y-1 not-italic text-[11px] text-zinc-600">
+          <address className="mt-4 flex flex-wrap gap-x-5 gap-y-2 not-italic text-[11px] text-white/80">
             {contactos.map((contacto) => (
               <span key={contacto.texto} className="min-w-0 break-all">
-                {contacto.url ? <a href={contacto.url}>{contacto.texto}</a> : contacto.texto}
+                {contacto.url ? <a className="hover:underline" href={contacto.url}>{contacto.texto}</a> : contacto.texto}
               </span>
             ))}
           </address>
         )}
+        </div>
       </header>
 
-      <main className="flex flex-1 flex-col gap-5 px-10 py-7">
+      <main className="flex flex-1 flex-col gap-6 px-10 py-7">
         {datos.perfil && (
           <section>
             <TituloSeccion color={color}>{e.perfilProfesional}</TituloSeccion>

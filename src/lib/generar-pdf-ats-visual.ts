@@ -17,6 +17,8 @@ import {
   escribirTextoRico,
 } from "@/lib/generar-pdf-ats-helpers"
 
+const HEADER_BACKGROUND = { r: 53, g: 64, b: 82 }
+
 function escribirEncabezadoVisual(
   pdf: jsPDF,
   datos: DatosCurriculum,
@@ -45,8 +47,10 @@ function escribirEncabezadoVisual(
   const altura = Math.max(38, 10 + nombre.length * 8 + titulo.length * 5 + lineasContacto.length * 3.8 + 6)
 
   pdf.setFillColor(color.r, color.g, color.b)
-  pdf.rect(0, 0, PAGE_WIDTH, altura, "F")
-  let y = 10
+  pdf.rect(0, 0, PAGE_WIDTH, 3, "F")
+  pdf.setFillColor(HEADER_BACKGROUND.r, HEADER_BACKGROUND.g, HEADER_BACKGROUND.b)
+  pdf.rect(0, 3, PAGE_WIDTH, altura - 3, "F")
+  let y = 11
   pdf.setTextColor(255, 255, 255)
   pdf.setFont(fuenteBase, "bold")
   pdf.setFontSize(21)
@@ -139,7 +143,7 @@ export async function crearPdfAtsVisual(
       seccion(e.experienciaLaboral)
       for (const experiencia of datos.experiencia) {
         checkPage(16)
-        const titulo = [experiencia.cargo || e.cargo, experiencia.empresa].filter(Boolean).join(" — ")
+        const titulo = experiencia.cargo || e.cargo
         y = escribirTituloConFecha(
           pdf,
           limpiarParaPdf(titulo),
@@ -147,6 +151,13 @@ export async function crearPdfAtsVisual(
           y,
           fuenteBase,
         )
+        if (experiencia.empresa) {
+          pdf.setFont(fuenteBase, "bold")
+          pdf.setFontSize(9)
+          pdf.setTextColor(color.r, color.g, color.b)
+          pdf.text(limpiarParaPdf(experiencia.empresa), MARGIN, y)
+          y += 3.5
+        }
         if (experiencia.ubicacion) {
           pdf.setFont(fuenteBase, "italic")
           pdf.setFontSize(9)
@@ -173,7 +184,7 @@ export async function crearPdfAtsVisual(
       seccion(e.educacion)
       for (const educacion of datos.educacion) {
         checkPage(12)
-        const titulo = [educacion.titulo || e.titulo, educacion.institucion].filter(Boolean).join(" — ")
+        const titulo = educacion.titulo || e.titulo
         y = escribirTituloConFecha(
           pdf,
           limpiarParaPdf(titulo),
@@ -181,6 +192,13 @@ export async function crearPdfAtsVisual(
           y,
           fuenteBase,
         )
+        if (educacion.institucion) {
+          pdf.setFont(fuenteBase, "bold")
+          pdf.setFontSize(9)
+          pdf.setTextColor(color.r, color.g, color.b)
+          pdf.text(limpiarParaPdf(educacion.institucion), MARGIN, y)
+          y += 3.5
+        }
         if (educacion.descripcion) {
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
@@ -197,11 +215,18 @@ export async function crearPdfAtsVisual(
         checkPage(9)
         y = escribirTituloConFecha(
           pdf,
-          limpiarParaPdf([curso.nombre || e.curso, curso.institucion].filter(Boolean).join(" — ")),
+          limpiarParaPdf(curso.nombre || e.curso),
           curso.fecha ? formatearFecha(curso.fecha, personalizacion.idiomaCv) : "",
           y,
           fuenteBase,
         )
+        if (curso.institucion) {
+          pdf.setFont(fuenteBase, "bold")
+          pdf.setFontSize(9)
+          pdf.setTextColor(color.r, color.g, color.b)
+          pdf.text(limpiarParaPdf(curso.institucion), MARGIN, y)
+          y += 3.5
+        }
         if (curso.url) {
           pdf.setFont(fuenteBase, "normal")
           pdf.setFontSize(9)
