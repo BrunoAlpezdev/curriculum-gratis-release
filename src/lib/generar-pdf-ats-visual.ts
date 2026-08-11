@@ -12,12 +12,49 @@ import {
   PAGE_HEIGHT,
   PAGE_WIDTH,
   hexToRgb,
-  renderSeccion,
   escribirTituloConFecha,
   escribirTextoRico,
 } from "@/lib/generar-pdf-ats-helpers"
 
 const HEADER_BACKGROUND = { r: 53, g: 64, b: 82 }
+
+function renderSeccionVisual(
+  pdf: jsPDF,
+  titulo: string,
+  y: number,
+  color: { r: number; g: number; b: number },
+  fuenteBase: string,
+): number {
+  if (y + 10 > PAGE_HEIGHT - MARGIN) {
+    pdf.addPage()
+    y = MARGIN
+  }
+
+  pdf.setFont(fuenteBase, "bold")
+  pdf.setFontSize(10)
+  pdf.setTextColor(53, 64, 82)
+  const lineas = pdf.splitTextToSize(titulo, CONTENT_WIDTH - 8)
+  const xTexto = MARGIN + 4
+  const yInicial = y
+
+  for (const linea of lineas) {
+    pdf.text(linea, xTexto, y)
+    y += 4
+  }
+
+  pdf.setFillColor(color.r, color.g, color.b)
+  pdf.roundedRect(MARGIN, yInicial - 3.5, 1.5, Math.max(5, y - yInicial + 0.5), 0.4, 0.4, "F")
+
+  const ultimaLinea = lineas[lineas.length - 1] ?? titulo
+  const inicioLinea = xTexto + pdf.getTextWidth(ultimaLinea) + 6
+  if (inicioLinea < PAGE_WIDTH - MARGIN - 8) {
+    pdf.setDrawColor(225, 226, 229)
+    pdf.setLineWidth(0.3)
+    pdf.line(inicioLinea, y - 2.5, PAGE_WIDTH - MARGIN, y - 2.5)
+  }
+
+  return y + 3.5
+}
 
 function escribirEncabezadoVisual(
   pdf: jsPDF,
@@ -125,8 +162,12 @@ export async function crearPdfAtsVisual(
   }
 
   function seccion(titulo: string) {
-    y = renderSeccion(pdf, limpiarParaPdf(titulo), y, color, fuenteBase, true)
+    if (seccionesRenderizadas > 0) y += 4
+    y = renderSeccionVisual(pdf, limpiarParaPdf(titulo), y, color, fuenteBase)
+    seccionesRenderizadas += 1
   }
+
+  let seccionesRenderizadas = 0
 
   if (datos.perfil) {
     seccion(e.perfilProfesional)
