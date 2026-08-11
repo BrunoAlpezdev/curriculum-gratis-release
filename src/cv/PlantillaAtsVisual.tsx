@@ -168,7 +168,7 @@ export function PlantillaAtsVisual({ datos, personalizacion }: Props) {
         </ul>
       </section>
     ),
-    destacadas: <SeccionesDestacadas datos={datos} color={color} estilo="clasico" />,
+    destacadas: <SeccionesDestacadas datos={datos} color={color} estilo="ats-visual" />,
   }
 
   return (

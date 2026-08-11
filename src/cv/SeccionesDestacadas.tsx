@@ -1,6 +1,6 @@
 import type { DatosCurriculum } from "@/types"
 
-type EstiloSeccionesDestacadas = "clasico" | "minimalista" | "moderno" | "colorido" | "ejecutivo" | "compacto"
+type EstiloSeccionesDestacadas = "clasico" | "minimalista" | "moderno" | "colorido" | "ejecutivo" | "compacto" | "ats-visual"
 
 interface Props {
   datos: DatosCurriculum
@@ -39,6 +39,11 @@ const ESTILOS: Record<EstiloSeccionesDestacadas, { contenedor: string; titulo: s
     titulo: "text-[10px] font-bold uppercase tracking-[0.14em] border-b border-zinc-200 pb-1 mb-2",
     lista: "list-disc pl-4 text-[10.5px] text-zinc-700 space-y-0.5",
   },
+  "ats-visual": {
+    contenedor: "mb-0",
+    titulo: "flex items-center gap-3 mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[#354052]",
+    lista: "list-disc pl-5 text-[11px] text-zinc-700 space-y-0.5",
+  },
 }
 
 export function SeccionesDestacadas({ datos, color, estilo }: Props) {
@@ -48,12 +53,20 @@ export function SeccionesDestacadas({ datos, color, estilo }: Props) {
   if (secciones.length === 0) return null
 
   const clases = ESTILOS[estilo]
+  const esAtsVisual = estilo === "ats-visual"
   return (
     <div className="flex flex-col gap-3">
       {secciones.map((seccion) => (
         <section key={seccion.id} className={clases.contenedor}>
-          <h2 className={clases.titulo} style={{ color, borderColor: color }}>
-            {seccion.titulo}
+          <h2
+            className={clases.titulo}
+            style={{ color: esAtsVisual ? "#354052" : color, borderColor: color }}
+          >
+            {esAtsVisual && (
+              <span className="h-5 w-1 shrink-0 rounded-sm" style={{ backgroundColor: color }} aria-hidden="true" />
+            )}
+            <span>{seccion.titulo}</span>
+            {esAtsVisual && <span className="h-px flex-1 bg-zinc-200" aria-hidden="true" />}
           </h2>
           <ul className={clases.lista}>
             {seccion.items.filter((item) => item.trim()).map((item, index) => (
